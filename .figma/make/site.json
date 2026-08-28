@@ -1,0 +1,10 @@
+{
+  "description": "Experience the art of scent with an immersive website that showcases Essentia Resonance's olfactory workshops through luxurious design and engaging storytelling.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
