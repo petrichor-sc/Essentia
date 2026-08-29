@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { useForm, ValidationError } from '@formspree/react'
 import HeroSection from './HeroSection'
 import logoMark from '@/imports/Essentia_Logo_2.png'
 import signatureSvg from '@/imports/layer1_3.svg'
@@ -182,7 +181,6 @@ export default function App() {
   useReveal()
   useParallax()
   const { dotRef, ringRef, hovering } = useCursor()
-  const [formState, handleFormSubmit] = useForm('xoeqvywn')
   const [menuOpen, setMenuOpen] = useState(false)
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
@@ -947,53 +945,12 @@ export default function App() {
             </div>
 
             {/* Right: form */}
-            {formState.succeeded ? (
-              <div
-                className="reveal reveal-delay-2"
-                style={{
-                  padding: '48px 0',
-                  borderTop: '1px solid rgba(201,164,101,0.30)',
-                }}
-              >
-                <div style={{
-                  fontFamily: "'DM Sans'",
-                  fontSize: '0.60rem',
-                  letterSpacing: '0.32em',
-                  textTransform: 'uppercase',
-                  color: 'rgba(196,158,88,0.80)',
-                  marginBottom: '18px',
-                }}>
-                  Message Received
-                </div>
-
-                <h3 style={{
-                  fontFamily: "'Fraunces', Georgia, serif",
-                  fontWeight: 300,
-                  fontStyle: 'italic',
-                  fontSize: 'clamp(1.7rem, 3vw, 2.5rem)',
-                  color: '#2a2117',
-                  margin: '0 0 18px 0',
-                }}>
-                  Thank you for your enquiry.
-                </h3>
-
-                <p style={{
-                  fontFamily: "'DM Sans'",
-                  fontWeight: 300,
-                  fontSize: '0.90rem',
-                  lineHeight: 1.8,
-                  color: 'rgba(42,33,23,0.60)',
-                  margin: 0,
-                }}>
-                  Your message has been received. We will respond personally, usually within 48 hours.
-                </p>
-              </div>
-            ) : (
-              <form
-                className="reveal reveal-delay-2"
-                onSubmit={handleFormSubmit}
-                style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
-              >
+            <form
+              className="reveal reveal-delay-2"
+              action="https://formspree.io/f/xoeqvywn"
+              method="POST"
+              style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
+            >
                 <input
                   type="hidden"
                   name="_subject"
@@ -1061,11 +1018,6 @@ export default function App() {
                       onFocus={e => (e.currentTarget.style.borderBottomColor = '#c9a465')}
                       onBlur={e => (e.currentTarget.style.borderBottomColor = 'rgba(42,33,23,0.22)')}
                     />
-                    <ValidationError
-                      prefix="Email"
-                      field="email"
-                      errors={formState.errors}
-                    />
                   </div>
                 </div>
 
@@ -1125,31 +1077,20 @@ export default function App() {
                     onFocus={e => (e.currentTarget.style.borderBottomColor = '#c9a465')}
                     onBlur={e => (e.currentTarget.style.borderBottomColor = 'rgba(42,33,23,0.22)')}
                   />
-                  <ValidationError
-                    prefix="Message"
-                    field="message"
-                    errors={formState.errors}
-                  />
                 </div>
-
-                <ValidationError errors={formState.errors} />
 
                 <div>
                   <button
                     type="submit"
-                    disabled={formState.submitting}
                     className="hero-btn-secondary"
                     style={{
                       color: '#2a2117',
                       borderColor: 'rgba(42,33,23,0.30)',
-                      opacity: formState.submitting ? 0.55 : 1,
-                      cursor: formState.submitting ? 'wait' : 'pointer',
+                      cursor: 'pointer',
                     }}
                     onMouseEnter={e => {
-                      if (!formState.submitting) {
-                        e.currentTarget.style.borderColor = '#c9a465'
-                        e.currentTarget.style.background = 'rgba(201,164,101,0.06)'
-                      }
+                      e.currentTarget.style.borderColor = '#c9a465'
+                      e.currentTarget.style.background = 'rgba(201,164,101,0.06)'
                     }}
                     onMouseLeave={e => {
                       e.currentTarget.style.borderColor = 'rgba(42,33,23,0.30)'
@@ -1157,7 +1098,7 @@ export default function App() {
                     }}
                   >
                     <span style={{ fontFamily: "'DM Sans'", fontSize: '0.70rem', letterSpacing: '0.22em', textTransform: 'uppercase' }}>
-                      {formState.submitting ? 'Sending…' : 'Send Enquiry'}
+                      Send Enquiry
                     </span>
                   </button>
 
@@ -1166,7 +1107,6 @@ export default function App() {
                   </p>
                 </div>
               </form>
-            )}
           </div>
         </div>
       </section>
