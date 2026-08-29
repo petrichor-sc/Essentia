@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
+import { useForm, ValidationError } from '@formspree/react'
 import HeroSection from './HeroSection'
 import logoMark from '@/imports/Essentia_Logo_2.png'
 import signatureSvg from '@/imports/layer1_3.svg'
@@ -181,6 +182,7 @@ export default function App() {
   useReveal()
   useParallax()
   const { dotRef, ringRef, hovering } = useCursor()
+  const [formState, handleFormSubmit] = useForm('xoeqvywn')
   const [menuOpen, setMenuOpen] = useState(false)
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
@@ -945,81 +947,226 @@ export default function App() {
             </div>
 
             {/* Right: form */}
-            <form className="reveal reveal-delay-2" onSubmit={e => e.preventDefault()}
-              style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            {formState.succeeded ? (
+              <div
+                className="reveal reveal-delay-2"
+                style={{
+                  padding: '48px 0',
+                  borderTop: '1px solid rgba(201,164,101,0.30)',
+                }}
+              >
+                <div style={{
+                  fontFamily: "'DM Sans'",
+                  fontSize: '0.60rem',
+                  letterSpacing: '0.32em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(196,158,88,0.80)',
+                  marginBottom: '18px',
+                }}>
+                  Message Received
+                </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }} className="grid-collapse">
-                {[
-                  { label: 'Your Name', type: 'text', placeholder: 'Full name' },
-                  { label: 'Email Address', type: 'email', placeholder: 'you@example.com' },
-                ].map(field => (
-                  <div key={field.label}>
-                    <label style={{ display: 'block', fontFamily: "'DM Sans'", fontSize: '0.58rem', letterSpacing: '0.32em', textTransform: 'uppercase', color: 'rgba(42,33,23,0.40)', marginBottom: '10px' }}>{field.label}</label>
-                    <input type={field.type} placeholder={field.placeholder} style={{
+                <h3 style={{
+                  fontFamily: "'Fraunces', Georgia, serif",
+                  fontWeight: 300,
+                  fontStyle: 'italic',
+                  fontSize: 'clamp(1.7rem, 3vw, 2.5rem)',
+                  color: '#2a2117',
+                  margin: '0 0 18px 0',
+                }}>
+                  Thank you for your enquiry.
+                </h3>
+
+                <p style={{
+                  fontFamily: "'DM Sans'",
+                  fontWeight: 300,
+                  fontSize: '0.90rem',
+                  lineHeight: 1.8,
+                  color: 'rgba(42,33,23,0.60)',
+                  margin: 0,
+                }}>
+                  Your message has been received. We will respond personally, usually within 48 hours.
+                </p>
+              </div>
+            ) : (
+              <form
+                className="reveal reveal-delay-2"
+                onSubmit={handleFormSubmit}
+                style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
+              >
+                <input
+                  type="hidden"
+                  name="_subject"
+                  value="New Essentia Resonance Website Enquiry"
+                />
+
+                {/* Honeypot field for basic bot filtering */}
+                <input
+                  type="text"
+                  name="_gotcha"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', opacity: 0 }}
+                />
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }} className="grid-collapse">
+                  <div>
+                    <label
+                      htmlFor="enquiry-name"
+                      style={{ display: 'block', fontFamily: "'DM Sans'", fontSize: '0.58rem', letterSpacing: '0.32em', textTransform: 'uppercase', color: 'rgba(42,33,23,0.40)', marginBottom: '10px' }}
+                    >
+                      Your Name
+                    </label>
+                    <input
+                      id="enquiry-name"
+                      type="text"
+                      name="name"
+                      placeholder="Full name"
+                      autoComplete="name"
+                      required
+                      style={{
+                        width: '100%', background: 'transparent',
+                        border: 'none', borderBottom: '1px solid rgba(42,33,23,0.22)',
+                        color: '#2a2117', fontFamily: "'DM Sans'", fontSize: '0.88rem',
+                        padding: '10px 0', outline: 'none',
+                        transition: 'border-color 0.3s',
+                      }}
+                      onFocus={e => (e.currentTarget.style.borderBottomColor = '#c9a465')}
+                      onBlur={e => (e.currentTarget.style.borderBottomColor = 'rgba(42,33,23,0.22)')}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="enquiry-email"
+                      style={{ display: 'block', fontFamily: "'DM Sans'", fontSize: '0.58rem', letterSpacing: '0.32em', textTransform: 'uppercase', color: 'rgba(42,33,23,0.40)', marginBottom: '10px' }}
+                    >
+                      Email Address
+                    </label>
+                    <input
+                      id="enquiry-email"
+                      type="email"
+                      name="email"
+                      placeholder="you@example.com"
+                      autoComplete="email"
+                      required
+                      style={{
+                        width: '100%', background: 'transparent',
+                        border: 'none', borderBottom: '1px solid rgba(42,33,23,0.22)',
+                        color: '#2a2117', fontFamily: "'DM Sans'", fontSize: '0.88rem',
+                        padding: '10px 0', outline: 'none',
+                        transition: 'border-color 0.3s',
+                      }}
+                      onFocus={e => (e.currentTarget.style.borderBottomColor = '#c9a465')}
+                      onBlur={e => (e.currentTarget.style.borderBottomColor = 'rgba(42,33,23,0.22)')}
+                    />
+                    <ValidationError
+                      prefix="Email"
+                      field="email"
+                      errors={formState.errors}
+                    />
+                  </div>
+                </div>
+
+                {/* Enquiry type */}
+                <div>
+                  <label
+                    htmlFor="enquiry-type"
+                    style={{ display: 'block', fontFamily: "'DM Sans'", fontSize: '0.58rem', letterSpacing: '0.32em', textTransform: 'uppercase', color: 'rgba(42,33,23,0.40)', marginBottom: '10px' }}
+                  >
+                    Type of Enquiry
+                  </label>
+                  <select
+                    id="enquiry-type"
+                    name="enquiryType"
+                    required
+                    defaultValue=""
+                    style={{
+                      width: '100%', background: 'transparent',
+                      border: 'none', borderBottom: '1px solid rgba(42,33,23,0.22)',
+                      color: 'rgba(42,33,23,0.72)', fontFamily: "'DM Sans'", fontSize: '0.88rem',
+                      padding: '10px 0', outline: 'none', appearance: 'none',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <option value="">Select an enquiry type…</option>
+                    <option value="Brand or Product Formulation">Brand or Product Formulation</option>
+                    <option value="Bespoke / Personalised Perfume">Bespoke / Personalised Perfume</option>
+                    <option value="Perfume Workshop">Perfume Workshop</option>
+                    <option value="Olfactory Art & Experiences">Olfactory Art &amp; Experiences</option>
+                    <option value="Olfactory Consultation">Olfactory Consultation</option>
+                    <option value="Something else">Something else</option>
+                  </select>
+                </div>
+
+                {/* Message */}
+                <div>
+                  <label
+                    htmlFor="enquiry-message"
+                    style={{ display: 'block', fontFamily: "'DM Sans'", fontSize: '0.58rem', letterSpacing: '0.32em', textTransform: 'uppercase', color: 'rgba(42,33,23,0.40)', marginBottom: '10px' }}
+                  >
+                    Your Message
+                  </label>
+                  <textarea
+                    id="enquiry-message"
+                    name="message"
+                    rows={4}
+                    required
+                    placeholder="Tell us a little about what you are looking for…"
+                    style={{
                       width: '100%', background: 'transparent',
                       border: 'none', borderBottom: '1px solid rgba(42,33,23,0.22)',
                       color: '#2a2117', fontFamily: "'DM Sans'", fontSize: '0.88rem',
-                      padding: '10px 0', outline: 'none',
+                      padding: '10px 0', outline: 'none', resize: 'none',
+                      lineHeight: 1.8,
                       transition: 'border-color 0.3s',
                     }}
                     onFocus={e => (e.currentTarget.style.borderBottomColor = '#c9a465')}
                     onBlur={e => (e.currentTarget.style.borderBottomColor = 'rgba(42,33,23,0.22)')}
-                    />
-                  </div>
-                ))}
-              </div>
+                  />
+                  <ValidationError
+                    prefix="Message"
+                    field="message"
+                    errors={formState.errors}
+                  />
+                </div>
 
-              {/* Session type select */}
-              <div>
-                <label style={{ display: 'block', fontFamily: "'DM Sans'", fontSize: '0.58rem', letterSpacing: '0.32em', textTransform: 'uppercase', color: 'rgba(42,33,23,0.40)', marginBottom: '10px' }}>Type of Enquiry</label>
-                <select style={{
-                  width: '100%', background: 'transparent',
-                  border: 'none', borderBottom: '1px solid rgba(42,33,23,0.22)',
-                  color: 'rgba(42,33,23,0.72)', fontFamily: "'DM Sans'", fontSize: '0.88rem',
-                  padding: '10px 0', outline: 'none', appearance: 'none',
-                  cursor: 'pointer',
-                }}>
-                  <option value="">Select an enquiry type…</option>
-                  <option>Brand or Product Formulation</option>
-                  <option>Bespoke / Personalised Perfume</option>
-                  <option>Perfume Workshop</option>
-                  <option>Olfactory Art &amp; Experiences</option>
-                  <option>Olfactory Consultation</option>
-                  <option>Something else</option>
-                </select>
-              </div>
+                <ValidationError errors={formState.errors} />
 
-              {/* Message */}
-              <div>
-                <label style={{ display: 'block', fontFamily: "'DM Sans'", fontSize: '0.58rem', letterSpacing: '0.32em', textTransform: 'uppercase', color: 'rgba(42,33,23,0.40)', marginBottom: '10px' }}>Your Message</label>
-                <textarea rows={4} placeholder="Tell us a little about what you are looking for…" style={{
-                  width: '100%', background: 'transparent',
-                  border: 'none', borderBottom: '1px solid rgba(42,33,23,0.22)',
-                  color: '#2a2117', fontFamily: "'DM Sans'", fontSize: '0.88rem',
-                  padding: '10px 0', outline: 'none', resize: 'none',
-                  lineHeight: 1.8,
-                  transition: 'border-color 0.3s',
-                }}
-                onFocus={e => (e.currentTarget.style.borderBottomColor = '#c9a465')}
-                onBlur={e => (e.currentTarget.style.borderBottomColor = 'rgba(42,33,23,0.22)')}
-                />
-              </div>
+                <div>
+                  <button
+                    type="submit"
+                    disabled={formState.submitting}
+                    className="hero-btn-secondary"
+                    style={{
+                      color: '#2a2117',
+                      borderColor: 'rgba(42,33,23,0.30)',
+                      opacity: formState.submitting ? 0.55 : 1,
+                      cursor: formState.submitting ? 'wait' : 'pointer',
+                    }}
+                    onMouseEnter={e => {
+                      if (!formState.submitting) {
+                        e.currentTarget.style.borderColor = '#c9a465'
+                        e.currentTarget.style.background = 'rgba(201,164,101,0.06)'
+                      }
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.borderColor = 'rgba(42,33,23,0.30)'
+                      e.currentTarget.style.background = 'transparent'
+                    }}
+                  >
+                    <span style={{ fontFamily: "'DM Sans'", fontSize: '0.70rem', letterSpacing: '0.22em', textTransform: 'uppercase' }}>
+                      {formState.submitting ? 'Sending…' : 'Send Enquiry'}
+                    </span>
+                  </button>
 
-              <div>
-                <button type="submit" className="hero-btn-secondary"
-                  style={{ color: '#2a2117', borderColor: 'rgba(42,33,23,0.30)' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#c9a465'; (e.currentTarget as HTMLButtonElement).style.background = 'rgba(201,164,101,0.06)' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(42,33,23,0.30)'; (e.currentTarget as HTMLButtonElement).style.background = 'transparent' }}
-                >
-                  <span style={{ fontFamily: "'DM Sans'", fontSize: '0.70rem', letterSpacing: '0.22em', textTransform: 'uppercase' }}>
-                    Send Enquiry
-                  </span>
-                </button>
-                <p style={{ fontFamily: "'DM Sans'", fontSize: '0.68rem', color: 'rgba(42,33,23,0.38)', marginTop: '14px', lineHeight: 1.7 }}>
-                  We respond personally to every message. Usually within 48 hours.
-                </p>
-              </div>
-            </form>
+                  <p style={{ fontFamily: "'DM Sans'", fontSize: '0.68rem', color: 'rgba(42,33,23,0.38)', marginTop: '14px', lineHeight: 1.7 }}>
+                    We respond personally to every message. Usually within 48 hours.
+                  </p>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </section>
