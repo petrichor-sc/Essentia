@@ -331,9 +331,11 @@ export default function HeroSection() {
           transform: ready ? 'translateY(0)' : 'translateY(16px)',
           transition: reducedMotion ? 'none' : 'opacity 0.9s ease 0.75s, transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.75s',
         }}>
-          <span>Independent Olfactory Atelier</span>
+          <span>Bespoke Perfumery</span>
           <span className="hero-eyebrow-separator">·</span>
-          <span className="hero-eyebrow-gold">Est. 2019</span>
+          <span>Workshops</span>
+          <span className="hero-eyebrow-separator">·</span>
+          <span className="hero-eyebrow-gold">Olfactory Experiences</span>
         </div>
 
         <div
@@ -346,11 +348,10 @@ export default function HeroSection() {
             transform: ready ? 'translateY(0)' : 'translateY(28px)',
             transition: reducedMotion ? 'none' : 'opacity 1.1s cubic-bezier(0.16,1,0.3,1) 0.96s, transform 1.1s cubic-bezier(0.16,1,0.3,1) 0.96s',
           }}>
-            <span className="hero-title-main">Between Material</span>
+            <span className="hero-title-main">Create a fragrance that is</span>
             <span className="hero-title-script-row">
-              <span className="hero-title-and">and</span>
               <span className="hero-title-memory">
-                Memory
+                uniquely yours.
                 {!reducedMotion && idleParticles.map((p, i) => (
                   <span
                     key={`idle-${i}`}
@@ -388,28 +389,20 @@ export default function HeroSection() {
           transform: ready ? 'translateY(0)' : 'translateY(18px)',
           transition: reducedMotion ? 'none' : 'opacity 1.1s cubic-bezier(0.16,1,0.3,1) 1.18s, transform 1.1s cubic-bezier(0.16,1,0.3,1) 1.18s',
         }}>
-          <span className="hero-copy-desktop">From the moment a scent leaves its material and enters the air to the moment it becomes emotion or memory, a whole story exists in between.</span>
-          <span className="hero-copy-mobile">From the moment a scent leaves its material to the moment it becomes memory or emotion, a whole story exists in between.</span>
+          <span>Essentia Resonance creates personalised perfumes, guided perfume workshops and olfactory experiences using aromatic materials from around the world.</span>
         </p>
 
-        <p className="hero-secondary-copy" style={{
-          fontFamily: "'Fraunces', Georgia, serif", fontWeight: 320,
-          fontSize: 'clamp(0.88rem, 1.08vw, 1rem)', lineHeight: 1.68,
-          margin: '1px 0 26px 0', maxWidth: '560px',
-          opacity: ready ? 1 : 0,
-          transform: ready ? 'translateY(0)' : 'translateY(18px)',
-          transition: reducedMotion ? 'none' : 'opacity 1.1s cubic-bezier(0.16,1,0.3,1) 1.34s, transform 1.1s cubic-bezier(0.16,1,0.3,1) 1.34s',
-        }}>
-          <span className="hero-secondary-desktop hero-secondary-emphasis">That space is where I create — between what a material is, and what it can awaken in us.</span>
-        </p>
-
-        <a
-          href="#philosophy"
-          className="hero-explore-link"
-          style={{ opacity: ready ? 1 : 0, transitionDelay: reducedMotion ? '0s' : '1.5s' }}
+        <div
+          className="hero-landing-actions"
+          style={{
+            opacity: ready ? 1 : 0,
+            transform: ready ? 'translateY(0)' : 'translateY(18px)',
+            transition: reducedMotion ? 'none' : 'opacity 1.1s cubic-bezier(0.16,1,0.3,1) 1.34s, transform 1.1s cubic-bezier(0.16,1,0.3,1) 1.34s',
+          }}
         >
-          Explore <span aria-hidden="true">↓</span>
-        </a>
+          <a href="#bespoke-perfume" className="hero-landing-cta hero-landing-cta--primary">Create Your Perfume</a>
+          <a href="#workshops" className="hero-landing-cta hero-landing-cta--secondary">Explore Workshops</a>
+        </div>
       </div>
 
       <div className="hero-scroll-indicator" style={{

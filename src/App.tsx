@@ -14,17 +14,16 @@ import labExtraction from '@/imports/IMG_5350.jpg'
 import memoryMoment from '@/imports/Hofefestival_014_memory_cropped.jpg'
 import WorldMap from './WorldMap'
 
-// Current navigation intentionally targets sections on the single-page site.
-// When the editorial pages are ready, these href values can be changed to
-// /philosophy, /atelier, /portraits, /formulation and /experiences without
-// having to redesign the navigation component. A /journal route can then be
-// added for essays, research notes, atelier news and new work.
+// Current navigation prioritises the three public service pathways.
+// The hash links keep the current single-page site functional; the matching
+// future routes are /bespoke-perfume, /workshops and /olfactory-experiences.
+// Philosophy remains a storytelling destination rather than the first thing
+// a new visitor has to decode.
 const PRIMARY_NAV_ITEMS = [
+  { label: 'Bespoke Perfume', href: '#bespoke-perfume' },
+  { label: 'Workshops', href: '#workshops' },
+  { label: 'Experiences', href: '#olfactory-experiences' },
   { label: 'Philosophy', href: '#philosophy' },
-  { label: 'Atelier', href: '#atelier' },
-  { label: 'Portraits', href: '#portraits' },
-  { label: 'Formulation', href: '#formulation' },
-  { label: 'Experiences', href: '#experiences' },
 ] as const
 
 
@@ -288,7 +287,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* Desktop nav links — atelier-first rather than booking-first */}
+        {/* Desktop nav links — services first, philosophy second */}
         <div style={{ display: 'flex', gap: 'clamp(18px,2.2vw,34px)', alignItems: 'center' }}
           className="hidden-mobile">
           {PRIMARY_NAV_ITEMS.map(({ label, href }) => (
@@ -343,7 +342,48 @@ export default function App() {
       {/* ── Hero (redesigned) ─────────────────────────────── */}
       <HeroSection />
 
-      {/* ── Philosophy — The Ancient Art of Scent ────────── */}
+      {/* ── Service pathways — immediate orientation ───────── */}
+      <section id="services" className="service-pathways" aria-label="Essentia Resonance services">
+        <div className="service-pathways-inner">
+          {[
+            {
+              n: '01',
+              title: 'Bespoke Perfume',
+              body: 'A one-to-one perfume created around your preferences, memories and individuality.',
+              href: '#bespoke-perfume',
+              futureRoute: '/bespoke-perfume',
+            },
+            {
+              n: '02',
+              title: 'Perfume Workshops',
+              body: 'Guided sessions where you explore aromatic materials and compose your own fragrance.',
+              href: '#workshops',
+              futureRoute: '/workshops',
+            },
+            {
+              n: '03',
+              title: 'Olfactory Art & Experiences',
+              body: 'Scent-led installations, collaborations and sensory experiences for groups, brands and cultural contexts.',
+              href: '#olfactory-experiences',
+              futureRoute: '/olfactory-experiences',
+            },
+          ].map((service, i) => (
+            <a
+              key={service.title}
+              href={service.href}
+              data-future-route={service.futureRoute}
+              className={`service-pathway reveal reveal-delay-${i + 1 as 1 | 2 | 3}`}
+            >
+              <span className="service-pathway-number">{service.n}</span>
+              <h2>{service.title}</h2>
+              <p>{service.body}</p>
+              <span className="service-pathway-link">Explore <span aria-hidden="true">→</span></span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Philosophy — Between Material and Memory / The Ancient Art of Scent ── */}
       <section id="philosophy" className="philosophy-section">
 
         {/* Background logo contour — outer arch family at ~3% opacity */}
@@ -370,6 +410,17 @@ export default function App() {
         </svg>
 
         <div className="philosophy-inner">
+          <div className="philosophy-story-prelude">
+            <span className="reveal philosophy-story-label">Philosophy</span>
+            <h2 className="reveal reveal-delay-1 philosophy-story-title">
+              <span>Between Material</span>
+              <span className="philosophy-story-script">and Memory</span>
+            </h2>
+            <p className="reveal reveal-delay-2 philosophy-story-copy">
+              From the moment a scent leaves its material and enters the air to the moment it becomes emotion or memory, a whole story exists in between. That space is where I create — between what a material is, and what it can awaken in us.
+            </p>
+          </div>
+
           <div className="reveal philosophy-kicker">
             <span>01 — The Ancient Art of Scent</span>
             <span className="gold-line philosophy-kicker-line" />
@@ -534,7 +585,7 @@ export default function App() {
       </section>
 
       {/* ── Atelier ──────────────────────────────────────── */}
-      <section id="atelier" style={{ background: '#130f0a', overflow: 'hidden' }}>
+      <section id="olfactory-experiences" style={{ background: '#130f0a', overflow: 'hidden' }}>
 
         {/* ── Research pillars: 3-panel horizontal strip ─────── */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)' }} className="grid-collapse-3">
@@ -649,7 +700,7 @@ export default function App() {
           </div>
         </div>
 
-        <div id="experiences" style={{ position: 'relative', top: '-68px' }} aria-hidden="true" />
+        <div id="workshops" style={{ position: 'relative', top: '-68px' }} aria-hidden="true" />
 
         {/* Two-column text + secondary photos */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '560px' }} className="grid-collapse">
@@ -657,7 +708,7 @@ export default function App() {
           {/* Text side */}
           <div style={{ padding: 'clamp(52px,7vw,100px) clamp(32px,6vw,80px)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <span className="reveal" style={{ fontFamily: "'DM Sans'", fontSize: '0.65rem', letterSpacing: '0.35em', textTransform: 'uppercase', color: 'rgba(201,164,101,0.6)', marginBottom: '32px', display: 'block' }}>
-              03 — The Atelier
+              03 — Perfume Workshops
             </span>
             <h2 className="reveal reveal-delay-1" style={{
               fontFamily: "'Fraunces', Georgia, serif", fontWeight: 100, fontStyle: 'italic',
@@ -696,7 +747,7 @@ export default function App() {
             </div>
 
             <div className="reveal reveal-delay-4" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
-              <button className="cta-btn"><span>Book the Atelier</span></button>
+              <a href="#enquire" className="cta-btn"><span>Enquire About a Workshop</span></a>
               <a href="#" style={{
                 display: 'inline-flex', alignItems: 'center',
                 fontFamily: "'DM Sans'", fontSize: '0.7rem', letterSpacing: '0.22em',
@@ -734,15 +785,15 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── Private Scent Portrait ────────────────────────── */}
-      <section id="portraits" style={{ background: '#0e0b18', overflow: 'hidden' }}>
+      {/* ── Bespoke Perfume — Fragrance Portraits / Number Series ── */}
+      <section id="bespoke-perfume" style={{ background: '#0e0b18', overflow: 'hidden' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '760px' }} className="grid-collapse">
 
           {/* Portrait image — image.png, full, unzoomed */}
           <div className="reveal-left" style={{ position: 'relative', overflow: 'hidden', minHeight: '500px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0e0b18' }}>
             <img
               src={coupleScent}
-              alt="Private Scent Portrait session — Essentia Resonance"
+              alt="Bespoke perfume consultation — Essentia Resonance"
               style={{
                 width: '100%', height: '100%',
                 objectFit: 'contain',
@@ -759,7 +810,7 @@ export default function App() {
               backdropFilter: 'blur(6px)',
               background: 'rgba(10,7,20,0.45)',
             }}>
-              <div style={{ fontFamily: "'DM Sans'", fontSize: '0.52rem', letterSpacing: '0.40em', textTransform: 'uppercase', color: 'rgba(201,164,101,0.78)' }}>The Portrait Series</div>
+              <div style={{ fontFamily: "'DM Sans'", fontSize: '0.52rem', letterSpacing: '0.40em', textTransform: 'uppercase', color: 'rgba(201,164,101,0.78)' }}>Fragrance Portraits · The Number Series</div>
             </div>
             {/* Number watermark */}
             <div style={{
@@ -777,7 +828,7 @@ export default function App() {
               textTransform: 'uppercase', color: 'rgba(201,164,101,0.58)',
               marginBottom: '36px', display: 'block',
             }}>
-              04 — Private Sessions
+              04 — Bespoke Perfume
             </span>
 
             <h2 className="reveal reveal-delay-1" style={{
@@ -785,25 +836,25 @@ export default function App() {
               fontSize: 'clamp(2rem, 4.2vw, 3.8rem)', color: '#f4ede0',
               lineHeight: 1.1, margin: '0 0 12px 0', letterSpacing: '-0.02em',
             }}>
-              Your Scent Portrait
+              Bespoke Perfume
             </h2>
             <div className="reveal reveal-delay-1" style={{
               fontFamily: "'Pinyon Script', Georgia, serif",
               fontSize: 'clamp(1.1rem, 1.8vw, 1.5rem)',
               color: 'rgba(201,164,101,0.70)', marginBottom: '32px', letterSpacing: '0.02em',
             }}>
-              Portrait No. 49 could be yours
+              Fragrance Portraits · The Number Series · No. 46
             </div>
 
             <p className="reveal reveal-delay-2" style={{ fontFamily: "'DM Sans'", fontWeight: 300, fontSize: '0.93rem', color: 'rgba(244,237,224,0.58)', lineHeight: 1.92, marginBottom: '20px' }}>
-              The Private Scent Portrait begins with a one-to-one consultation — an unhurried exploration
-              of materials, memories and olfactive language. Together we move through the palette, uncovering
-              what resonates: the notes, the structures, the concentrations, the form your fragrance should take.
+              A bespoke perfume begins with a one-to-one consultation — an unhurried exploration of materials,
+              preferences, memories and olfactive language. Together we move through the palette, uncovering what
+              resonates: the notes, structures, concentrations and character your fragrance should take.
             </p>
             <p className="reveal reveal-delay-3" style={{ fontFamily: "'DM Sans'", fontWeight: 300, fontSize: '0.93rem', color: 'rgba(244,237,224,0.58)', lineHeight: 1.92, marginBottom: '44px' }}>
-              After the session Sarthak works on the composition over several weeks. The final fragrance —
-              in a quantity and concentration decided together — is then delivered to you. It is documented
-              and archived as a numbered work. It belongs entirely to you.
+              After the session Sarthak develops the composition over several weeks. The final perfume — in a
+              quantity and concentration decided together — is delivered to you and archived within Fragrance
+              Portraits, the artistic Number Series. The current work is No. 46. The fragrance itself is yours.
             </p>
 
             {/* Portrait series stats */}
@@ -812,7 +863,7 @@ export default function App() {
                 { label: 'Format',     value: 'One-to-one'   },
                 { label: 'Duration',   value: '3 – 5 hours'  },
                 { label: 'Delivery',   value: 'A few weeks'   },
-                { label: 'Next portrait', value: 'No. 49'     },
+                { label: 'Current series', value: 'No. 46'     },
               ].map(d => (
                 <div key={d.label}>
                   <div style={{ fontFamily: "'DM Sans'", fontSize: '0.56rem', letterSpacing: '0.30em', textTransform: 'uppercase', color: 'rgba(244,237,224,0.28)', marginBottom: '6px' }}>{d.label}</div>
@@ -822,7 +873,7 @@ export default function App() {
             </div>
 
             <div className="reveal reveal-delay-4" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
-              <button className="cta-btn"><span>Request Your Portrait</span></button>
+              <a href="#enquire" className="cta-btn"><span>Create Your Perfume</span></a>
               <a href="#" style={{
                 display: 'inline-flex', alignItems: 'center',
                 fontFamily: "'DM Sans'", fontSize: '0.68rem', letterSpacing: '0.22em',
@@ -833,7 +884,7 @@ export default function App() {
               }}
               onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#c9a465'; (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(201,164,101,0.5)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(244,237,224,0.38)'; (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(244,237,224,0.15)' }}>
-                View the Series →
+                About the Number Series →
               </a>
             </div>
           </div>
@@ -872,13 +923,13 @@ export default function App() {
                 Begin your conversation with scent
               </h2>
               <p className="reveal reveal-delay-2" style={{ fontFamily: "'DM Sans'", fontWeight: 300, fontSize: '0.90rem', lineHeight: 1.90, color: 'rgba(42,33,23,0.62)', marginBottom: '32px' }}>
-                Whether you are looking for a private scent portrait, a formulation for a perfume, cosmetic or
+                Whether you are looking for a bespoke personalised perfume, a formulation for a perfume, cosmetic or
                 aromatherapy product, a group atelier session or another olfactory collaboration, we respond personally to every enquiry.
               </p>
               <div className="reveal reveal-delay-3">
                 {[
                   { label: 'Brand & Product Formulation', sub: 'Perfume, cosmetic & aromatherapy applications' },
-                  { label: 'Scent Portrait', sub: 'One-to-one, numbered series' },
+                  { label: 'Bespoke Perfume', sub: 'Personalised perfume · Fragrance Portraits Number Series' },
                   { label: 'Workshop Atelier', sub: 'Groups of 2–15, Kamp-Lintfort' },
                   { label: 'Corporate & Events', sub: 'Bespoke group experiences' },
                 ].map(item => (
@@ -930,9 +981,9 @@ export default function App() {
                 }}>
                   <option value="">Select an enquiry type…</option>
                   <option>Brand or Product Formulation</option>
-                  <option>Private Scent Portrait</option>
-                  <option>Workshop Atelier</option>
-                  <option>Corporate or Group Event</option>
+                  <option>Bespoke / Personalised Perfume</option>
+                  <option>Perfume Workshop</option>
+                  <option>Olfactory Art &amp; Experiences</option>
                   <option>Olfactory Consultation</option>
                   <option>Something else</option>
                 </select>
