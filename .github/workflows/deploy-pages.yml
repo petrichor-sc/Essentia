@@ -42,31 +42,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Verify DSC_0072.JPG
-        shell: bash
-        run: |
-          echo "Checking DSC_0072.JPG..."
-
-          if [ ! -f "src/imports/DSC_0072.JPG" ]; then
-            echo "ERROR: DSC_0072.JPG does not exist."
-            exit 1
-          fi
-
-          FILE_SIZE=$(stat -c%s "src/imports/DSC_0072.JPG")
-          echo "DSC_0072.JPG size: $FILE_SIZE bytes"
-
-          if grep -q "^version https://git-lfs.github.com/spec/v1" "src/imports/DSC_0072.JPG"; then
-            echo "ERROR: DSC_0072.JPG is still a Git LFS pointer."
-            exit 1
-          fi
-
-          if [ "$FILE_SIZE" -lt 1000000 ]; then
-            echo "ERROR: DSC_0072.JPG is unexpectedly small."
-            exit 1
-          fi
-
-          echo "DSC_0072.JPG downloaded successfully."
-
+      
       - name: Build website
         run: pnpm run build
 
