@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository with Git LFS
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           lfs: true
@@ -42,19 +42,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      
-      - name: Build website
-        run: pnpm run build
-
-      - name: Verify DSC_0072 was included in build
+      - name: Verify web image
         shell: bash
         run: |
-          echo "Searching dist for DSC_0072 build asset..."
+          test -f src/imports/DSC_0072_web.webp
+          echo "DSC_0072_web.webp found."
+          ls -lh src/imports/DSC_0072_web.webp
 
-          find dist -type f | grep -i "DSC_0072" || true
-
-          echo "Built image files:"
-          find dist/assets -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) -exec ls -lh {} \;
+      - name: Build website
+        run: pnpm run build
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
