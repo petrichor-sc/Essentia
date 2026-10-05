@@ -1039,6 +1039,7 @@ export default function App() {
                     <option value="Perfume Workshop">Perfume Workshop</option>
                     <option value="Olfactory Art & Experiences">Olfactory Art &amp; Experiences</option>
                     <option value="Olfactory Consultation">Olfactory Consultation</option>
+                    <option value="Photo removal request">Photo removal request</option>
                     <option value="Something else">Something else</option>
                   </select>
                 </div>

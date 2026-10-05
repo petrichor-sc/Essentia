@@ -58,7 +58,15 @@ export default function WorkshopGalleries({ albumId }: { albumId?: string }) {
             <h1 ref={heading} tabIndex={-1}>{album.titleLead}<br /><em>{album.titleEmphasis}</em></h1>
             <p className="gallery-event-name">{album.title}</p>
             <p className="gallery-lead">{album.description}</p>
+            <dl className="gallery-event-details">
+              <div><dt>Date</dt><dd>{album.date}</dd></div>
+              {album.venue && <div><dt>Location</dt><dd>{album.venue}</dd></div>}
+              <div><dt>Workshop theme</dt><dd>{album.theme}</dd></div>
+            </dl>
             <a className="gallery-text-link" href={GALLERIES_ROUTE}>← All workshop galleries</a>
+            <aside className="gallery-photo-removal" aria-label="Photo removal requests">
+              <p>If you would like any of these photographs removed, please <a href="#enquire">get in contact with us</a>. Select “Photo removal request” and include the gallery name and photo number so we can identify the image.</p>
+            </aside>
           </section>
           {cover && <figure className="gallery-hero-photo">
             <button aria-label="Enlarge cover photo" onClick={() => setSelected(coverIndex)}><img src={cover.src} alt={cover.alt} fetchPriority="high" /></button>
