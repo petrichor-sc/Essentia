@@ -1,0 +1,64 @@
+.botanical-atlas { max-width:1440px; margin:0 auto; padding:0 clamp(24px,6vw,80px) 64px; font-family:'DM Sans',system-ui,sans-serif; color:#f4ede0; }
+.botanical-atlas button,.botanical-atlas input { font:inherit; }
+.botanical-atlas button { cursor:pointer; }
+#botanical-origins, .botanical-atlas { scroll-margin-top:100px; }
+.botanical-atlas :focus-visible { outline:2px solid #c9a465; outline-offset:5px; }
+.atlas-toolbar { display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:22px; margin-bottom:32px; }
+.atlas-filters { display:flex; flex-wrap:wrap; gap:8px; }
+.atlas-filters button,.atlas-region-list button { color:#bdb2ca; border:1px solid #c9a46530; background:transparent; padding:10px 15px; font-size:11px; letter-spacing:.06em; }
+.atlas-filters button[aria-pressed=true] { color:#f4ede0; border-color:#c9a465; background:#c9a46518; }
+.atlas-search { display:flex; flex-direction:column; gap:9px; width:260px; max-width:100%; }
+.atlas-search>span { font-size:10px; text-transform:uppercase; letter-spacing:.16em; color:#b6a78d; }
+.atlas-search input { width:100%; min-width:0; border:0; border-bottom:1px solid #c9a46555; background:transparent; color:#f4ede0; border-radius:0; padding:8px 0; font-size:12px; }
+.atlas-search input::placeholder { color:#bdb2ca99; }
+.atlas-layout { display:grid; grid-template-columns:minmax(0,1.8fr) minmax(270px,1fr); border-top:1px solid #c9a46525; border-bottom:1px solid #c9a46525; }
+.atlas-map-column { min-width:0; padding:22px 28px 24px 0; }
+.atlas-map-heading { display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:16px; color:#b6a78d; font-size:9px; letter-spacing:.13em; text-transform:uppercase; }
+.atlas-map-heading span:last-child { color:#bdb2ca99; }
+.atlas-map { display:block; width:100%; height:auto; overflow:visible; }
+.atlas-grid { stroke:#c9a4650d; stroke-width:.7; }
+.atlas-equator { stroke:#c9a46520; stroke-width:.8; stroke-dasharray:4 6; }
+.atlas-land { fill:#c0ace80b; stroke:#c9a46550; stroke-width:.7; }
+.atlas-borders { fill:none; stroke:#c9a46518; stroke-width:.45; }
+.atlas-continent { fill:#c9a46570; font-size:8px; letter-spacing:1.5px; text-anchor:middle; pointer-events:none; }
+.atlas-atelier { fill:#c0ace890; font-size:7px; letter-spacing:1px; text-anchor:end; }
+.atlas-pin { cursor:pointer; }
+.atlas-pin-halo { fill:#c9a4650b; stroke:#c9a46550; stroke-width:.8; }
+.atlas-pin-dot { fill:#c9a465; }
+.atlas-pin.is-heritage .atlas-pin-dot { fill:#c0ace8; }
+.atlas-pin.is-heritage .atlas-pin-halo { stroke:#c0ace850; }
+.atlas-pin.is-active .atlas-pin-halo { stroke:#f4ede0; fill:#c9a46520; }
+.atlas-pin:focus { outline:none; }
+.atlas-pin:focus-visible .atlas-pin-halo { stroke:#f4ede0; stroke-width:2; }
+.atlas-map-key { display:flex; flex-wrap:wrap; gap:16px; padding:10px 0 20px; font-size:10px; color:#bdb2ca; }
+.atlas-map-key span { display:flex; align-items:center; gap:8px; }
+.atlas-map-key i { width:5px; height:5px; border-radius:50%; background:#c9a465; }
+.atlas-map-key i.heritage { background:#c0ace8; }
+.atlas-region-list { display:flex; flex-wrap:wrap; gap:6px; }
+.atlas-region-list button { font-size:10px; padding:7px 10px; border-color:transparent; }
+.atlas-region-list button:hover,.atlas-region-list button[aria-pressed=true] { border-color:#c9a46545; color:#e4c68f; }
+.atlas-note { border-left:1px solid #c9a46525; padding:30px 0 30px 32px; min-width:0; }
+.atlas-eyebrow { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:#c9a465; }
+.atlas-note h3 { font:200 italic clamp(28px,3vw,42px)/1.15 'Fraunces',Georgia,serif; margin:18px 0 10px; overflow-wrap:anywhere; }
+.atlas-note .atlas-botanical { color:#c0ace8; font-family:Georgia,serif; font-style:italic; font-size:15px; }
+.atlas-badges { display:flex; flex-wrap:wrap; gap:6px; margin:20px 0 28px; }
+.atlas-badges span { padding:5px 8px; color:#d3c1a2; border:1px solid #c9a46535; font-size:10px; }
+.atlas-note h4 { text-transform:uppercase; font-size:9px; letter-spacing:.18em; color:#c9a465a6; font-weight:400; margin:24px 0 9px; }
+.atlas-note p { font-size:12px; font-weight:300; line-height:1.85; color:#c6bccd; margin:0 0 12px; }
+.atlas-note .atlas-origin { font-size:14px; color:#e4daca; }
+.atlas-note .atlas-context { font-size:11px; color:#b5a9c0; margin-top:24px; }
+.atlas-sources { margin-top:24px; color:#c9a465; font-size:10px; line-height:1.7; }
+.atlas-sources summary { cursor:pointer; }
+.atlas-sources a { display:block; margin-top:10px; color:#c0ace8; text-decoration:underline; text-underline-offset:3px; }
+.atlas-palette { padding-top:30px; }
+.atlas-palette-heading { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:20px; }
+.atlas-palette-heading h3 { font:200 italic 24px/1.4 'Fraunces',Georgia,serif; margin:0; }
+.atlas-palette-heading>span { font-size:10px; color:#b6a78d; letter-spacing:.12em; }
+.atlas-note-list { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }
+.atlas-note-list button { text-align:left; padding:13px 15px; border:1px solid #c9a46525; color:#ddd3e6; background:transparent; font-size:12px; line-height:1.5; overflow-wrap:anywhere; }
+.atlas-note-list button span { display:block; font-size:9px; color:#b6a78d; letter-spacing:.08em; margin-top:3px; }
+.atlas-note-list button:hover,.atlas-note-list button[aria-pressed=true] { background:#c9a46512; border-color:#c9a46590; color:#f4ede0; }
+.atlas-footnote { margin:24px 0 0; color:#a294b4; font-size:10px; line-height:1.85; max-width:900px; }
+.atlas-reset { margin-top:16px; border:1px solid #c9a465; color:#f4ede0; background:transparent; padding:10px 14px; font-size:11px; }
+@media(max-width:900px) { .atlas-layout { grid-template-columns:1fr; } .atlas-map-column { padding-right:0; } .atlas-note { border-left:0; border-top:1px solid #c9a46525; padding:28px 0; } .atlas-note-list { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media(max-width:540px) { .botanical-atlas { padding-inline:20px; } .atlas-toolbar { align-items:stretch; } .atlas-search { width:100%; } .atlas-filters button { padding:9px 11px; font-size:10px; } .atlas-note-list { grid-template-columns:repeat(2,minmax(0,1fr)); } .atlas-map-heading { font-size:8px; } }
