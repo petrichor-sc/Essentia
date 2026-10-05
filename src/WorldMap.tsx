@@ -1,10 +1,11 @@
 import { useId, useState } from 'react'
-import { PALETTE, REGIONS } from './data/botanical-palette'
+import { PALETTE, REGIONS, type BotanicalNote } from './data/botanical-palette'
 import geography from './data/world-geography.json'
 import './botanical-map.css'
 
 const FILTERS = [['all', 'All materials'], ['top', 'Top'], ['heart', 'Heart'], ['base', 'Base'], ['carrier', 'Carriers']]
 const project = (lon: number, lat: number) => [(lon + 180) * 1000 / 360, (90 - lat) * 500 / 180]
+const belongsTo = (note: BotanicalNote, region: string) => (note.regionIds || [note.regionId]).includes(region)
 
 export default function WorldMap() {
   const [tier, setTier] = useState('all')
@@ -15,16 +16,18 @@ export default function WorldMap() {
   const id = useId()
   const matching = PALETTE.filter(note =>
     (tier === 'all' || (tier === 'carrier' ? note.families.includes('Carrier') : note.tiers.includes(tier))) &&
-    [note.name, note.botanicalName, note.origin, ...note.families].join(' ').toLowerCase().includes(query.trim().toLowerCase()))
-  const visible = matching.filter(note => !regionId || note.regionId === regionId)
+    [note.name, note.botanicalName, note.origin, note.scentProfile, ...note.families,
+      ...(note.productionVariants || []).flatMap(variant => [variant.label, variant.origin, variant.scentOriginal || ''])]
+      .join(' ').toLowerCase().includes(query.trim().toLowerCase()))
+  const visible = matching.filter(note => !regionId || belongsTo(note, regionId))
   const listed = expanded ? visible : visible.slice(0, 4)
   const active = visible.find(note => note.id === selected) || visible[0]
-  const regions = REGIONS.filter(region => matching.some(note => note.regionId === region.id))
+  const regions = REGIONS.filter(region => matching.some(note => belongsTo(note, region.id)))
   const selectedRegion = REGIONS.find(region => region.id === regionId)
   const selectRegion = (value: string) => {
     setRegionId(value)
     setExpanded(false)
-    const first = matching.find(note => note.regionId === value)
+    const first = matching.find(note => belongsTo(note, value))
     if (first) setSelected(first.id)
   }
   const reset = () => { setTier('all'); setQuery(''); setRegionId(null); setSelected('himalayan-cedar'); setExpanded(false) }
@@ -55,9 +58,9 @@ export default function WorldMap() {
           })}
           {regions.map(region => {
             const [x,y] = project(region.longitude,region.latitude)
-            const notes = matching.filter(note => note.regionId === region.id)
+            const notes = matching.filter(note => belongsTo(note, region.id))
             const native = active?.regionId === region.id ? active.originKind === 'Native range' : notes.some(note => note.originKind === 'Native range')
-            const isActive = active?.regionId === region.id
+            const isActive = !!active && belongsTo(active, region.id)
             return <g key={region.id} role="button" tabIndex={0} aria-pressed={regionId === region.id}
               aria-label={`${region.label}: ${notes.map(note => note.name).join(', ')}`}
               onClick={() => selectRegion(region.id)} onFocus={() => setSelected(notes[0].id)}
@@ -75,21 +78,40 @@ export default function WorldMap() {
             <text x="505" y="95" className="atlas-atelier">ATELIER</text>
           </g>
         </svg>
-        <div className="atlas-map-key"><span><i /> Native range</span><span><i className="heritage" /> Cultivation &amp; heritage</span></div>
-        <div className="atlas-region-list" role="group" aria-label="Explore a region">
-          <button type="button" aria-pressed={!regionId} onClick={() => { setRegionId(null); setExpanded(false) }}>All regions</button>
-          {regions.map(region => <button key={region.id} type="button" aria-pressed={regionId === region.id}
-            onClick={() => selectRegion(region.id)}>{region.label}</button>)}
-        </div>
+        <div className="atlas-map-key"><span><i /> Verified native range</span><span><i className="heritage" /> Production &amp; heritage</span></div>
+        <label className="atlas-region-select" htmlFor={`${id}-region`}>Explore a region
+          <select id={`${id}-region`} value={regionId || ''} onChange={event => {
+            if (event.target.value) selectRegion(event.target.value)
+            else { setRegionId(null); setExpanded(false) }
+          }}>
+            <option value="">All regions</option>
+            {regions.map(region => <option key={region.id} value={region.id}>{region.label}</option>)}
+          </select>
+        </label>
       </div>
       <aside className="atlas-note" aria-label="Selected material">
         {active ? <div key={active.id}>
           <span className="atlas-eyebrow">{active.originKind}</span><h3>{active.name}</h3>
           {active.botanicalName && <p className="atlas-botanical">{active.botanicalName}</p>}
           <div className="atlas-badges">{[active.tiers.map(t => t === 'heart' ? 'Heart' : t[0].toUpperCase()+t.slice(1)).join(' / '),...active.families].filter(Boolean).map(label => <span key={label}>{label}</span>)}</div>
-          <h4>Botanical roots</h4><p className="atlas-origin">{active.origin}</p>
+          <h4>{active.originKind === 'Native range' ? 'Botanical roots' : 'Documented origin'}</h4><p className="atlas-origin">{active.origin}</p>
           {active.scentProfile && <><h4>Scent character</h4><p>{active.scentProfile}</p></>}
           {active.context && <p className="atlas-context">{active.context}</p>}
+          {!!active.productionVariants?.length && <div className="atlas-productions">
+            <h4>Sunday Natural · production notes</h4>
+            <p>{active.productionVariants.length} documented {active.productionVariants.length === 1 ? 'variant' : 'variants'}. Product labels are preserved; source details may be in German or English.</p>
+            <div className="atlas-variant-list">{active.productionVariants.map((variant, index) => <details key={`${variant.label}-${index}`}>
+              <summary>{variant.label}<span>{variant.origin}</span></summary>
+              {variant.originNote && <p>{variant.originNote}</p>}
+              {variant.extractionOriginal && <p><strong>Extraction</strong>{variant.extractionOriginal}</p>}
+              {variant.scentOriginal && <p><strong>Scent</strong>{variant.scentOriginal}</p>}
+              {variant.cultivationOriginal && <p><strong>Cultivation</strong>{variant.cultivationOriginal}</p>}
+              {variant.provenanceOriginal && <p><strong>Provenance</strong>{variant.provenanceOriginal}</p>}
+              {variant.harvestOriginal && <p><strong>Harvest</strong>{variant.harvestOriginal}</p>}
+              {variant.constituentsOriginal && <p><strong>Main constituents</strong>{variant.constituentsOriginal}</p>}
+              <a href={variant.url} target="_blank" rel="noopener noreferrer">Read the source ↗</a>
+            </details>)}</div>
+          </div>}
           {active.sources.length > 0 && <details className="atlas-sources"><summary>Explore the botanical references</summary>
             {active.sources.map(source => <a key={source.url} href={source.url} target="_blank" rel="noopener noreferrer">{source.label} ↗</a>)}
           </details>}
@@ -107,7 +129,7 @@ export default function WorldMap() {
         aria-controls={`${id}-palette`} onClick={() => setExpanded(!expanded)}>
         {expanded ? 'Show less' : `Show more (${visible.length - 4})`}
       </button>}
-      <p className="atlas-footnote">Pins are representative points within broader botanical regions, not farms or harvest locations. Cultivated hybrids, compositions and uncertain identities are distinguished from wild native ranges. Botanical references: Sunday Natural and Kew.</p>
+      <p className="atlas-footnote">Reviewed 5 October 2026. Pins mark representative regions; production countries are separate from verified native ranges. Bottle sizes are grouped while species, plant parts and chemotypes remain distinct. Top, heart and base filters cover the materials already classified in our palette. Botanical references: Sunday Natural and Kew.</p>
     </div>
   </div>
 }

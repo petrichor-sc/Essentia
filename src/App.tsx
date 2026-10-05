@@ -3,7 +3,9 @@ import HeroSection from './HeroSection'
 import logoMark from '@/imports/Essentia_Logo_2.png'
 import signatureSvg from '@/imports/layer1_3.svg'
 import workshopTalk from '@/imports/09242025_Perfume_067.jpg'
-import workshopStanding from '@/imports/09242025_Perfume_088_1.jpg'
+import workshopStanding from './galleries/summer-perfume-atelier-2026/MAR_3261.jpg'
+import founderWorkshop from './galleries/summer-perfume-atelier-2026/2.jpg'
+import enquiryWorkshop from './galleries/summer-perfume-atelier-2026/MAR_3235.jpg'
 import workshopWriting from '@/imports/09242025_Perfume_091_1.jpg'
 import portraitCouple from '@/imports/JUL_2063_copy_1_.jpg'
 import sarthakLab from '@/imports/DSC_1892.jpg'
@@ -11,7 +13,7 @@ import coupleScent from '@/imports/image.png'
 import kidsOlfaction from '@/imports/DSC_0072_web.webp'
 import sarthakGlass from '@/imports/a.png'
 import labExtraction from '@/imports/IMG_5350.jpg'
-import memoryMoment from '@/imports/Hofefestival_014_memory_cropped.jpg'
+import memoryMoment from './galleries/schirrhof-festival-2026/2026_Hofefestival_014.jpg'
 import WorldMap from './WorldMap'
 import WorkshopMenu from './WorkshopMenu'
 
@@ -418,6 +420,7 @@ export default function App() {
 
         <div className="philosophy-inner">
           <div className="philosophy-story-prelude">
+            <img className="philosophy-story-photo" src={founderWorkshop} alt="Sarthak guiding a participant through aromatic materials at the Summer Perfume Atelier 2026" loading="lazy" />
             <span className="reveal philosophy-story-label">Philosophy</span>
             <h2 className="reveal reveal-delay-1 philosophy-story-title">
               <span>Between Material</span>
@@ -539,7 +542,7 @@ export default function App() {
       <section id="botanical-origins" style={{ background: '#07050f', overflow: 'hidden' }}>
         {/* Header */}
         <div style={{ padding: 'clamp(64px,8vw,100px) clamp(24px,6vw,80px) 0' }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '24px', marginBottom: '48px' }}>
+          <div className="botanical-intro">
             <div>
               <span className="reveal" style={{ fontFamily: "'DM Sans'", fontSize: '0.65rem', letterSpacing: '0.35em', textTransform: 'uppercase', color: 'rgba(201,164,101,0.6)' }}>
                 02 — The Material World
@@ -555,11 +558,7 @@ export default function App() {
                 Botanical Origins
               </h2>
             </div>
-            <p className="reveal reveal-delay-2" style={{
-              fontFamily: "'DM Sans'", fontWeight: 300, fontSize: '0.88rem',
-              color: 'rgba(244,237,224,0.38)', maxWidth: '320px',
-              lineHeight: 1.85, textAlign: 'right',
-            }}>
+            <p className="reveal reveal-delay-2 botanical-intro-copy">
               Every material carries the culture, climate and history of its origin.
               Explore the native roots, cultivated heritage and scent character of our palette. Tap a region or choose a material below.
             </p>
@@ -766,8 +765,8 @@ export default function App() {
             <div style={{ overflow: 'hidden', position: 'relative', borderTop: '2px solid #130f0a' }}>
               <img
                 src={workshopStanding}
-                alt="Workshop participants in conversation with the perfumer"
-                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 28%', display: 'block', filter: 'brightness(0.68) saturate(0.78)' }}
+                alt="A workshop participant measuring aromatic materials and recording a perfume formula"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 60%', display: 'block', filter: 'brightness(0.68) saturate(0.78)' }}
               />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(19,15,10,0.14) 0%, transparent 60%)' }} />
             </div>
@@ -883,7 +882,9 @@ export default function App() {
 
       {/* ── Enquire ──────────────────────────────────────── */}
       <div id="formulation" style={{ position: 'relative', top: '-68px' }} aria-hidden="true" />
-      <section id="enquire" style={{ background: '#f4ede0', padding: 'clamp(80px,10vw,140px) clamp(24px,8vw,120px)', position: 'relative', overflow: 'hidden' }}>
+      <section id="enquire" className="enquiry-section" style={{ background: '#f4ede0', padding: 'clamp(80px,10vw,140px) clamp(24px,8vw,120px)', position: 'relative', overflow: 'hidden' }}>
+        <img className="enquiry-background-photo" src={enquiryWorkshop} alt="" aria-hidden="true" loading="lazy" />
+        <div className="enquiry-background-wash" aria-hidden="true" />
         {/* Faint contour watermark */}
         <svg aria-hidden="true" viewBox="0 0 100 60" style={{ position: 'absolute', top: '-5%', right: '-8%', width: '55%', height: 'auto', pointerEvents: 'none', opacity: 0.025 }}>
           {[0.55, 0.90, 1.35].map((s, i) => {
@@ -936,7 +937,7 @@ export default function App() {
 
             {/* Right: form */}
             <form
-              className="reveal reveal-delay-2"
+              className="reveal reveal-delay-2 enquiry-form"
               action="https://formspree.io/f/xoeqvywn"
               method="POST"
               style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}

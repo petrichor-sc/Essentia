@@ -64,3 +64,13 @@
 .atlas-reset { margin-top:16px; border:1px solid #c9a465; color:#f4ede0; background:transparent; padding:10px 14px; font-size:11px; }
 @media(max-width:900px) { .atlas-layout { grid-template-columns:1fr; } .atlas-map-column { padding-right:0; } .atlas-note { border-left:0; border-top:1px solid #c9a46525; padding:28px 0; } .atlas-note-list { grid-template-columns:repeat(3,minmax(0,1fr)); } }
 @media(max-width:540px) { .botanical-atlas { padding-inline:20px; } .atlas-toolbar { align-items:stretch; } .atlas-search { width:100%; } .atlas-filters button { padding:9px 11px; font-size:10px; } .atlas-note-list { grid-template-columns:repeat(2,minmax(0,1fr)); } .atlas-map-heading { font-size:8px; } }
+.atlas-region-select { display:flex; align-items:center; flex-wrap:wrap; gap:12px; color:#b6a78d; font-size:10px; }
+.atlas-region-select select { font:inherit; max-width:100%; padding:10px 30px 10px 12px; color:#eee5d8; background:#130e20; border:1px solid #c9a46545; }
+.atlas-productions { margin-top:28px; }
+.atlas-variant-list { max-height:300px; overflow:auto; padding-right:8px; scrollbar-color:#c9a46565 transparent; }
+.atlas-variant-list details { border-top:1px solid #c9a46525; padding:12px 0; font-size:11px; line-height:1.7; }
+.atlas-variant-list summary { cursor:pointer; color:#e2c996; overflow-wrap:anywhere; }
+.atlas-variant-list summary span { display:block; color:#bdb2ca; font-size:10px; margin:4px 0 0 14px; }
+.atlas-variant-list p { margin:14px 0 10px; font-size:11px; }
+.atlas-variant-list strong { display:block; font-size:9px; font-weight:400; text-transform:uppercase; letter-spacing:.12em; color:#b6a78d; }
+.atlas-variant-list a { font-size:10px; color:#c0ace8; text-decoration:underline; text-underline-offset:3px; }

@@ -2110,3 +2110,33 @@ body {
   }
   .hero-explore-link { transition: none; }
 }
+
+/* Workshop photographs and compact botanical introduction. */
+.philosophy-story-prelude { position: relative; isolation: isolate; overflow: hidden; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; min-height: 530px; padding: clamp(36px,5vw,70px); border-bottom: 0; }
+.philosophy-story-photo { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: center 38%; }
+.philosophy-story-prelude::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg,#f4ede0 0%,rgba(244,237,224,.96) 28%,rgba(244,237,224,.83) 44%,rgba(244,237,224,.1) 72%); }
+.philosophy-story-title { max-width: 560px; font-size: clamp(2.3rem,4.2vw,4rem); }
+.philosophy-story-copy { max-width: 39ch; margin-top: 28px; }
+.memory-interlude { min-height: 690px; }
+.memory-interlude-photo { left: auto; right: 0; width: 62%; object-fit: contain; object-position: center; transform: none; }
+.memory-interlude:hover .memory-interlude-photo { transform: none; }
+.memory-interlude-overlay { background: linear-gradient(90deg,#100820 0%,rgba(16,8,32,.96) 29%,rgba(16,8,32,.45) 42%,rgba(16,8,32,0) 62%); }
+.botanical-intro { max-width: 1280px; margin: 0 auto 40px; display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); gap: clamp(28px,4vw,64px); align-items: center; }
+.botanical-intro-copy { margin: 0; font-family: 'DM Sans',sans-serif; font-weight: 300; font-size: .9rem; line-height: 1.8; color: rgba(244,237,224,.62); max-width: 58ch; text-align: left; }
+.enquiry-background-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: .44; filter: saturate(.45); pointer-events: none; }
+.enquiry-background-wash { position: absolute; inset: 0; background: linear-gradient(90deg,rgba(244,237,224,.76),rgba(244,237,224,.92) 55%,rgba(244,237,224,.98)); pointer-events: none; }
+@media(max-width:900px) { .botanical-intro { grid-template-columns: 1fr; gap: 22px; } .botanical-intro-copy { max-width: 70ch; } }
+@media(max-width:760px) {
+ .philosophy-story-prelude { min-height: 0; padding: 0 0 28px; overflow: visible; }
+ .philosophy-story-photo { position: relative; z-index: 0; height: auto; aspect-ratio: 3 / 2; object-fit: cover; margin-bottom: 28px; }
+ .philosophy-story-prelude::before { display: none; }
+ .philosophy-story-copy { max-width: none; margin-top: 18px; }
+ .memory-interlude { min-height: 0; display: flex; flex-direction: column; }
+ .memory-interlude-photo { position: relative; inset: auto; width: 100%; height: auto; object-fit: contain; filter: brightness(.9) saturate(.9); }
+ .memory-interlude:hover .memory-interlude-photo { transform: none; }
+ .memory-interlude-shell { position: relative; inset: auto; padding: 26px 22px 40px; display: block; }
+ .memory-interlude-content { max-width: none; }
+ .memory-interlude-overlay { display: none; }
+ .enquiry-background-photo { object-position: 35% center; opacity: .25; }
+ .enquiry-background-wash { background: rgba(244,237,224,.82); }
+}
