@@ -1,13 +1,23 @@
 // Optional captions preserve an existing gallery description file.
 const descriptions = import.meta.glob<Record<string, string>>('./photo-descriptions.json', { eager: true, import: 'default' })
 
-const files = import.meta.glob<string>(
+const festivalFiles = import.meta.glob<string>(
   './schirrhof-festival-2026/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,WEBP,AVIF}',
   { eager: true, query: '?url', import: 'default' },
 )
 const labels: Record<string, string> = descriptions['./photo-descriptions.json'] || {}
 
-export const festivalPhotos = Object.entries(files)
+const summerFiles = import.meta.glob<string>(
+  './summer-perfume-atelier-2026/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,WEBP,AVIF}',
+  { eager: true, query: '?url', import: 'default' },
+)
+const atelier2025Files = import.meta.glob<string>(
+  './perfume-atelier-2025/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,WEBP,AVIF}',
+  { eager: true, query: '?url', import: 'default' },
+)
+
+function albumPhotos(files: Record<string, string>, album: string, title: string) {
+  return Object.entries(files)
   .sort(([a], [b]) => {
     const aCover = /\/cover\.[^/]+$/i.test(a)
     const bCover = /\/cover\.[^/]+$/i.test(b)
@@ -15,5 +25,10 @@ export const festivalPhotos = Object.entries(files)
   })
   .map(([path, src], index) => {
     const filename = path.split('/').pop()!
-    return { src, filename, alt: labels[filename] || `Summer Perfume-Making Atelier at Schirrhof-Festival 2026 — photo ${index + 1}` }
+    return { src, filename, alt: labels[`${album}/${filename}`] || labels[filename] || `${title} — photo ${index + 1}` }
   })
+}
+
+export const festivalPhotos = albumPhotos(festivalFiles, 'schirrhof-festival-2026', 'Summer Perfume-Making Atelier at Schirrhof-Festival 2026')
+export const summerPhotos = albumPhotos(summerFiles, 'summer-perfume-atelier-2026', 'Summer Perfume Atelier 2026')
+export const atelier2025Photos = albumPhotos(atelier2025Files, 'perfume-atelier-2025', 'Perfume Atelier 2025')

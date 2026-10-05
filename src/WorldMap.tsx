@@ -11,30 +11,33 @@ export default function WorldMap() {
   const [query, setQuery] = useState('')
   const [regionId, setRegionId] = useState<string | null>(null)
   const [selected, setSelected] = useState('himalayan-cedar')
+  const [expanded, setExpanded] = useState(false)
   const id = useId()
   const matching = PALETTE.filter(note =>
     (tier === 'all' || (tier === 'carrier' ? note.families.includes('Carrier') : note.tiers.includes(tier))) &&
     [note.name, note.botanicalName, note.origin, ...note.families].join(' ').toLowerCase().includes(query.trim().toLowerCase()))
   const visible = matching.filter(note => !regionId || note.regionId === regionId)
+  const listed = expanded ? visible : visible.slice(0, 4)
   const active = visible.find(note => note.id === selected) || visible[0]
   const regions = REGIONS.filter(region => matching.some(note => note.regionId === region.id))
   const selectedRegion = REGIONS.find(region => region.id === regionId)
   const selectRegion = (value: string) => {
     setRegionId(value)
+    setExpanded(false)
     const first = matching.find(note => note.regionId === value)
     if (first) setSelected(first.id)
   }
-  const reset = () => { setTier('all'); setQuery(''); setRegionId(null); setSelected('himalayan-cedar') }
+  const reset = () => { setTier('all'); setQuery(''); setRegionId(null); setSelected('himalayan-cedar'); setExpanded(false) }
 
   return <div className="botanical-atlas">
     <div className="atlas-toolbar">
       <div className="atlas-filters" role="group" aria-label="Filter by perfume note position">
         {FILTERS.map(([value, label]) => <button key={value} type="button" aria-pressed={tier === value}
-          onClick={() => { setTier(value); setRegionId(null) }}>{label}</button>)}
+          onClick={() => { setTier(value); setRegionId(null); setExpanded(false) }}>{label}</button>)}
       </div>
       <label className="atlas-search" htmlFor={`${id}-search`}><span>Find a material</span>
         <input id={`${id}-search`} type="search" value={query} placeholder="Name, botanical or region…"
-          onChange={event => { setQuery(event.target.value); setRegionId(null) }} />
+          onChange={event => { setQuery(event.target.value); setRegionId(null); setExpanded(false) }} />
       </label>
     </div>
     <div className="atlas-layout">
@@ -74,7 +77,7 @@ export default function WorldMap() {
         </svg>
         <div className="atlas-map-key"><span><i /> Native range</span><span><i className="heritage" /> Cultivation &amp; heritage</span></div>
         <div className="atlas-region-list" role="group" aria-label="Explore a region">
-          <button type="button" aria-pressed={!regionId} onClick={() => setRegionId(null)}>All regions</button>
+          <button type="button" aria-pressed={!regionId} onClick={() => { setRegionId(null); setExpanded(false) }}>All regions</button>
           {regions.map(region => <button key={region.id} type="button" aria-pressed={regionId === region.id}
             onClick={() => selectRegion(region.id)}>{region.label}</button>)}
         </div>
@@ -95,11 +98,15 @@ export default function WorldMap() {
     </div>
     <div className="atlas-palette">
       <div className="atlas-palette-heading"><h3>{selectedRegion ? selectedRegion.label : 'Explore our palette'}</h3>
-        <span aria-live="polite">{visible.length} {visible.length === 1 ? 'material' : 'materials'}</span></div>
-      <div className="atlas-note-list" role="group" aria-label="Select a material">
-        {visible.map(note => <button key={note.id} type="button" aria-pressed={active?.id === note.id}
+        <span aria-live="polite">{listed.length < visible.length ? `${listed.length} of ${visible.length}` : visible.length} {visible.length === 1 ? 'material' : 'materials'}</span></div>
+      <div id={`${id}-palette`} className="atlas-note-list" role="group" aria-label="Select a material">
+        {listed.map(note => <button key={note.id} type="button" aria-pressed={active?.id === note.id}
           onClick={() => setSelected(note.id)}>{note.name}<span>{note.families[0] || note.originKind}</span></button>)}
       </div>
+      {visible.length > 4 && <button type="button" className="atlas-show-more" aria-expanded={expanded}
+        aria-controls={`${id}-palette`} onClick={() => setExpanded(!expanded)}>
+        {expanded ? 'Show less' : `Show more (${visible.length - 4})`}
+      </button>}
       <p className="atlas-footnote">Pins are representative points within broader botanical regions, not farms or harvest locations. Cultivated hybrids, compositions and uncertain identities are distinguished from wild native ranges. Botanical references: Sunday Natural and Kew.</p>
     </div>
   </div>

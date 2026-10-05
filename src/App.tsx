@@ -1101,64 +1101,11 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── Sensory Language ─────────────────────────────── */}
-      <section style={{
-        background: `url('https://images.unsplash.com/photo-1586875401592-64f1d5cb43e4?w=1800&h=900&fit=crop&auto=format') center/cover no-repeat`,
-        position: 'relative', padding: 'clamp(100px,14vw,180px) clamp(24px,6vw,80px)',
-      }}>
-        <div style={{ position: 'absolute', inset: 0, background: 'rgba(19,15,10,0.88)' }}/>
-        <div style={{ position: 'relative', maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
-          <div className="quote-mark reveal" style={{ marginBottom: '0px' }}>"</div>
-          <blockquote className="reveal reveal-delay-1" style={{
-            fontFamily: "'Fraunces', Georgia, serif", fontWeight: 100, fontStyle: 'italic',
-            fontSize: 'clamp(1.5rem, 4vw, 3rem)', color: '#f4ede0',
-            lineHeight: 1.35, margin: '0 0 48px 0', letterSpacing: '-0.01em',
-          }}>
-            The first breath of a new fragrance is one of the last genuinely
-            untranslatable human experiences. Nothing can prepare you for it.
-          </blockquote>
-          <div className="gold-line reveal reveal-delay-2" style={{ maxWidth: '200px', margin: '0 auto 32px' }}/>
-          <div className="reveal reveal-delay-3" style={{ fontFamily: "'DM Sans'", fontSize: '0.72rem', letterSpacing: '0.3em', color: 'rgba(201,164,101,0.7)', textTransform: 'uppercase' }}>
-            Mara Selin — Workshop Guest, 2024
-          </div>
-        </div>
-      </section>
-
-      {/* ── Testimonials ─────────────────────────────────── */}
-      <section style={{ background: '#1e1810', padding: 'clamp(80px,10vw,140px) clamp(24px,6vw,80px)' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ marginBottom: '80px' }}>
-            <span className="reveal" style={{ fontFamily: "'DM Sans'", fontSize: '0.65rem', letterSpacing: '0.35em', textTransform: 'uppercase', color: 'rgba(201,164,101,0.6)' }}>05 — Voices</span>
-            <h2 className="reveal reveal-delay-1" style={{
-              fontFamily: "'Fraunces', Georgia, serif", fontWeight: 100, fontStyle: 'italic',
-              fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', color: '#f4ede0',
-              lineHeight: 1, margin: '16px 0 0 0', letterSpacing: '-0.02em',
-            }}>
-              From the Atelier
-            </h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '48px' }}>
-            {[
-              { text: "I've attended perfume masterclasses across Paris and Tokyo. Nothing comes close to the intimacy and depth of an Essentia session. My fragrance still makes people stop me on the street to ask what I'm wearing.", name: 'Chiara B.', role: 'Art Curator, Milan' },
-              { text: "The workshop changed how I understand smell entirely. Our master perfumer speaks about notes the way a wine sommelier speaks about terroir. It's a completely new sensory vocabulary.", name: 'Thomas R.', role: 'Architect, Berlin' },
-              { text: "I gave this as a gift to my partner for our anniversary. She still describes it as the most meaningful gift she's received. The fragrance she created captures something I don't have words for.", name: 'Priya M.', role: 'Writer, London' },
-            ].map((t, i) => (
-              <div key={i} className={`reveal reveal-delay-${i + 1}`}
-                style={{ borderTop: '1px solid rgba(201,164,101,0.15)', paddingTop: '32px' }}>
-                <p style={{ fontFamily: "'Fraunces', Georgia, serif", fontWeight: 300, fontStyle: 'italic', fontSize: '1.05rem', color: 'rgba(244,237,224,0.75)', lineHeight: 1.75, margin: '0 0 28px 0' }}>"{t.text}"</p>
-                <div style={{ fontFamily: "'DM Sans'", fontSize: '0.72rem', letterSpacing: '0.15em', color: '#c9a465', textTransform: 'uppercase', marginBottom: '4px' }}>{t.name}</div>
-                <div style={{ fontFamily: "'DM Sans'", fontSize: '0.7rem', color: 'rgba(244,237,224,0.3)', letterSpacing: '0.1em' }}>{t.role}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── Process Timeline ─────────────────────────────── */}
       <section style={{ background: '#f4ede0', padding: 'clamp(80px,10vw,140px) clamp(24px,6vw,80px)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ marginBottom: '80px' }}>
-            <span className="reveal" style={{ fontFamily: "'DM Sans'", fontSize: '0.65rem', letterSpacing: '0.35em', textTransform: 'uppercase', color: 'rgba(42,33,23,0.4)' }}>06 — The Process</span>
+            <span className="reveal" style={{ fontFamily: "'DM Sans'", fontSize: '0.65rem', letterSpacing: '0.35em', textTransform: 'uppercase', color: 'rgba(42,33,23,0.4)' }}>05 — The Process</span>
             <h2 className="reveal reveal-delay-1" style={{
               fontFamily: "'Fraunces', Georgia, serif", fontWeight: 100, fontStyle: 'italic',
               fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', color: '#2a2117',
@@ -1265,7 +1212,7 @@ export default function App() {
             {[
               { title: 'Explore', links: ['Philosophy', 'Collections', 'Ingredients', 'The Process'] },
               { title: 'Experience', links: ['Workshop Sessions', 'Workshop Galleries', 'Bespoke Commission', 'Corporate Events', 'Gift Vouchers'] },
-              { title: 'Studio', links: ['London Atelier', 'Contact', 'Press', 'Stockists'] },
+              { title: 'Studio', links: ['Our Atelier', 'Contact', 'Press', 'Stockists'] },
             ].map(col => (
               <div key={col.title}>
                 <div style={{ fontFamily: "'DM Sans'", fontSize: '0.6rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(201,164,101,0.5)', marginBottom: '20px' }}>{col.title}</div>
@@ -1290,7 +1237,7 @@ export default function App() {
               © 2026 Essentia Resonance Ltd. All rights reserved.
             </span>
             <span style={{ fontFamily: "'DM Sans'", fontSize: '0.65rem', color: 'rgba(244,237,224,0.2)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-              London · Paris · Kyoto
+              Europe · India
             </span>
           </div>
         </div>

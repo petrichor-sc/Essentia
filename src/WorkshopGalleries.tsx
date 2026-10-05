@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import logoMark from './imports/Essentia_Logo_2.png'
-import { festivalPhotos as photos } from './galleries/photos'
+import { ALBUMS, GALLERIES_ROUTE } from './galleries/albums'
 import WorkshopMenu from './WorkshopMenu'
 import './workshop-galleries.css'
 
-export const GALLERIES_ROUTE = '#/workshop-galleries'
-export const FESTIVAL_ROUTE = `${GALLERIES_ROUTE}/schirrhof-festival-2026`
-const officialEvent = 'https://kulturprojekte-niederrhein.de/events/2026-schirrhof-festival'
+export { GALLERIES_ROUTE, FESTIVAL_ROUTE } from './galleries/albums'
 
-export default function WorkshopGalleries({ detail }: { detail: boolean }) {
+export default function WorkshopGalleries({ albumId }: { albumId?: string }) {
+  const album = ALBUMS.find(item => item.id === albumId)
+  const photos = album?.photos || []
+  const coverIndex = Math.max(0, photos.findIndex(photo => photo.filename === album?.coverFilename))
+  const cover = photos[coverIndex]
   const [selected, setSelected] = useState<number | null>(null)
   const dialog = useRef<HTMLDialogElement>(null)
   const heading = useRef<HTMLHeadingElement>(null)
@@ -16,10 +18,10 @@ export default function WorkshopGalleries({ detail }: { detail: boolean }) {
 
   useEffect(() => {
     const previousTitle = document.title
-    document.title = `${detail ? 'Schirrhof-Festival 2026 · Summer Perfume-Making Atelier' : 'Workshop Galleries'} | Essentia Resonance`
+    document.title = `${album?.title || 'Workshop Galleries'} | Essentia Resonance`
     heading.current?.focus({ preventScroll: true })
     return () => { document.title = previousTitle }
-  }, [detail])
+  }, [album])
 
   useEffect(() => {
     if (!hasSelection) return
@@ -47,20 +49,20 @@ export default function WorkshopGalleries({ detail }: { detail: boolean }) {
       <main id="gallery-main">
         <nav className="gallery-breadcrumb" aria-label="Breadcrumb">
           <a href="#hero">Home</a><span aria-hidden="true">/</span>
-          {detail ? <><a href={GALLERIES_ROUTE}>Workshop Galleries</a><span aria-hidden="true">/</span><span aria-current="page">Schirrhof-Festival 2026</span></> : <span aria-current="page">Workshop Galleries</span>}
+          {album ? <><a href={GALLERIES_ROUTE}>Workshop Galleries</a><span aria-hidden="true">/</span><span aria-current="page">{album.title}</span></> : <span aria-current="page">Workshop Galleries</span>}
         </nav>
 
-        {detail ? <>
+        {album ? <>
           <section className="gallery-intro">
-            <p className="gallery-eyebrow">23 August 2026 · Schirrhof, Kamp-Lintfort</p>
-            <h1 ref={heading} tabIndex={-1}>Summer Perfume-<br /><em>Making Atelier</em></h1>
-            <p className="gallery-event-name">Schirrhof-Festival 2026</p>
-            <p className="gallery-lead">A summer afternoon of scent, conversation and personal creations. Explore moments from the Essentia Resonance perfume atelier at the Schirrhof.</p>
+            <p className="gallery-eyebrow">{album.eyebrow}</p>
+            <h1 ref={heading} tabIndex={-1}>{album.titleLead}<br /><em>{album.titleEmphasis}</em></h1>
+            <p className="gallery-event-name">{album.title}</p>
+            <p className="gallery-lead">{album.description}</p>
             <a className="gallery-text-link" href={GALLERIES_ROUTE}>← All workshop galleries</a>
           </section>
-          {photos.length > 0 && <figure className="gallery-hero-photo">
-            <button aria-label="Enlarge cover photo" onClick={() => setSelected(0)}><img src={photos[0].src} alt={photos[0].alt} fetchPriority="high" /></button>
-            <figcaption>Essentia Resonance · Summer 2026</figcaption>
+          {cover && <figure className="gallery-hero-photo">
+            <button aria-label="Enlarge cover photo" onClick={() => setSelected(coverIndex)}><img src={cover.src} alt={cover.alt} fetchPriority="high" /></button>
+            <figcaption>{album.caption}</figcaption>
           </figure>}
           <section className="gallery-collection" aria-labelledby="collection-title">
             <div className="gallery-section-heading"><h2 id="collection-title">Moments from the atelier</h2>{photos.length > 0 && <span>{photos.length} photographs · Click to explore</span>}</div>
@@ -73,8 +75,8 @@ export default function WorkshopGalleries({ detail }: { detail: boolean }) {
           </section>
           <aside className="gallery-credits">
             <p className="gallery-eyebrow">A shared summer experience</p>
-            <p>Perfume atelier by Essentia Resonance. With thanks to Kulturprojekte Niederrhein e.V., Schirrhof and AStA HSRW.</p>
-            <a href={officialEvent} target="_blank" rel="noreferrer" className="gallery-text-link">Explore the festival programme ↗</a>
+            <p>{album.credits}</p>
+            {album.officialEvent && <a href={album.officialEvent} target="_blank" rel="noreferrer" className="gallery-text-link">Explore the festival programme ↗</a>}
           </aside>
         </> : <>
           <section className="gallery-intro">
@@ -83,13 +85,15 @@ export default function WorkshopGalleries({ detail }: { detail: boolean }) {
             <p className="gallery-lead">The people, the process and the perfumes. Revisit our ateliers through the moments we created together.</p>
           </section>
           <section aria-label="Past workshop galleries" className="gallery-events">
-            <a href={FESTIVAL_ROUTE} className="gallery-event-card">
+            {ALBUMS.map(item => {
+              const itemCover = item.photos.find(photo => photo.filename === item.coverFilename) || item.photos[0]
+              return <a href={item.route} className="gallery-event-card" key={item.id}>
               <div className="gallery-card-art">
-                {photos.length ? <img src={photos[0].src} alt={photos[0].alt} /> : <div className="gallery-card-placeholder" aria-hidden="true"><img src={logoMark} alt="" /><span>Summer 2026</span></div>}
-                <span className="gallery-card-badge">23 August 2026</span>
+                {itemCover ? <img src={itemCover.src} alt={itemCover.alt} loading="lazy" /> : <div className="gallery-card-placeholder" aria-hidden="true"><img src={logoMark} alt="" /><span>{item.date}</span></div>}
+                <span className="gallery-card-badge">{item.date}</span>
               </div>
-              <div className="gallery-card-copy"><p className="gallery-eyebrow">Schirrhof · Kamp-Lintfort</p><h2>Schirrhof-Festival 2026</h2><p>Summer Perfume-Making Atelier</p><span className="gallery-card-cta">Explore the gallery <span aria-hidden="true">↗</span></span></div>
-            </a>
+              <div className="gallery-card-copy"><p className="gallery-eyebrow">{item.location}</p><h2>{item.title}</h2><p>{item.subtitle}</p><span className="gallery-card-cta">{item.photos.length} photographs · Explore the gallery <span aria-hidden="true">↗</span></span></div>
+            </a>})}
           </section>
         </>}
         <section className="gallery-invitation"><p className="gallery-eyebrow">Your own scent story</p><h2>Join us at the atelier.</h2><a href="#enquire" className="gallery-button">Enquire about a workshop <span aria-hidden="true">↗</span></a></section>

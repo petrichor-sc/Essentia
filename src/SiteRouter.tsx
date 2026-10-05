@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import App from './App'
-import WorkshopGalleries, { FESTIVAL_ROUTE, GALLERIES_ROUTE } from './WorkshopGalleries'
+import WorkshopGalleries from './WorkshopGalleries'
+import { ALBUMS, GALLERIES_ROUTE } from './galleries/albums'
 
 // Hash routes work with GitHub Pages and retain the existing home section links.
 export default function SiteRouter() {
@@ -11,7 +12,8 @@ export default function SiteRouter() {
     return () => window.removeEventListener('hashchange', update)
   }, [])
   const route = hash.replace(/\/$/, '')
-  const isGallery = route === GALLERIES_ROUTE || route === FESTIVAL_ROUTE
+  const album = ALBUMS.find(item => item.route === route)
+  const isGallery = route === GALLERIES_ROUTE || !!album
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
       if (isGallery) window.scrollTo({ top: 0, behavior: 'instant' })
@@ -24,5 +26,5 @@ export default function SiteRouter() {
     })
     return () => cancelAnimationFrame(frame)
   }, [hash, isGallery])
-  return isGallery ? <WorkshopGalleries key={route} detail={route === FESTIVAL_ROUTE} /> : <App />
+  return isGallery ? <WorkshopGalleries key={route} albumId={album?.id} /> : <App />
 }

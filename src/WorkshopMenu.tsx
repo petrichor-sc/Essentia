@@ -21,9 +21,12 @@ export default function WorkshopMenu({ buttonStyle = false }: { buttonStyle?: bo
       onKeyDown={event => {
         if (event.key === 'Escape') { setOpen(false); trigger.current?.focus() }
       }}>
-      <button ref={trigger} className={buttonStyle ? 'cta-btn' : 'nav-link workshop-menu-trigger'}
+      <button ref={trigger} className={`${buttonStyle ? 'cta-btn' : 'nav-link'} workshop-menu-trigger`}
         aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}>
-        <span>Workshops <span aria-hidden="true">⌄</span></span>
+        <span>Workshops</span>
+        <svg className="workshop-menu-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" focusable="false">
+          <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </button>
       {open && <div id={id} className="workshop-menu-panel">
         <a href="#workshops" onClick={() => setOpen(false)}>About the workshops</a>

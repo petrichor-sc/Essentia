@@ -1,6 +1,7 @@
 .workshop-menu { position: relative; }
-.workshop-menu-trigger { background: none; border: 0; color: rgba(216,208,240,.8); cursor: pointer; }
-.workshop-menu-trigger span span { margin-left: 5px; }
+.workshop-menu-trigger { display: inline-flex; align-items: center; gap: 8px; background: none; border: 0; color: rgba(216,208,240,.65); cursor: pointer; }
+.workshop-menu-chevron { display: block; flex: 0 0 12px; transition: transform .2s; }
+.workshop-menu-trigger[aria-expanded="true"] .workshop-menu-chevron { transform: rotate(180deg); }
 .workshop-menu-panel { position: absolute; top: calc(100% + 12px); right: 0; z-index: 110; width: 260px; padding: 10px; background: #1b1426; border: 1px solid #594660; box-shadow: 0 18px 45px #0006; }
 .workshop-menu-panel a { display: flex; justify-content: space-between; padding: 15px 12px; color: #f4ede0; font: 400 13px/1.5 'DM Sans', sans-serif; text-decoration: none; letter-spacing: .025em; }
 .workshop-menu-panel a:hover, .workshop-menu-panel a:focus-visible { background: #ffffff0d; color: #ddbf87; }
@@ -26,7 +27,7 @@
 .gallery-event-name { font-size: 16px; letter-spacing: .04em; margin: 0 0 18px; }
 .gallery-lead { font-size: 15px; line-height: 1.95; font-weight: 300; color: #bdb2c6; max-width: 600px; margin: 0 0 24px; }
 .gallery-text-link { font-size: 12px; color: #ddbf87; border-bottom: 1px solid #c9a46555; padding-bottom: 5px; display: inline-block; }
-.gallery-events { padding-bottom: 70px; }
+.gallery-events { display: grid; gap: 28px; padding-bottom: 70px; }
 .gallery-event-card { display: grid; grid-template-columns: 1.15fr 1fr; overflow: hidden; color: inherit; border: 1px solid #c9a46533; background: #17111e; transition: border-color .25s; }
 .gallery-event-card:hover { border-color: #c9a46599; }
 .gallery-card-art { min-height: 340px; position: relative; overflow: hidden; }
