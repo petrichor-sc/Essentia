@@ -1,11 +1,10 @@
-// Optional captions preserve an existing gallery description file.
-const descriptions = import.meta.glob<Record<string, string>>('./photo-descriptions.json', { eager: true, import: 'default' })
+import descriptions from './photo-descriptions.json'
 
 const files = import.meta.glob<string>(
   './schirrhof-festival-2026/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,WEBP,AVIF}',
   { eager: true, query: '?url', import: 'default' },
 )
-const labels: Record<string, string> = descriptions['./photo-descriptions.json'] || {}
+const labels: Record<string, string> = descriptions
 
 export const festivalPhotos = Object.entries(files)
   .sort(([a], [b]) => {

@@ -13,7 +13,6 @@ import sarthakGlass from '@/imports/a.png'
 import labExtraction from '@/imports/IMG_5350.jpg'
 import memoryMoment from '@/imports/Hofefestival_014_memory_cropped.jpg'
 import WorldMap from './WorldMap'
-import WorkshopMenu from './WorkshopMenu'
 
 // Current navigation prioritises the three public service pathways.
 // The hash links keep the current single-page site functional; the matching
@@ -112,7 +111,6 @@ function useCursor() {
       ring.style.top = ry + 'px'
     }
 
-    let id = 0
     const raf = () => {
       if (ring) {
         const cx = parseFloat(ring.style.left || '0')
@@ -122,16 +120,15 @@ function useCursor() {
         ring.style.left = (cx + (tx - cx) * 0.1) + 'px'
         ring.style.top = (cy + (ty - cy) * 0.1) + 'px'
       }
-      id = requestAnimationFrame(raf)
+      requestAnimationFrame(raf)
     }
-    id = requestAnimationFrame(raf)
+    const id = requestAnimationFrame(raf)
 
     const onHoverIn = () => setHovering(true)
     const onHoverOut = () => setHovering(false)
 
     document.addEventListener('mousemove', onMove)
-    const hoverTargets = document.querySelectorAll('a, button, .scent-card, .cta-btn, .ingredient-tag')
-    hoverTargets.forEach(el => {
+    document.querySelectorAll('a, button, .scent-card, .cta-btn, .ingredient-tag').forEach(el => {
       el.addEventListener('mouseenter', onHoverIn)
       el.addEventListener('mouseleave', onHoverOut)
     })
@@ -139,10 +136,6 @@ function useCursor() {
     return () => {
       cancelAnimationFrame(id)
       document.removeEventListener('mousemove', onMove)
-      hoverTargets.forEach(el => {
-        el.removeEventListener('mouseenter', onHoverIn)
-        el.removeEventListener('mouseleave', onHoverOut)
-      })
     }
   }, [])
 
@@ -192,7 +185,7 @@ export default function App() {
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [introVisible, setIntroVisible] = useState(() => !window.location.hash)
+  const [introVisible, setIntroVisible] = useState(true)
   const [introLeaving, setIntroLeaving] = useState(false)
 
   useEffect(() => {
@@ -298,7 +291,7 @@ export default function App() {
         <div style={{ display: 'flex', gap: 'clamp(18px,2.2vw,34px)', alignItems: 'center' }}
           className="hidden-mobile">
           {PRIMARY_NAV_ITEMS.map(({ label, href }) => (
-            label === 'Workshops' ? <WorkshopMenu key={label} /> : <a key={label} href={href} className="nav-link" style={{ color: 'rgba(216,208,240,0.65)' }}>{label}</a>
+            <a key={label} href={href} className="nav-link" style={{ color: 'rgba(216,208,240,0.65)' }}>{label}</a>
           ))}
         </div>
 
@@ -328,7 +321,7 @@ export default function App() {
         }}>
           {/* Logo in mobile menu */}
           <img src={logoMark} alt="" style={{ width: '52px', filter: 'invert(1) brightness(0.85) sepia(0.3) hue-rotate(220deg) saturate(1.5)', opacity: 0.7, marginBottom: '8px' }} />
-          {[...PRIMARY_NAV_ITEMS, { label: 'Workshop Galleries', href: '#/workshop-galleries' }, { label: 'Enquire', href: '#enquire' }].map(({ label, href }) => (
+          {[...PRIMARY_NAV_ITEMS, { label: 'Enquire', href: '#enquire' }].map(({ label, href }) => (
             <a key={label} href={href} onClick={() => setMenuOpen(false)} style={{
               fontFamily: "'Aboreto', system-ui, sans-serif",
               fontSize: '1.4rem',
@@ -536,7 +529,7 @@ export default function App() {
       </section>
 
       {/* ── Botanical Notes — World Map ────────────────────── */}
-      <section id="botanical-origins" style={{ background: '#07050f', overflow: 'hidden' }}>
+      <section style={{ background: '#07050f', overflow: 'hidden' }}>
         {/* Header */}
         <div style={{ padding: 'clamp(64px,8vw,100px) clamp(24px,6vw,80px) 0' }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '24px', marginBottom: '48px' }}>
@@ -561,7 +554,7 @@ export default function App() {
               lineHeight: 1.85, textAlign: 'right',
             }}>
               Every material carries the culture, climate and history of its origin.
-              Explore the native roots, cultivated heritage and scent character of our palette. Tap a region or choose a material below.
+              Hover the map to explore where our palette comes from.
             </p>
           </div>
         </div>
@@ -571,6 +564,24 @@ export default function App() {
           <WorldMap />
         </div>
 
+        {/* Origin legend strip */}
+        <div style={{ padding: '32px clamp(24px,6vw,80px) clamp(48px,6vw,80px)' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+            {[
+              'Rose de Mai · Grasse', 'Bergamot · Calabria', 'Moroccan Rose · Atlas Mtns',
+              'Frankincense · Oman', 'Jasmine Sambac · Kannauj', 'Boswellia · Ethiopia',
+              'Ylang-Ylang · Madagascar', 'Patchouli · Sumatra', 'Vetiver · Haiti',
+            ].map(tag => (
+              <span key={tag} style={{
+                fontFamily: "'DM Sans'", fontSize: '0.64rem', letterSpacing: '0.18em',
+                color: 'rgba(201,164,101,0.45)', textTransform: 'uppercase',
+                border: '1px solid rgba(201,164,101,0.12)', padding: '5px 12px',
+              }}>
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* ── Atelier ──────────────────────────────────────── */}
@@ -737,7 +748,6 @@ export default function App() {
 
             <div className="reveal reveal-delay-4" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
               <a href="#enquire" className="cta-btn"><span>Enquire About a Workshop</span></a>
-              <a href="#/workshop-galleries" className="cta-btn"><span>Workshop Galleries</span></a>
               <a href="#" style={{
                 display: 'inline-flex', alignItems: 'center',
                 fontFamily: "'DM Sans'", fontSize: '0.7rem', letterSpacing: '0.22em',
@@ -1264,13 +1274,13 @@ export default function App() {
             </div>
             {[
               { title: 'Explore', links: ['Philosophy', 'Collections', 'Ingredients', 'The Process'] },
-              { title: 'Experience', links: ['Workshop Sessions', 'Workshop Galleries', 'Bespoke Commission', 'Corporate Events', 'Gift Vouchers'] },
+              { title: 'Experience', links: ['Workshop Sessions', 'Bespoke Commission', 'Corporate Events', 'Gift Vouchers'] },
               { title: 'Studio', links: ['London Atelier', 'Contact', 'Press', 'Stockists'] },
             ].map(col => (
               <div key={col.title}>
                 <div style={{ fontFamily: "'DM Sans'", fontSize: '0.6rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(201,164,101,0.5)', marginBottom: '20px' }}>{col.title}</div>
                 {col.links.map(l => (
-                  <a key={l} href={l === 'Workshop Galleries' ? '#/workshop-galleries' : l === 'Workshop Sessions' ? '#workshops' : l === 'Ingredients' ? '#botanical-origins' : '#'} style={{
+                  <a key={l} href="#" style={{
                     display: 'block', fontFamily: "'DM Sans'", fontWeight: 300, fontSize: '0.82rem',
                     color: 'rgba(244,237,224,0.45)', textDecoration: 'none', marginBottom: '12px',
                     transition: 'color 0.3s',
