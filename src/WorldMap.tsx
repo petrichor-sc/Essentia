@@ -43,6 +43,11 @@ export default function WorldMap() {
           onChange={event => { setQuery(event.target.value); setRegionId(null); setExpanded(false) }} />
       </label>
     </div>
+    <p style={{ margin: '0 0 24px' }}>
+  <a href="./atlas/" style={{ color: '#c9a465', fontSize: 13 }}>
+    Explore the immersive Essentia Atlas ↗
+  </a>
+</p>
     <div className="atlas-layout">
       <div className="atlas-map-column">
         <div className="atlas-map-heading"><span>A world of botanical roots</span><span>Hover · tap · explore</span></div>

@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#100b19">
+  <meta name="description" content="Explore the aromatic world with Essentia Resonance. An interactive botanical atlas of places, plant parts, cultural traditions, perfumery, and evidence for body and mind.">
+  <title>Essentia Atlas · Plants, Places & People</title>
+  <link rel="icon" href="./assets/favicon.png">
+  <link rel="stylesheet" href="./assets/fonts.css">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="importmap">{"imports":{"three":"./assets/three.module.js"}}</script>
+</head>
+<body>
+  <a class="skip-link" href="#botanical-index">Skip to the botanical index</a>
+  <header class="site-header">
+    <a class="brand" href="https://www.essentiaresonance.com/" aria-label="Essentia Resonance home">
+      <img src="./assets/essentia-logo.png" alt="" class="brand-mark" width="30" height="44">
+      <span>ESSENTIA<small>R E S O N A N C E</small></span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="#explore" class="nav-current">The atlas</a>
+      <a href="#botanical-index">Botanical index</a>
+      <button type="button" id="about-button">About</button>
+    </nav>
+    <a class="return-link" href="https://www.essentiaresonance.com/">Visit Essentia <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main>
+    <section class="atlas-intro" id="explore" aria-labelledby="atlas-title">
+      <div>
+        <p class="eyebrow"><span class="tiny-star" aria-hidden="true">✦</span> AN ESSENTIA RESONANCE STUDY ATLAS</p>
+        <h1 id="atlas-title">A world within <em>a drop.</em></h1>
+      </div>
+      <p class="intro-description">Follow a scent through landscapes, plant traditions,<br class="desktop-break"> and the human experience. Explore. Connect. Understand.</p>
+    </section>
+
+    <section class="explorer" aria-label="Interactive botanical atlas">
+      <div class="explorer-toolbar">
+        <div class="view-switch" role="group" aria-label="Choose a starting point">
+          <button type="button" data-view="world" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><ellipse cx="12" cy="12" rx="4" ry="8.5"/><path d="M3.5 12h17M5.5 6.5h13M5.5 17.5h13"/></svg>World & botanicals</button>
+          <button type="button" data-view="body" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="4.5" r="2"/><path d="M8 21v-5L6 11l1-3h10l1 3-2 5v5M12 16v5M9 8v6h6V8"/></svg>Body & mind</button>
+        </div>
+        <div class="explorer-tools">
+          <button type="button" class="text-button" id="compare-button" disabled><span aria-hidden="true">⇄</span> Compare <span id="compare-count">0</span></button>
+          <button type="button" class="text-button" id="focus-button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg><span>Focus view</span></button>
+        </div>
+      </div>
+
+      <div class="explorer-grid">
+        <div class="visual-pane" id="visual-pane">
+          <div class="scene-label"><span class="status-dot" aria-hidden="true"></span><span id="scene-label-text">THE AROMATIC WORLD</span><span class="scene-mode" id="scene-mode-text">Regional reference points</span></div>
+          <div id="scene" class="scene" role="img" aria-label="Interactive globe showing botanical origin regions. Use the region menu or botanical index for keyboard navigation."></div>
+          <div class="scene-fallback" id="scene-fallback" hidden></div>
+          <div class="scene-topic-labels" id="scene-topic-labels" hidden></div>
+          <div class="map-tooltip" id="map-tooltip" hidden></div>
+          <div class="scene-caption" id="scene-caption"><span>Drag to explore</span><span class="caption-dot">·</span><span>Select a point to discover</span></div>
+          <div class="scene-controls">
+            <button type="button" id="rotate-button" aria-pressed="true" aria-label="Pause globe rotation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg></button>
+            <button type="button" id="reset-scene-button" aria-label="Reset view"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6"/></svg></button>
+          </div>
+          <div class="world-controls" id="world-controls">
+            <label for="region-select" class="sr-only">Explore a region</label>
+            <select id="region-select"><option value="">All regions</option></select>
+          </div>
+          <div class="body-note" id="body-note" hidden>Conceptual navigation · select a research topic</div>
+        </div>
+        <aside class="botanical-spotlight" id="botanical-spotlight" aria-label="Selected botanical" aria-busy="true">
+          <div class="loading-state">Opening the aromatic world…</div>
+        </aside>
+      </div>
+      <div class="explorer-footnote">
+        <p id="explorer-note">Production, botanical range, and cultural heritage are distinct. Points represent regions, not individual farms.</p>
+        <button type="button" class="text-button" id="method-button">How to read this atlas <span aria-hidden="true">↗</span></button>
+      </div>
+    </section>
+
+    <section class="topic-strip" id="topic-strip" aria-label="Body and mind topics" hidden>
+      <div class="topic-intro"><p class="eyebrow">FOLLOW YOUR CURIOSITY</p><h2>Body & mind</h2></div>
+      <div class="topic-options" id="topic-options"></div>
+      <p class="topic-context" id="topic-context">Explore what has been studied and how it was used.</p>
+    </section>
+
+    <section class="botanical-index" id="botanical-index" aria-labelledby="index-title">
+      <div class="index-heading">
+        <div><p class="eyebrow">THE BOTANICAL LIBRARY</p><h2 id="index-title">Let curiosity <em>lead you.</em></h2></div>
+        <label class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><span class="sr-only">Search the botanical collection</span><input id="search" type="search" placeholder="Botanical, scent, or place…" autocomplete="off"><kbd aria-hidden="true">/</kbd></label>
+      </div>
+      <div class="index-toolbar">
+        <div class="collection-switch" role="group" aria-label="Choose a collection">
+          <button type="button" data-collection="study" aria-pressed="true">Study chapters <span id="study-total"></span></button>
+          <button type="button" data-collection="palette" aria-pressed="false">Essentia palette <span id="palette-total"></span></button>
+          <button type="button" data-collection="all" aria-pressed="false">All materials <span id="all-total"></span></button>
+        </div>
+        <label class="note-select-label"><span>Note position</span><select id="tier-select" aria-label="Filter by perfume note position"><option value="all">All notes</option><option value="top">Top</option><option value="heart">Heart</option><option value="base">Base</option><option value="carrier">Carriers</option></select></label>
+      </div>
+      <div class="results-line"><p id="result-count" aria-live="polite"></p><div id="active-filters"></div><button type="button" class="text-button" id="clear-filters" hidden>Clear filters</button></div>
+      <div class="botanical-grid" id="botanical-grid" aria-label="Botanical results"></div>
+      <div class="empty-state" id="empty-state" hidden><span aria-hidden="true">✧</span><h3>A different path to explore.</h3><p>No materials match this combination. Try another term or clear the filters.</p><button type="button" class="outline-button" id="empty-clear">Show the collection</button></div>
+      <button type="button" class="outline-button load-more" id="load-more" hidden>Explore more botanicals <span aria-hidden="true">↓</span></button>
+    </section>
+
+    <section class="atlas-philosophy" aria-label="About the collection">
+      <span class="philosophy-star" aria-hidden="true">✦</span>
+      <p>Every material carries a landscape.<br>Every tradition carries <em>a story.</em></p>
+      <button type="button" class="text-button" id="philosophy-about">Our approach to plants, people & evidence <span aria-hidden="true">↗</span></button>
+    </section>
+  </main>
+  <footer class="site-footer"><a class="footer-brand" href="https://www.essentiaresonance.com/">ESSENTIA RESONANCE</a><p>An evolving reference for curious minds and the art of perfumery.</p><button type="button" class="text-button" id="footer-sources">Sources & editorial approach</button></footer>
+
+  <dialog id="reader" class="reader-dialog" aria-labelledby="reader-title"><div id="reader-content"></div></dialog>
+  <dialog id="about" class="about-dialog" aria-labelledby="about-title">
+    <div class="dialog-topbar"><span class="eyebrow">ESSENTIA ATLAS</span><button type="button" class="icon-button" data-close="about" aria-label="Close about">×</button></div>
+    <div class="about-content">
+      <p class="eyebrow">PLANTS, PLACES & PEOPLE</p><h2 id="about-title">A living reference.<br><em>A thoughtful exploration.</em></h2>
+      <p>This atlas connects aromatic plants, the people who work with them, and the questions we ask about scent and wellbeing. It is designed for independent study, perfume consultations, and Essentia Resonance workshops.</p>
+      <h3>Two ways in. One connected collection.</h3><p>Explore places on the globe, or follow a body-and-mind topic. Open a study chapter to read cultural accounts, preparation details, evidence summaries, and their sources. The body figure is a navigation aid; a highlighted topic does not establish a treatment effect.</p>
+      <h3>Different kinds of knowledge</h3><div class="evidence-key"><p><span class="evidence-badge human">Human research</span> A study in people. Read the summary for the formulation, route, population, and limitations. A small study is not proof of clinical benefit.</p><p><span class="evidence-badge tradition">Traditional use</span> A documented cultural practice or a traditional-use medicinal assessment, identified in context. This is not equivalent to demonstrated efficacy.</p><p><span class="evidence-badge uncertain">Insufficient evidence</span> This edition does not establish a particular health benefit. Missing evidence is stated rather than filled with a general wellness claim.</p></div>
+      <h3>Where does a botanical come from?</h3><p>A wild native range, an established cultivation region, a cultural tradition, and a supplier’s production location describe different things. The map retains these distinctions. Pins are representative regional reference points, not verified farm coordinates.</p>
+      <h3>What is in this first edition?</h3><p id="edition-description">The original website palette and supplier reference records are retained. Selected materials have expanded study chapters.</p><p>Catalogue production and extraction records are an editorial snapshot from <strong>5 October 2026</strong>. Expanded chapter sources were checked on <strong>18 October 2026</strong>. Supplier records do not establish the origin or specification of an individual bottle. Consult the linked source and the batch documentation.</p>
+      <h3>Preparing and using aromatic materials</h3><p>Plant preparations, distilled essential oils, absolutes, carrier oils, and formulated medicines are different materials. Follow product-specific instructions. Research on an oral medicine is not a recommendation to swallow an essential oil. Suitability, dilution, age restrictions, and sun exposure depend on the exact product and route.</p>
+      <p class="about-credit">Created for Essentia Resonance · Bespoke perfumery & olfactory experiences.<br>World geometry: Natural Earth via the existing Essentia map. 3D rendering: Three.js.</p>
+      <a class="gold-button" href="https://www.essentiaresonance.com/">Discover Essentia Resonance <span aria-hidden="true">↗</span></a>
+    </div>
+  </dialog>
+  <dialog id="compare" class="compare-dialog" aria-labelledby="compare-title"><div class="dialog-topbar"><span class="eyebrow">BOTANICAL CONNECTIONS</span><button type="button" class="icon-button" data-close="compare" aria-label="Close comparison">×</button></div><div class="compare-content"><h2 id="compare-title">Side by <em>side.</em></h2><div id="compare-grid" class="compare-grid"></div></div></dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <noscript><p class="noscript-note">The interactive atlas needs JavaScript. Visit <a href="https://www.essentiaresonance.com/">Essentia Resonance</a> for workshops and perfumery.</p></noscript>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

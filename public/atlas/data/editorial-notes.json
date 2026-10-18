@@ -1,0 +1,10 @@
+{
+  "edition": "2026-10-18",
+  "originSnapshot": "2026-10-05",
+  "corrections": [
+    "Santalum album: Kew currently places native range from Jawa to northern Australia, including the Philippines. Label India as cultural/cultivated heritage rather than wild native origin.",
+    "Neroli: Kew describes Citrus × aurantium as a cultigen from southern China; the existing petitgrain supplier page is not evidence for a neroli bottle or flower extraction.",
+    "Pogostemon cablin: Kew specifies Sri Lanka, western and central Malesia, and Papua New Guinea as native range.",
+    "Himalayan cedar material in the supplier map is listed as produced in Bagmati, Nepal. This is distinct from the user's previously stated Indian bottle origin; do not claim it identifies their bottle."
+  ]
+}

@@ -1,0 +1,1264 @@
+{
+  "metadata": {
+    "researched": "2026-10-18",
+    "supplierSnapshot": "2026-10-05",
+    "scope": "Cultural and botanical study notes. Traditional preparations are documented as history, not instructions or proof of efficacy. Existing supplier extraction metadata has not been rechecked live.",
+    "importantMapCorrections": [
+      "Santalum album: Kew currently places native range from Jawa to northern Australia, including the Philippines. Label India as cultural/cultivated heritage rather than wild native origin.",
+      "Neroli: Kew describes Citrus × aurantium as a cultigen from southern China; the existing petitgrain supplier page is not evidence for a neroli bottle or flower extraction.",
+      "Pogostemon cablin: Kew specifies Sri Lanka, western and central Malesia, and Papua New Guinea as native range.",
+      "Himalayan cedar material in the supplier map is listed as produced in Bagmati, Nepal. This is distinct from the user's previously stated Indian bottle origin; do not claim it identifies their bottle."
+    ]
+  },
+  "profiles": {
+    "bergamot": {
+      "part": "Fresh fruit peel, especially the aromatic outer rind.",
+      "extraction": "Expression/cold pressing releases the peel oil. The imported supplier catalogue includes both ordinary expressed oil and an expressed oil subsequently rectified to remove bergapten; these remain separate material variants.",
+      "extractionSourceIds": [
+        "cul-supplier-bergamot",
+        "cul-supplier-bergamot-fcf"
+      ],
+      "culture": [
+        {
+          "title": "The Calabrian extraction craft",
+          "text": "At Bova Marina, the local agropastoral museum preserves concolina vessels and the story of the spiritaro, who collected peel essence with a sea sponge and squeezed it into a ceramic container. Its collection also documents the nineteenth-century Macchina Calabrese, which rubbed the fruit mechanically. This is a regional history of work and fragrance production.",
+          "sourceIds": [
+            "cul-bergamot-museum"
+          ]
+        }
+      ],
+      "native": {
+        "text": "Calabria is an established cultivation and craft region. The atlas does not assign a verified single wild birthplace to this cultivated citrus.",
+        "sourceIds": [
+          "cul-bergamot-museum",
+          "cul-supplier-bergamot"
+        ]
+      },
+      "keyDistinction": "Expressed peel oil, rectified bergamot oil, fruit juice and bergamot supplements are different preparations. A historical or clinical claim about one cannot automatically describe the others.",
+      "topics": [
+        "calm"
+      ],
+      "evidence": [
+        {
+          "title": "Short-term mood study",
+          "status": "Human research",
+          "text": "A crossover experiment in 41 healthy women compared rest, water vapour, and water vapour with bergamot oil. Some negative-mood and fatigue scores improved after the bergamot condition; the results also included changes in cortisol and heart-rate variability. This was a short experiment, not a trial demonstrating treatment of an anxiety disorder. It does not establish benefits for a particular organ, skin condition, or long-term mental health.",
+          "sourceIds": [
+            "health-bergamot-2015"
+          ]
+        }
+      ],
+      "use": {
+        "text": "For scent study, use a labelled fragrance preparation as directed. Research exposure is not a recipe for personal treatment.",
+        "sourceIds": [
+          "health-bfr"
+        ]
+      },
+      "safety": {
+        "text": "Published cases describe blistering phototoxic reactions after bergamot oil exposure followed by ultraviolet light. Confirm whether the material is cold-pressed or a verified bergapten-free variant before any skin formulation; those variants need separate safety assessment.",
+        "sourceIds": [
+          "health-bergamot-phototoxicity"
+        ]
+      }
+    },
+    "himalayan-cedar": {
+      "part": "Wood; the imported Nepalese supplier variant also lists roots.",
+      "extraction": "Steam distillation of wood and roots, as specified in the existing supplier snapshot. Bagmati, Nepal is the listed production location for that catalogue variant.",
+      "extractionSourceIds": [
+        "cul-supplier-cedar"
+      ],
+      "culture": [
+        {
+          "title": "Deodar in Himachal sacred groves",
+          "text": "The Himachal Pradesh State Biodiversity Board documents sacred groves dominated by Cedrus deodara and describes deodar wood burned with butter and other plants at birth, marriage and death ceremonies. The story connects living trees, community institutions and ritual materials; it does not establish an essential-oil treatment.",
+          "sourceIds": [
+            "cul-cedar-groves"
+          ]
+        }
+      ],
+      "native": {
+        "text": "Kew records a native range from northeastern Afghanistan through the western Himalayas to western Nepal and northwestern India. A production address is a separate layer from this broader botanical distribution.",
+        "sourceIds": [
+          "cul-kew-cedar"
+        ]
+      },
+      "keyDistinction": "Cedrus deodara is distinct from Cedrus atlantica and from junipers sold as cedarwood. Burning wood, traditional wood preparations and steam-distilled oil have different exposure profiles.",
+      "topics": [],
+      "evidence": [
+        {
+          "title": "Clinical benefit not established",
+          "status": "Insufficient evidence",
+          "text": "The cited experiment tested an isolated Cedrus deodara heartwood constituent in rodents. It did not test inhaled Himalayan cedarwood essential oil in people. This appraisal has not established a material-specific clinical benefit for sleep, anxiety, skin, breathing, or another body system. Laboratory or animal responses are research leads, not evidence that smelling or applying this oil treats a human condition. Results for a different cedar species or isolated constituent also require their own appraisal. Traditional whole-plant remedies need their own source and preparation description.",
+          "sourceIds": [
+            "health-cedar-rodents"
+          ]
+        }
+      ],
+      "use": {
+        "text": "For scent study, use a labelled fragrance preparation as directed. No therapeutic application is established in this profile.",
+        "sourceIds": [
+          "health-poison-control"
+        ]
+      },
+      "safety": {
+        "text": "General essential-oil precautions apply: concentrated oils can irritate or sensitise skin. Use caution around children and during pregnancy.",
+        "sourceIds": [
+          "health-bfr"
+        ]
+      }
+    },
+    "cardamom": {
+      "part": "Aromatic seeds within the fruit capsules; commercial oil may be distilled from crushed fruits.",
+      "extraction": "Steam distillation of the fruits in the imported Sri Lankan supplier variant. Kew likewise describes commercial oil production from crushed fruits.",
+      "extractionSourceIds": [
+        "cul-supplier-cardamom",
+        "cul-kew-cardamom"
+      ],
+      "culture": [
+        {
+          "title": "Kashmiri drinks and seed traditions",
+          "text": "Kew describes green cardamom as an important ingredient in Kashmiri kahwa and sweet black tea. It also records seeds chewed after meals as a breath freshener and traditional Ayurvedic use of seed preparations for digestive complaints. These accounts describe the spice and particular preparations, rather than evidence that inhaling its oil reproduces their effects.",
+          "sourceIds": [
+            "cul-kew-cardamom"
+          ]
+        }
+      ],
+      "native": {
+        "text": "Native to southwestern India, particularly the Western Ghats. Sri Lanka is the production origin in the existing supplier entry; cultivation elsewhere does not change the species' native range.",
+        "sourceIds": [
+          "cul-kew-cardamom",
+          "cul-supplier-cardamom"
+        ]
+      },
+      "keyDistinction": "Green cardamom, Elettaria cardamomum, is not black cardamom or the other plants also traded as cardamom. Food spice, essential oil and oleoresin are different materials.",
+      "topics": [
+        "digestion"
+      ],
+      "evidence": [
+        {
+          "title": "Nausea in a supervised surgical setting",
+          "status": "Human research",
+          "text": "A single-blind trial randomised 70 women undergoing caesarean section to inhale cardamom oil or a saline control when nausea began. The cardamom group had lower nausea severity after adjustment for baseline nausea and fewer nausea and retching episodes. This is preliminary evidence for a specific hospital setting. It does not demonstrate improved digestion in daily life, replace anti-nausea medicine, or establish the safety of unsupervised use during pregnancy. An appraisal limitation is that a saline comparator leaves uncertainty about the influence of an obvious smell and participant expectations.",
+          "sourceIds": [
+            "health-cardamom-trial"
+          ]
+        }
+      ],
+      "use": {
+        "text": "The studied route was inhalation during supervised medical care. For workshop scent study, follow the labelled product directions.",
+        "sourceIds": [
+          "health-cardamom-trial",
+          "health-bfr"
+        ]
+      },
+      "safety": {
+        "text": "Treat concentrated oil differently from the culinary spice. Avoid undiluted skin application; stop exposure if irritation occurs.",
+        "sourceIds": [
+          "health-bfr",
+          "health-poison-control"
+        ]
+      }
+    },
+    "eucalyptus": {
+      "part": "Leaves and young twigs in the imported supplier variants.",
+      "extraction": "Steam distillation of fresh leaves and twigs. The existing catalogue lists production in Andalusia, Spain, and central Portugal, separate from the species' Australian native range.",
+      "extractionSourceIds": [
+        "cul-supplier-eucalyptus-spain",
+        "cul-supplier-eucalyptus-portugal"
+      ],
+      "culture": [
+        {
+          "title": "A documented European leaf preparation",
+          "text": "EMA records a European tradition of dried Eucalyptus globulus leaf preparations, including teas, inhaled infusions and alcoholic extracts used for coughs associated with colds. Its traditional-use assessment is preparation-specific and explicitly distinguishes long-standing use from adequate clinical-trial evidence. This documented record is more precise than attributing every eucalyptus practice to a single undifferentiated Indigenous tradition.",
+          "sourceIds": [
+            "cul-ema-eucalyptus-leaf"
+          ]
+        }
+      ],
+      "native": {
+        "text": "Kew places Eucalyptus globulus in southern Victoria and eastern Tasmania. It is now cultivated and naturalised across many other regions.",
+        "sourceIds": [
+          "cul-kew-eucalyptus"
+        ]
+      },
+      "keyDistinction": "Eucalyptus globulus is one species among many eucalypts. Leaf infusions, isolated 1,8-cineole and essential-oil products must be evaluated separately.",
+      "topics": [
+        "breathing",
+        "muscles"
+      ],
+      "evidence": [
+        {
+          "title": "Cold-related cough and local muscle discomfort",
+          "status": "Traditional use",
+          "text": "EMA recognises eucalyptus oil medicines for relief of cough associated with a cold and localised muscle pain on the basis of longstanding use. Cough preparations include inhaled and topical products; muscle preparations are topical or formulated bath products. This classification is not proof from robust clinical trials. Studies of oral isolated 1,8-cineole do not establish the same effects for inhaled Eucalyptus globulus oil.",
+          "sourceIds": [
+            "health-eucalyptus-ema",
+            "health-eucalyptus-assessment"
+          ]
+        }
+      ],
+      "use": {
+        "text": "Use an appropriately labelled finished preparation for its intended route. Do not copy oral cineole or medicinal-oil protocols using a fragrance bottle.",
+        "sourceIds": [
+          "health-eucalyptus-ema"
+        ]
+      },
+      "safety": {
+        "text": "EMA contraindicates these medicines below 24 months and in children with a seizure history; use under three has further restrictions. Avoid eyes and broken skin. Pregnancy and breastfeeding safety is unestablished. Swallowing the oil can cause serious poisoning.",
+        "sourceIds": [
+          "health-eucalyptus-ema",
+          "health-poison-control"
+        ]
+      }
+    },
+    "jasmine": {
+      "part": "Flowers of Jasminum sambac.",
+      "extraction": "For the perfumery absolute, flowers undergo volatile-solvent extraction to produce a concrete, followed by purification. This is a general manufacturing example, not confirmation of the extract in the user's bottle.",
+      "extractionSourceIds": [
+        "cul-dsm-jasmine"
+      ],
+      "culture": [
+        {
+          "title": "Garlands and tea",
+          "text": "Singapore's National Parks Board records Indian garlands made from sambac flower buds and flowers prepared as tea. The manufacturer dsm-firmenich describes a contemporary Madurai, Tamil Nadu supply chain in which buds left over from flower markets are allowed to open before extraction, connecting the perfume ingredient to an existing ornamental and religious flower economy. In China it describes flower production around Hengxian, Guangxi, with tea among the plant's uses.",
+          "sourceIds": [
+            "cul-nparks-jasmine",
+            "cul-dsm-jasmine"
+          ]
+        }
+      ],
+      "native": {
+        "text": "Kew records Bhutan to India as the native range. This botanical range differs from the many regions where sambac is now cultivated and culturally important.",
+        "sourceIds": [
+          "cul-kew-jasmine"
+        ]
+      },
+      "keyDistinction": "Jasminum sambac and Jasminum grandiflorum are distinct species. An absolute, a tea-scenting flower and an attar are different preparations.",
+      "topics": [
+        "attention"
+      ],
+      "evidence": [
+        {
+          "title": "Alertness rather than relaxation",
+          "status": "Human research",
+          "text": "A small experiment in 40 healthy volunteers studied abdominal massage with material described as Jasminum sambac oil. Participants reported more alertness and vigour and less relaxation than the control group; some autonomic measurements also increased. This does not demonstrate treatment of depression or improved learning. The exact extraction and formulation must be checked before applying the result to a jasmine absolute, diluted perfume material, or inhalation-only experience. Because the participants were healthy, the authors’ suggestion about depression should be read as a hypothesis rather than a tested treatment.",
+          "sourceIds": [
+            "health-jasmine-trial"
+          ]
+        }
+      ],
+      "use": {
+        "text": "Use the profile to compare perceived alertness and scent character. The cited massage experiment is not a topical-use prescription.",
+        "sourceIds": [
+          "health-jasmine-trial"
+        ]
+      },
+      "safety": {
+        "text": "Follow the exact extract’s label. General essential-oil precautions include skin irritation and allergy; avoid undiluted application.",
+        "sourceIds": [
+          "health-bfr"
+        ]
+      }
+    },
+    "myrhh": {
+      "part": "Gum-resin exudate from Commiphora myrrha.",
+      "extraction": "Steam distillation of the resin. The imported catalogue records variants from northern Kenya and Somaliland, Somalia; these are supplier production claims from the retained snapshot.",
+      "extractionSourceIds": [
+        "cul-supplier-myrrh-kenya",
+        "cul-supplier-myrrh-somalia"
+      ],
+      "culture": [
+        {
+          "title": "Resin extracts in European herbal practice",
+          "text": "EMA's myrrh record describes liquid solvent extracts of gum-resin, traditionally used on the mouth lining or skin. Its assessment concerns specific extracts for minor mouth inflammation and minor skin complaints and is based on long-standing use, not sufficient clinical trials. The monograph uses the historical name Commiphora molmol, which Kew includes among the synonyms of Commiphora myrrha.",
+          "sourceIds": [
+            "cul-ema-myrrh",
+            "cul-kew-myrrh"
+          ]
+        }
+      ],
+      "native": {
+        "text": "Kew records eastern and southeastern Ethiopia to northeastern Kenya, together with southwestern and southern parts of the Arabian Peninsula; its distribution includes Somalia.",
+        "sourceIds": [
+          "cul-kew-myrrh"
+        ]
+      },
+      "keyDistinction": "Myrrh resin, an alcoholic resin extract and steam-distilled essential oil are different materials. Do not convert traditional mouth-extract use into advice to apply or swallow essential oil.",
+      "topics": [],
+      "evidence": [
+        {
+          "title": "Resin extract medicine is a different preparation",
+          "status": "Traditional use",
+          "text": "EMA’s myrrh assessment covers resin dissolved in a solvent such as ethanol. It recognises traditional use of these specific medicines for minor mouth ulcers and inflammation, minor wounds, and small boils. Those conclusions do not cover steam-distilled myrrh essential oil. Traditional oral-care or wound-care use must therefore be described with its actual resin preparation, rather than presented as an instruction to apply essential oil to the mouth or a wound.",
+          "sourceIds": [
+            "health-myrrh-ema"
+          ]
+        },
+        {
+          "title": "Distilled oil",
+          "status": "Insufficient evidence",
+          "text": "This appraisal has not established a clinical organ-specific benefit for the distilled oil. The body map should not label it a proven wound or oral treatment.",
+          "sourceIds": [
+            "health-myrrh-ema"
+          ]
+        }
+      ],
+      "use": {
+        "text": "For scent study, use a labelled fragrance preparation as directed. Keep the resin medicine and distilled fragrance material distinct.",
+        "sourceIds": [
+          "health-bfr",
+          "health-myrrh-ema"
+        ]
+      },
+      "safety": {
+        "text": "Do not swallow fragrance oil or put it on damaged skin. Myrrh solvent medicines can also cause allergic reactions.",
+        "sourceIds": [
+          "health-poison-control",
+          "health-myrrh-ema"
+        ]
+      }
+    },
+    "neroli": {
+      "part": "Flowers of bitter orange, Citrus × aurantium.",
+      "extraction": "Water or steam distillation of flowers yields neroli oil and an aqueous distillate. Solvent extraction instead yields orange-flower absolute; leaves and twigs yield petitgrain oil.",
+      "extractionSourceIds": [
+        "cul-dsm-neroli"
+      ],
+      "culture": [
+        {
+          "title": "Nabeul's orange-blossom water",
+          "text": "UNIDO documents the Nabeul, Tunisia tradition of hand-picking and distilling bitter-orange flowers. The floral water, called zahr locally, flavours dishes, pastries and coffee and accompanies hospitality and wedding customs. The account traces the local distillation tradition to Andalusian influence in the sixteenth century. These practices principally concern floral water; neroli is the separated aromatic oil produced from the same flowers.",
+          "sourceIds": [
+            "cul-unido-neroli"
+          ]
+        }
+      ],
+      "native": {
+        "text": "Kew describes bitter orange as a cultigen from southern China. Nabeul is a documented cultivation and distillation centre, rather than its wild native birthplace.",
+        "sourceIds": [
+          "cul-kew-neroli",
+          "cul-unido-neroli"
+        ]
+      },
+      "keyDistinction": "The original map links a petitgrain product. That page cannot establish the origin or extraction of a neroli bottle.",
+      "topics": [
+        "calm"
+      ],
+      "evidence": [
+        {
+          "title": "Preliminary inhalation research with important negative findings",
+          "status": "Human research",
+          "text": "A five-day trial analysed 63 healthy postmenopausal women who inhaled diluted bitter-orange flower oil or almond-oil control. Some menopause-related quality-of-life and blood-pressure outcomes improved. Subjective stress, cortisol and estrogen did not differ significantly between groups. The results do not establish hormone balancing or treatment of anxiety, hypertension, or menopause. Neroli flower oil also differs from bitter-orange leaf oil, peel oil, and oral bitter-orange supplements. For the atlas, calm is a research-navigation topic, not a demonstrated clinical outcome.",
+          "sourceIds": [
+            "health-neroli-trial"
+          ]
+        }
+      ],
+      "use": {
+        "text": "Explore it as a floral scent and read the trial in context. No hormone-directed or organ-directed use is established here.",
+        "sourceIds": [
+          "health-neroli-trial"
+        ]
+      },
+      "safety": {
+        "text": "For diffusion, respiratory sensitivity matters: essential-oil sprays and diffusers can irritate eyes and airways, especially with asthma. Follow product directions and stop if symptoms develop.",
+        "sourceIds": [
+          "health-anses"
+        ]
+      }
+    },
+    "patchouli": {
+      "part": "Leaves of Pogostemon cablin.",
+      "extraction": "Steam distillation of carefully dried leaves in the imported supplier entry. That catalogue variant is listed from Nawalparashi, Nepal; it is not a record of the species' entire native range.",
+      "extractionSourceIds": [
+        "cul-supplier-patchouli"
+      ],
+      "culture": [
+        {
+          "title": "Leaf preparations and perfumery",
+          "text": "Singapore's National Parks Board records leaf poultices among patchouli's traditional preparations and separately describes leaf-derived essential oil in soaps and perfumes. Its summary does not name a community or date those poultice practices, so the atlas should retain that limitation rather than invent a regional origin story. More specific local histories can be added when a community record or original field study has been verified.",
+          "sourceIds": [
+            "cul-nparks-patchouli"
+          ]
+        }
+      ],
+      "native": {
+        "text": "Kew specifies Sri Lanka, western and central Malesia, and Papua New Guinea. This is more precise than a general tropical-Asia label.",
+        "sourceIds": [
+          "cul-kew-patchouli"
+        ]
+      },
+      "keyDistinction": "A poultice uses plant material. Its documented traditional use is not clinical evidence for inhaled or skin-applied essential oil.",
+      "topics": [
+        "calm"
+      ],
+      "evidence": [
+        {
+          "title": "Short-term stress in emergency nurses",
+          "status": "Human research",
+          "text": "A randomised study allocated 50 emergency nurses to inhaled diluted Pogostemon cablin oil or sweet-almond-oil control over two evenings. Reported stress was lower and compassion satisfaction higher in the patchouli group. Between-group differences in blood pressure, heart rate, compassion fatigue and burnout were not significant. This small, brief, occupational study is a research lead, not evidence that patchouli treats anxiety disorders, depression, insomnia, or cardiovascular disease. Participants could probably recognise whether they smelled patchouli; this is an appraisal concern about blinding and self-reported outcomes.",
+          "sourceIds": [
+            "health-patchouli-trial"
+          ]
+        }
+      ],
+      "use": {
+        "text": "The study used inhalation, not ingestion or treatment of skin disease. Explore personal scent impressions without expecting a guaranteed effect.",
+        "sourceIds": [
+          "health-patchouli-trial"
+        ]
+      },
+      "safety": {
+        "text": "General essential-oil precautions apply: dilution and product identity matter; concentrated preparations can cause skin irritation or allergy.",
+        "sourceIds": [
+          "health-bfr"
+        ]
+      }
+    },
+    "pepper-mint": {
+      "part": "Aerial herb, including leaves; the imported suppliers describe fresh plants.",
+      "extraction": "Steam distillation of fresh plant material. Existing supplier entries distinguish Bulgarian, Indian and Tasmanian production variants, including a Mitcham-labelled material.",
+      "extractionSourceIds": [
+        "cul-supplier-peppermint"
+      ],
+      "culture": [
+        {
+          "title": "The European peppermint-leaf tradition",
+          "text": "EMA records dried peppermint leaf and leaf extracts used in European herbal practice for indigestion and flatulence. Its traditional-use conclusion rests on a documented history of use, while clinical evidence for those leaf preparations remains insufficient. The source describes teas and specified extracts; it does not give a reason to add a perfumery oil to a drink. Stories about ancient mint should also identify their species before being assigned to this hybrid.",
+          "sourceIds": [
+            "cul-ema-peppermint-leaf"
+          ]
+        }
+      ],
+      "native": {
+        "text": "Kew identifies Mentha × piperita as a hybrid with a range from Europe to Central Asia. Commercial growing regions are a separate map layer.",
+        "sourceIds": [
+          "cul-kew-peppermint"
+        ]
+      },
+      "keyDistinction": "Peppermint leaf tea, essential oil and formulated medicinal capsules differ in composition and route of use.",
+      "topics": [
+        "digestion",
+        "muscles",
+        "breathing"
+      ],
+      "evidence": [
+        {
+          "title": "Digestive evidence belongs to a medicinal formulation",
+          "status": "Human research",
+          "text": "Some evidence supports enteric-coated peppermint-oil capsules for adult irritable-bowel symptoms. Those manufactured medicines are different from swallowing drops from an aromatherapy bottle. Limited evidence also concerns specific topical preparations for tension headache. Neither finding establishes that smelling peppermint treats IBS. These uses need separate evidence for each route.",
+          "sourceIds": [
+            "health-peppermint-nccih"
+          ]
+        },
+        {
+          "title": "Other topical and inhaled uses",
+          "status": "Traditional use",
+          "text": "EMA classifies certain finished peppermint-oil preparations for cold symptoms, local muscle pain and itching as traditional uses, with route-specific age restrictions.",
+          "sourceIds": [
+            "health-peppermint-ema"
+          ]
+        }
+      ],
+      "use": {
+        "text": "Use only a finished product labelled for the intended route; discuss medicinal capsules with a pharmacist. This atlas gives no home-ingestion instruction.",
+        "sourceIds": [
+          "health-peppermint-ema"
+        ]
+      },
+      "safety": {
+        "text": "Menthol must not be applied to the face of infants or young children: inhalation can seriously affect breathing. Skin irritation can occur. Oral medicines can cause heartburn and other digestive side effects.",
+        "sourceIds": [
+          "health-peppermint-nccih"
+        ]
+      }
+    },
+    "rose-otto": {
+      "part": "Flowers of Rosa × damascena, particularly the aromatic petals.",
+      "extraction": "Rose otto is the distilled flower oil, obtained with water or steam and separated from the aqueous distillate. Rose absolute is a different extract. The user's specific producer and extraction record still need confirmation.",
+      "extractionSourceIds": [
+        "cul-dsm-rose"
+      ],
+      "culture": [
+        {
+          "title": "The Damascene rose in Al-Mrah",
+          "text": "UNESCO recognises the practices and craftsmanship of farmers and families in Al-Mrah, rural Damascus: cultivating and harvesting roses, producing fragrant preparations and traditional products, and organising the annual Damascene Rose Festival. This is living community knowledge connecting family work, celebration and the plant, not a generic claim about all rose-growing cultures. The documented heritage includes culinary, cosmetic and traditional medicinal practices; those categories do not themselves demonstrate clinical effectiveness.",
+          "sourceIds": [
+            "cul-unesco-rose"
+          ]
+        }
+      ],
+      "native": {
+        "text": "Kew lists Rosa × damascena as an artificial hybrid. The atlas should show cultivation and cultural centres rather than assign it a single wild native origin.",
+        "sourceIds": [
+          "cul-kew-rose"
+        ]
+      },
+      "keyDistinction": "Rose otto, rose absolute and rosewater are different preparations from flowers.",
+      "topics": [
+        "calm",
+        "rest"
+      ],
+      "evidence": [
+        {
+          "title": "Anxiety and sleep in a specific staff population",
+          "status": "Human research",
+          "text": "An unblinded randomised trial in 80 operating-room staff during the pandemic compared inhaled Rosa damascena oil with paraffin oil, including repeated evening exposure over 30 nights. Anxiety and self-reported sleep scores improved more in the rose group. The small setting-specific study and obvious scent make expectancy effects difficult to separate. It does not establish a general insomnia treatment, an organ-specific benefit, or equivalent effects for rose water, rose absolute, or rose-fragranced cosmetics. These findings should be evaluated as a specific exposure in a specific population.",
+          "sourceIds": [
+            "health-rose-trial"
+          ]
+        }
+      ],
+      "use": {
+        "text": "Use the evidence to discuss scent and rest, not to copy a nightly dosing schedule. Follow the finished product’s directions.",
+        "sourceIds": [
+          "health-rose-trial",
+          "health-poison-control"
+        ]
+      },
+      "safety": {
+        "text": "Diffused scent may irritate sensitive airways. Keep exposure optional in group workshops, especially for people with asthma.",
+        "sourceIds": [
+          "health-anses"
+        ]
+      }
+    },
+    "sandalwood": {
+      "part": "Aromatic heartwood of Santalum album.",
+      "extraction": "Steam distillation of heartwood. The existing supplier catalogue includes Sri Lankan and Australian Santalum album production, distinct from Australian Santalum spicatum.",
+      "extractionSourceIds": [
+        "cul-supplier-sandalwood"
+      ],
+      "culture": [
+        {
+          "title": "Wood, paste and ritual",
+          "text": "The Indian Council of Forestry Research and Education describes sandalwood's long place in Indian cultural life, including carved objects, incense and wood paste, alongside ritual use in Hindu, Buddhist and Muslim traditions. These are different material practices and should be named individually. Descriptions of wood paste as cooling belong to that traditional preparation and do not establish a bodily cooling effect from inhaling distilled oil.",
+          "sourceIds": [
+            "cul-icfre-sandalwood"
+          ]
+        }
+      ],
+      "native": {
+        "text": "Kew currently places the native range from Jawa to northern Australia, including the Philippines, and lists India and Sri Lanka as introduced. India remains a major historical and cultural association.",
+        "sourceIds": [
+          "cul-kew-sandalwood"
+        ]
+      },
+      "keyDistinction": "A cultural centre, a cultivation origin and the botanical native range can differ. Common names such as Indian sandalwood do not resolve that distinction.",
+      "topics": [
+        "calm"
+      ],
+      "evidence": [
+        {
+          "title": "Human findings depend on the experiment",
+          "status": "Human research",
+          "text": "A pilot in 32 people exposed to experimental stress found lower systolic blood pressure with Santalum album oil during recovery. The cortisol finding concerned Santalum spicatum and should not be transferred to Santalum album. A separate inhalation experiment with Santalum album found increased physiological arousal. Together these observations are preliminary and context-dependent, rather than proof that sandalwood consistently sedates people, lowers harmful stress, or treats anxiety. Personal associations and odour preference may contribute to how participants respond; this does not map cleanly onto a single organ.",
+          "sourceIds": [
+            "health-sandalwood-pilot",
+            "health-sandalwood-arousal"
+          ]
+        }
+      ],
+      "use": {
+        "text": "Explore its scent and your own response. These short laboratory experiments do not establish a therapeutic application or personal dosing protocol.",
+        "sourceIds": [
+          "health-sandalwood-pilot",
+          "health-sandalwood-arousal"
+        ]
+      },
+      "safety": {
+        "text": "Use the exact product as directed; concentrated essential oils can irritate or sensitise skin. Avoid undiluted application.",
+        "sourceIds": [
+          "health-bfr"
+        ]
+      }
+    },
+    "tea-tree": {
+      "part": "Leaves of Melaleuca alternifolia.",
+      "extraction": "Steam distillation of the leaves. The imported catalogue lists a Northern Rivers, New South Wales material; this is a production claim rather than proof of a particular bottle's identity.",
+      "extractionSourceIds": [
+        "cul-nccih-teatree",
+        "cul-supplier-teatree"
+      ],
+      "culture": [
+        {
+          "title": "Leaf use and the modern oil industry",
+          "text": "NCCIH records Aboriginal Australian use of tea-tree leaves for wounds, burns and insect bites. Its summary does not identify particular Nations or local procedures; the atlas should not assign that knowledge to a named community without a more specific source. ACIAR dates the Australian tea-tree oil industry to the early twentieth century, making it useful to distinguish older leaf practices from the later commercial distilled product.",
+          "sourceIds": [
+            "cul-nccih-teatree",
+            "cul-aciar-teatree-history"
+          ]
+        }
+      ],
+      "native": {
+        "text": "The species is native to New South Wales and Queensland in eastern Australia, according to NCCIH.",
+        "sourceIds": [
+          "cul-nccih-teatree"
+        ]
+      },
+      "keyDistinction": "Melaleuca alternifolia is not the tea plant Camellia sinensis. Historical leaf use does not make swallowing essential oil appropriate.",
+      "topics": [
+        "skin"
+      ],
+      "evidence": [
+        {
+          "title": "Limited evidence for topical skin products",
+          "status": "Human research",
+          "text": "NCCIH finds a small amount of evidence that topical tea tree products may help acne or athlete’s foot; more studies are needed, and athlete’s-foot products may work less well than standard treatments. Evidence does not support firm conclusions for nail fungus and many other promoted uses. These findings concern skin preparations, not diffuser use, a general immune benefit, or a reason to put concentrated oil on wounds.",
+          "sourceIds": [
+            "health-teatree-nccih"
+          ]
+        }
+      ],
+      "use": {
+        "text": "Choose a finished topical product labelled for the relevant use and follow its directions. Do not extrapolate its concentration to a homemade blend.",
+        "sourceIds": [
+          "health-teatree-nccih"
+        ]
+      },
+      "safety": {
+        "text": "Never swallow tea tree oil: serious neurological poisoning can occur. Redness and skin irritation are possible, particularly with oil degraded by air, heat or light. Do not use it in the eyes.",
+        "sourceIds": [
+          "health-teatree-nccih"
+        ]
+      }
+    },
+    "vanilla": {
+      "part": "Cured fruits, commonly called beans or pods, of the climbing orchid Vanilla planifolia.",
+      "extraction": "A perfumery absolute can be made by solvent extraction of cured beans followed by purification. The atlas has no verified extract specification for the user's vanilla material and should not label it a steam-distilled essential oil.",
+      "extractionSourceIds": [
+        "cul-dsm-vanilla"
+      ],
+      "culture": [
+        {
+          "title": "Vanilla and Mexican plant knowledge",
+          "text": "Kew associates vanilla's food and drink flavouring history with Totonac and Olmec people in Mexico. Its fruit is the familiar aromatic material, connecting a climbing orchid to culinary practice and cultivation knowledge. This cultural history is distinct from the later perfume extract. It also makes clear why the flower, green fruit and cured pod should appear as separate stages in the atlas, rather than depicting a vanilla-scented essential oil distilled directly from blossoms.",
+          "sourceIds": [
+            "cul-kew-vanilla-story",
+            "cul-dsm-vanilla"
+          ]
+        }
+      ],
+      "native": {
+        "text": "Kew records southern Mexico to northern Brazil as the native range, broader than a Mexico-only origin marker.",
+        "sourceIds": [
+          "cul-kew-vanilla"
+        ]
+      },
+      "keyDistinction": "Vanilla absolute, CO₂ extract, food extract, fragrance blends and isolated vanillin have different compositions. Confirm the actual product before adding use guidance.",
+      "topics": [],
+      "evidence": [
+        {
+          "title": "A scent constituent is not a clinical treatment",
+          "status": "Insufficient evidence",
+          "text": "The cited study investigated isolated vanillin vapour in mice, using behavioural tests and drug-induced sleep. It did not test a Vanilla planifolia perfume extract in people. Such findings do not establish antidepressant effects, sleep improvement, or another organ-specific benefit in workshop participants. This appraisal has not established a material-specific clinical benefit for the actual vanilla extract. A personal sense of comfort can be recorded as an individual scent response, without converting it into a medical claim.",
+          "sourceIds": [
+            "health-vanillin-mice"
+          ]
+        }
+      ],
+      "use": {
+        "text": "Treat the actual extract as a perfume material and follow its label. Do not infer an ingestion route from vanilla’s use as food flavouring.",
+        "sourceIds": [
+          "health-poison-control"
+        ]
+      },
+      "safety": {
+        "text": "Check the full formulation, including its solvent and diluent. Fragrance products can contain alcohol or other ingredients that affect their hazards.",
+        "sourceIds": [
+          "health-poison-control"
+        ]
+      }
+    },
+    "sunday-lavandula-angustifolia": {
+      "part": "Flowering tops or inflorescences of Lavandula angustifolia.",
+      "extraction": "Steam distillation of flowering tops. The existing supplier catalogue includes French, Bulgarian, Spanish and Kashmir production variants; they should retain their individual origins.",
+      "extractionSourceIds": [
+        "cul-ema-lavender-report",
+        "cul-supplier-lavender"
+      ],
+      "culture": [
+        {
+          "title": "Flowers and oil in European herbal records",
+          "text": "EMA's assessment records separate European traditions for dried lavender flowers, tinctures and distilled oil, including flower teas and formulated bathing products. It discusses German herbal-tea records and an Austrian lavender-oil bath marketed since 1994. These documented preparations provide a more precise study story than an unsourced claim that all ancient bathing traditions used this exact species and oil.",
+          "sourceIds": [
+            "cul-ema-lavender-report"
+          ]
+        }
+      ],
+      "native": {
+        "text": "Kew places the native range from northeastern Spain to Italy, including France. Bulgaria and Kashmir are cultivation origins in the supplier map, not evidence of a wild native range.",
+        "sourceIds": [
+          "cul-kew-lavender",
+          "cul-supplier-lavender"
+        ]
+      },
+      "keyDistinction": "True lavender is not Lavandula stoechas or lavandin. Evidence and use instructions need the exact species, extract and route.",
+      "topics": [
+        "calm",
+        "rest"
+      ],
+      "evidence": [
+        {
+          "title": "Aromatherapy evidence remains uncertain",
+          "status": "Human research",
+          "text": "NCCIH finds the benefits of lavender aromatherapy for stress, anxiety and sleep unclear. Studies of a specific oral lavender-oil medicine cannot be treated as evidence for smelling an arbitrary bottle or applying it to skin. The exact species matters.",
+          "sourceIds": [
+            "health-lavender-nccih"
+          ]
+        },
+        {
+          "title": "Traditional medicinal preparations",
+          "status": "Traditional use",
+          "text": "EMA recognises Lavandula angustifolia oil medicines for mild mental stress and exhaustion and to aid sleep, based on longstanding use. Its reviewed preparations include oral medicines and formulated bath products; this is not an unrestricted diffuser efficacy claim.",
+          "sourceIds": [
+            "health-lavender-ema"
+          ]
+        }
+      ],
+      "use": {
+        "text": "For scent study, follow a labelled preparation’s directions. Use of a medicinal product belongs with its leaflet and pharmacist guidance.",
+        "sourceIds": [
+          "health-lavender-ema"
+        ]
+      },
+      "safety": {
+        "text": "Aromatherapy can cause headache or coughing, and topical products can cause allergy. Pregnancy and breastfeeding safety is uncertain. Full medicinal baths have additional health restrictions.",
+        "sourceIds": [
+          "health-lavender-nccih",
+          "health-lavender-ema"
+        ]
+      }
+    },
+    "sunday-lavandula-stoechas": {
+      "part": "Flowering tops or fresh inflorescences of Lavandula stoechas.",
+      "extraction": "Steam distillation of fresh inflorescences in the imported supplier variant, listed as wild-collected in central Portugal. Its chemical composition should be checked against a current batch analysis before detailed use guidance.",
+      "extractionSourceIds": [
+        "cul-supplier-stoechas"
+      ],
+      "culture": [
+        {
+          "title": "A Messiwa plant account",
+          "text": "Fieldwork among Messiwa people in Morocco's Al-Haouz region, conducted in 2018–2019, records Lavandula stoechas under the vernacular name Khzama and lists its aerial parts as used in drinks. The study verified plant specimens and documented knowledge with participants' consent. This is a named community account about the plant, not a recommendation to drink its concentrated oil or a clinical test of effectiveness.",
+          "sourceIds": [
+            "cul-messiwa-study"
+          ]
+        }
+      ],
+      "native": {
+        "text": "Kew records a Mediterranean native range. Central Portugal is the production location of the particular supplier variant in the existing map.",
+        "sourceIds": [
+          "cul-kew-stoechas",
+          "cul-supplier-stoechas"
+        ]
+      },
+      "keyDistinction": "Spanish lavender is a separate species from true lavender. Do not carry Lavandula angustifolia clinical findings or safety guidance across automatically.",
+      "topics": [],
+      "evidence": [
+        {
+          "title": "Separate species; clinical benefit not established",
+          "status": "Insufficient evidence",
+          "text": "A 2026 laboratory study tested Lavandula stoechas extract and essential oil in cultured human-derived macrophages and computer models. Human-derived cells are not a clinical trial in people. This appraisal has not established a clinical benefit for anxiety, sleep, inflammation, smoking cessation, or a particular body area. Results and medicinal-use conclusions for Lavandula angustifolia must not be transferred to this species, even when both products are sold as lavender. The atlas therefore leaves its body-topic connections empty until appropriate human evidence for the actual preparation is appraised.",
+          "sourceIds": [
+            "health-stoechas-cells",
+            "health-lavender-ema"
+          ]
+        }
+      ],
+      "use": {
+        "text": "For scent study, use a labelled fragrance preparation as directed. No therapeutic application is established in this profile.",
+        "sourceIds": [
+          "health-poison-control"
+        ]
+      },
+      "safety": {
+        "text": "General essential-oil precautions still apply. Avoid undiluted skin use and use particular caution around children, pregnancy, and respiratory sensitivity.",
+        "sourceIds": [
+          "health-bfr",
+          "health-anses"
+        ]
+      }
+    }
+  },
+  "sources": {
+    "cul-bergamot-museum": {
+      "title": "La filiera del bergamotto",
+      "url": "https://www.museoagropastorale.it/la-filiera-del-bergamotto/",
+      "organization": "Museo Agropastorale dell'area ellenofona di Bova Marina",
+      "accessed": "2026-10-18",
+      "webRef": "turn19view5"
+    },
+    "cul-kew-cedar": {
+      "title": "Cedrus deodara — Plants of the World Online",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:676701-1",
+      "organization": "Royal Botanic Gardens, Kew",
+      "accessed": "2026-10-18",
+      "webRef": "turn8view0"
+    },
+    "cul-cedar-groves": {
+      "title": "Sacred groves: final report",
+      "url": "https://www.hpbiodiversity.gov.in/Pdf/SGd.pdf",
+      "organization": "Himachal Pradesh State Biodiversity Board",
+      "accessed": "2026-10-18",
+      "accessNote": "Indexed report excerpt verified; direct PDF fetch failed.",
+      "webRef": "turn10search52"
+    },
+    "cul-kew-cardamom": {
+      "title": "Elettaria cardamomum — species profile",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:796556-1/general-information",
+      "organization": "Royal Botanic Gardens, Kew",
+      "accessed": "2026-10-18",
+      "webRef": "turn28view4"
+    },
+    "cul-kew-eucalyptus": {
+      "title": "Eucalyptus globulus — Plants of the World Online",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:592965-1",
+      "organization": "Royal Botanic Gardens, Kew",
+      "accessed": "2026-10-18",
+      "webRef": "turn19view3"
+    },
+    "cul-ema-eucalyptus-leaf": {
+      "title": "Eucalypti folium — public summary and monographs",
+      "url": "https://www.ema.europa.eu/en/medicines/herbal/eucalypti-folium",
+      "organization": "European Medicines Agency",
+      "accessed": "2026-10-18",
+      "webRef": "turn23view2"
+    },
+    "cul-kew-jasmine": {
+      "title": "Jasminum sambac — Plants of the World Online",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:609755-1",
+      "organization": "Royal Botanic Gardens, Kew",
+      "accessed": "2026-10-18",
+      "webRef": "turn17view0"
+    },
+    "cul-nparks-jasmine": {
+      "title": "Jasminum sambac 'Arabian Nights' — ethnobotanical uses",
+      "url": "https://www.nparks.gov.sg/florafaunaweb/flora/5/2/5208",
+      "organization": "Singapore National Parks Board",
+      "accessed": "2026-10-18",
+      "webRef": "turn15view2"
+    },
+    "cul-dsm-jasmine": {
+      "title": "Jasmine Sambac ABS — extraction and sourcing",
+      "url": "https://studio.dsm-firmenich.com/product/jasmine-sambac-abs-pe-952605",
+      "organization": "dsm-firmenich",
+      "accessed": "2026-10-18",
+      "webRef": "turn28view1"
+    },
+    "cul-kew-myrrh": {
+      "title": "Commiphora myrrha — Plants of the World Online",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:127741-1",
+      "organization": "Royal Botanic Gardens, Kew",
+      "accessed": "2026-10-18",
+      "webRef": "turn19view2"
+    },
+    "cul-ema-myrrh": {
+      "title": "Myrrha — public summary and monographs",
+      "url": "https://www.ema.europa.eu/en/medicines/herbal/myrrha",
+      "organization": "European Medicines Agency",
+      "accessed": "2026-10-18",
+      "webRef": "turn30view5"
+    },
+    "cul-kew-neroli": {
+      "title": "Citrus × aurantium — Plants of the World Online",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:59600-2",
+      "organization": "Royal Botanic Gardens, Kew",
+      "accessed": "2026-10-18",
+      "webRef": "turn28view5"
+    },
+    "cul-dsm-neroli": {
+      "title": "Neroli Bigarade EO — extraction and sourcing",
+      "url": "https://studio.dsm-firmenich.com/product/neroli-bigarade-eo-pe-966689",
+      "organization": "dsm-firmenich",
+      "accessed": "2026-10-18",
+      "webRef": "turn28view2"
+    },
+    "cul-unido-neroli": {
+      "title": "La fleur d'oranger bigaradier de Nabeul",
+      "url": "https://tunisia.un.org/fr/267110-onudi-tunisie-la-fleur-doranger-bigaradier-de-nabeul-une-port%C3%A9e-%C3%A9conomique-une-exp%C3%A9rience",
+      "organization": "UNIDO / United Nations Tunisia",
+      "accessed": "2026-10-18",
+      "webRef": "turn30view3"
+    },
+    "cul-kew-patchouli": {
+      "title": "Pogostemon cablin — Plants of the World Online",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:454827-1",
+      "organization": "Royal Botanic Gardens, Kew",
+      "accessed": "2026-10-18",
+      "webRef": "turn15view1"
+    },
+    "cul-nparks-patchouli": {
+      "title": "Pogostemon cablin — ethnobotanical uses",
+      "url": "https://www.nparks.gov.sg/florafaunaweb/flora/4/8/4857",
+      "organization": "Singapore National Parks Board",
+      "accessed": "2026-10-18",
+      "webRef": "turn23view0"
+    },
+    "cul-kew-peppermint": {
+      "title": "Mentha × piperita — Plants of the World Online",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:450969-1/general-information",
+      "organization": "Royal Botanic Gardens, Kew",
+      "accessed": "2026-10-18",
+      "webRef": "turn17search8"
+    },
+    "cul-ema-peppermint-leaf": {
+      "title": "Menthae piperitae folium — public summary and monographs",
+      "url": "https://www.ema.europa.eu/en/medicines/herbal/menthae-piperitae-folium",
+      "organization": "European Medicines Agency",
+      "accessed": "2026-10-18",
+      "webRef": "turn23view1"
+    },
+    "cul-kew-rose": {
+      "title": "Rosa × damascena — Plants of the World Online",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:77394892-1",
+      "organization": "Royal Botanic Gardens, Kew",
+      "accessed": "2026-10-18",
+      "webRef": "turn19view8"
+    },
+    "cul-unesco-rose": {
+      "title": "Practices and craftsmanship associated with the Damascene rose in Al-Mrah",
+      "url": "https://ich.unesco.org/en/RL/practices-and-craftsmanship-associated-with-the-damascene-rose-in-al-mrah-01369",
+      "organization": "UNESCO Intangible Cultural Heritage",
+      "accessed": "2026-10-18",
+      "accessNote": "Indexed UNESCO inscription and decision text consulted; direct page presented a JavaScript challenge.",
+      "webRef": "turn5search0"
+    },
+    "cul-dsm-rose": {
+      "title": "Rose Damascena EO — extraction and sourcing",
+      "url": "https://studio.dsm-firmenich.com/product/rose-damascena-eo-pe-979490",
+      "organization": "dsm-firmenich",
+      "accessed": "2026-10-18",
+      "webRef": "turn31search2"
+    },
+    "cul-kew-sandalwood": {
+      "title": "Santalum album — Plants of the World Online",
+      "url": "https://powo.science.kew.org/taxon/780592-1",
+      "organization": "Royal Botanic Gardens, Kew",
+      "accessed": "2026-10-18",
+      "webRef": "turn15view0"
+    },
+    "cul-icfre-sandalwood": {
+      "title": "Practices for enhancing productivity of Santalum album",
+      "url": "https://icfre.gov.in/pdf/books-file/book12.pdf",
+      "organization": "Indian Council of Forestry Research and Education",
+      "accessed": "2026-10-18",
+      "accessNote": "Indexed book excerpt consulted; direct PDF fetch failed.",
+      "webRef": "turn15search44"
+    },
+    "cul-nccih-teatree": {
+      "title": "Tea Tree Oil: Usefulness and Safety",
+      "url": "https://www.nccih.nih.gov/health/tea-tree-oil",
+      "organization": "US National Center for Complementary and Integrative Health",
+      "accessed": "2026-10-18",
+      "webRef": "turn24view2"
+    },
+    "cul-aciar-teatree-history": {
+      "title": "Controlled pollination methods for Melaleuca alternifolia",
+      "url": "https://www.aciar.gov.au/publication/technical-publications/controlled-pollination-methods-melaleuca-alternifolia-maiden-betche-cheel",
+      "organization": "Australian Centre for International Agricultural Research",
+      "accessed": "2026-10-18",
+      "webRef": "turn13search1"
+    },
+    "cul-kew-vanilla": {
+      "title": "Vanilla planifolia — Plants of the World Online",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:262578-2",
+      "organization": "Royal Botanic Gardens, Kew",
+      "accessed": "2026-10-18",
+      "webRef": "turn19view7"
+    },
+    "cul-kew-vanilla-story": {
+      "title": "Vanilla — plant profile",
+      "url": "https://www.kew.org/plants/vanilla",
+      "organization": "Royal Botanic Gardens, Kew",
+      "accessed": "2026-10-18",
+      "accessNote": "Indexed Kew profile consulted; direct page fetch failed.",
+      "webRef": "turn5search43"
+    },
+    "cul-dsm-vanilla": {
+      "title": "Vanilla Planifolia Mada ABS — extraction and sourcing",
+      "url": "https://studio.dsm-firmenich.com/product/vanilla-planifolia-mada-abs-pe-990045",
+      "organization": "dsm-firmenich",
+      "accessed": "2026-10-18",
+      "webRef": "turn31search0"
+    },
+    "cul-kew-lavender": {
+      "title": "Lavandula angustifolia — Plants of the World Online",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:449008-1",
+      "organization": "Royal Botanic Gardens, Kew",
+      "accessed": "2026-10-18",
+      "webRef": "turn19view0"
+    },
+    "cul-ema-lavender-report": {
+      "title": "Final assessment report on Lavandula angustifolia aetheroleum and flos",
+      "url": "https://www.ema.europa.eu/en/documents/herbal-report/final-assessment-report-lavandula-angustifolia-miller-aetheroleum-and-lavandula-angustifolia-miller-flos_en.pdf",
+      "organization": "European Medicines Agency",
+      "accessed": "2026-10-18",
+      "webRef": "turn23view6"
+    },
+    "cul-kew-stoechas": {
+      "title": "Lavandula stoechas — Plants of the World Online",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:449089-1/general-information",
+      "organization": "Royal Botanic Gardens, Kew",
+      "accessed": "2026-10-18",
+      "webRef": "turn19view1"
+    },
+    "cul-messiwa-study": {
+      "title": "Ghanimi et al. (2022): Ethnobotanical study on wild edible plants traditionally used by Messiwa people, Morocco",
+      "url": "https://link.springer.com/article/10.1186/s13002-022-00500-4",
+      "organization": "Journal of Ethnobiology and Ethnomedicine / original field study",
+      "accessed": "2026-10-18",
+      "accessNote": "Methods and discussion read on publisher site; table entry checked in indexed PMC full text.",
+      "webRef": "turn31search1"
+    },
+    "cul-supplier-bergamot": {
+      "title": "Bergamotteöl Bio — imported catalogue snapshot",
+      "url": "https://www.sunday.de/bergamotteoel-citrus-bergamia-bio-italien.html",
+      "organization": "Sunday Natural",
+      "accessed": "2026-10-05",
+      "snapshotDate": "2026-10-05",
+      "verification": "Imported map metadata, not live reverified"
+    },
+    "cul-supplier-bergamot-fcf": {
+      "title": "Bergamotteöl Bergaptenfrei Bio — imported catalogue snapshot",
+      "url": "https://www.sunday.de/bergamotteoel-citrus-bergamia-bergaptenfrei-bio-italien.html",
+      "organization": "Sunday Natural",
+      "accessed": "2026-10-05",
+      "snapshotDate": "2026-10-05",
+      "verification": "Imported map metadata, not live reverified"
+    },
+    "cul-supplier-cedar": {
+      "title": "Himalayan cedar oil — imported catalogue snapshot",
+      "url": "https://www.sunday.de/en/himalaya-cedar-oil-cedrus-deodara-wildcrafted-organic-nepal.html",
+      "organization": "Sunday Natural",
+      "accessed": "2026-10-05",
+      "snapshotDate": "2026-10-05",
+      "verification": "Imported map metadata, not live reverified"
+    },
+    "cul-supplier-cardamom": {
+      "title": "Kardamomöl bio — imported catalogue snapshot",
+      "url": "https://www.sunday.de/kardamomoel-elettaria-cardamomum-bio-srilanka.html",
+      "organization": "Sunday Natural",
+      "accessed": "2026-10-05",
+      "snapshotDate": "2026-10-05",
+      "verification": "Imported map metadata, not live reverified"
+    },
+    "cul-supplier-eucalyptus-spain": {
+      "title": "Eukalyptusöl Bio Spain — imported catalogue snapshot",
+      "url": "https://www.sunday.de/eukalyptusoel-eucalyptus-globulus-bio-spanien.html",
+      "organization": "Sunday Natural",
+      "accessed": "2026-10-05",
+      "snapshotDate": "2026-10-05",
+      "verification": "Imported map metadata, not live reverified"
+    },
+    "cul-supplier-eucalyptus-portugal": {
+      "title": "Eukalyptusöl Portugal — imported catalogue snapshot",
+      "url": "https://www.sunday.de/eukalyptusoel-eucalyptus-globulus-bio-wild-portugal.html",
+      "organization": "Sunday Natural",
+      "accessed": "2026-10-05",
+      "snapshotDate": "2026-10-05",
+      "verification": "Imported map metadata, not live reverified"
+    },
+    "cul-supplier-myrrh-kenya": {
+      "title": "Myrrhenöl Kenya — imported catalogue snapshot",
+      "url": "https://www.sunday.de/myrrhenoel-commiphora-myrrha-wild-kenia.html",
+      "organization": "Sunday Natural",
+      "accessed": "2026-10-05",
+      "snapshotDate": "2026-10-05",
+      "verification": "Imported map metadata, not live reverified"
+    },
+    "cul-supplier-myrrh-somalia": {
+      "title": "Myrrhenöl Somalia — imported catalogue snapshot",
+      "url": "https://www.sunday.de/myrrhenoel-commiphora-myrrha-wild-bio-somalia.html",
+      "organization": "Sunday Natural",
+      "accessed": "2026-10-05",
+      "snapshotDate": "2026-10-05",
+      "verification": "Imported map metadata, not live reverified"
+    },
+    "cul-supplier-patchouli": {
+      "title": "Patchouliöl Nepal — imported catalogue snapshot",
+      "url": "https://www.sunday.de/patchoulioel-pogostemon-cablin-nepal.html",
+      "organization": "Sunday Natural",
+      "accessed": "2026-10-05",
+      "snapshotDate": "2026-10-05",
+      "verification": "Imported map metadata, not live reverified"
+    },
+    "cul-supplier-peppermint": {
+      "title": "Pfefferminzöl Bio Bulgaria — imported catalogue snapshot",
+      "url": "https://www.sunday.de/pfefferminzoel-mentha-piperita-bio-bulgarien.html",
+      "organization": "Sunday Natural",
+      "accessed": "2026-10-05",
+      "snapshotDate": "2026-10-05",
+      "verification": "Imported map metadata, not live reverified"
+    },
+    "cul-supplier-sandalwood": {
+      "title": "Sandelholzöl bio Sri Lanka — imported catalogue snapshot",
+      "url": "https://www.sunday.de/sandelholzoel-santalum-album-bio-sri-lanka.html",
+      "organization": "Sunday Natural",
+      "accessed": "2026-10-05",
+      "snapshotDate": "2026-10-05",
+      "verification": "Imported map metadata, not live reverified"
+    },
+    "cul-supplier-teatree": {
+      "title": "Teebaumöl Australia — imported catalogue snapshot",
+      "url": "https://www.sunday.de/teebaumoel-melaleuca-alternifolia-nsw-australien.html",
+      "organization": "Sunday Natural",
+      "accessed": "2026-10-05",
+      "snapshotDate": "2026-10-05",
+      "verification": "Imported map metadata, not live reverified"
+    },
+    "cul-supplier-lavender": {
+      "title": "True lavender — imported supplier catalogue variants",
+      "url": "https://www.sunday.de/echtes-lavendeloel-lavandula-angustifolia-bio-wild-alpes-maritimes-provence-1600m.html",
+      "organization": "Sunday Natural",
+      "accessed": "2026-10-05",
+      "snapshotDate": "2026-10-05",
+      "verification": "Imported map metadata; additional variant URLs retained in palette.json, not live reverified"
+    },
+    "cul-supplier-stoechas": {
+      "title": "Schopf-Lavendelöl Portugal — imported catalogue snapshot",
+      "url": "https://www.sunday.de/schopflavendeloel-lavandula-stoechas-bio-wild-portugal.html",
+      "organization": "Sunday Natural",
+      "accessed": "2026-10-05",
+      "snapshotDate": "2026-10-05",
+      "verification": "Imported map metadata, not live reverified"
+    },
+    "health-bergamot-2015": {
+      "title": "Bergamot inhalation: mood, autonomic activity and cortisol in 41 healthy women (Watanabe et al., 2015)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25824404/",
+      "organization": "Kyoto Prefectural University of Medicine; Forschende Komplementärmedizin",
+      "accessed": "2026-10-18"
+    },
+    "health-bergamot-phototoxicity": {
+      "title": "Accidental bullous phototoxic reactions to bergamot aromatherapy oil (Kaddu et al., 2001)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11511848/",
+      "organization": "Journal of the American Academy of Dermatology",
+      "accessed": "2026-10-18"
+    },
+    "health-cedar-rodents": {
+      "title": "Atypical antidepressant activity of an isolated Cedrus deodara heartwood compound in rodents (2014)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4211118/",
+      "organization": "Indian Journal of Pharmaceutical Sciences; original animal research",
+      "accessed": "2026-10-18"
+    },
+    "health-cardamom-trial": {
+      "title": "Cardamom inhalation for nausea during and after caesarean section (Khatiban et al., 2022)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35581106/",
+      "organization": "Hamadan University of Medical Sciences; Journal of PeriAnesthesia Nursing",
+      "accessed": "2026-10-18"
+    },
+    "health-eucalyptus-ema": {
+      "title": "Eucalyptus oil: EU herbal monograph, revision 1, adopted November 2024 and published February 2025",
+      "url": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-eucalyptus-globulus-labill-eucalyptus-polybractea-rt-baker-eucalyptus-smithii-rt-baker-aetheroleum-revision-1_en.pdf",
+      "organization": "European Medicines Agency",
+      "accessed": "2026-10-18"
+    },
+    "health-eucalyptus-assessment": {
+      "title": "Eucalyptus oil: assessment and limits of the evidence",
+      "url": "https://www.ema.europa.eu/en/medicines/herbal/eucalypti-aetheroleum",
+      "organization": "European Medicines Agency",
+      "accessed": "2026-10-18"
+    },
+    "health-jasmine-trial": {
+      "title": "Stimulating effect of aromatherapy massage with Jasminum sambac oil (Hongratanaworakit, 2010)",
+      "url": "https://journals.sagepub.com/doi/10.1177/1934578X1000500136",
+      "organization": "Srinakharinwirot University; Natural Product Communications",
+      "accessed": "2026-10-18"
+    },
+    "health-myrrh-ema": {
+      "title": "Myrrh resin solvent extracts: traditional medicinal uses and preparation limits",
+      "url": "https://www.ema.europa.eu/en/medicines/herbal/myrrha",
+      "organization": "European Medicines Agency",
+      "accessed": "2026-10-18"
+    },
+    "health-neroli-trial": {
+      "title": "Neroli inhalation in postmenopausal women: randomized trial (Choi et al., 2014)",
+      "url": "https://onlinelibrary.wiley.com/doi/10.1155/2014/796518",
+      "organization": "Korea University; Evidence-Based Complementary and Alternative Medicine",
+      "accessed": "2026-10-18"
+    },
+    "health-patchouli-trial": {
+      "title": "Short-term patchouli inhalation and stress in emergency nurses (Shin et al., 2020)",
+      "url": "https://journals.sagepub.com/doi/abs/10.1089/acm.2020.0206",
+      "organization": "Korea University; Journal of Alternative and Complementary Medicine",
+      "accessed": "2026-10-18"
+    },
+    "health-peppermint-nccih": {
+      "title": "Peppermint oil: usefulness and safety",
+      "url": "https://www.nccih.nih.gov/health/peppermint-oil",
+      "organization": "US National Center for Complementary and Integrative Health",
+      "accessed": "2026-10-18"
+    },
+    "health-peppermint-ema": {
+      "title": "Peppermint oil medicines: routes and evidence",
+      "url": "https://www.ema.europa.eu/en/medicines/herbal/menthae-piperitae-aetheroleum",
+      "organization": "European Medicines Agency",
+      "accessed": "2026-10-18"
+    },
+    "health-rose-trial": {
+      "title": "Damask rose inhalation, anxiety and sleep in operating-room staff (Mahdood et al., 2022)",
+      "url": "https://www.sciencedirect.com/science/article/abs/pii/S1089947221003543",
+      "organization": "Hamadan University of Medical Sciences; Journal of PeriAnesthesia Nursing",
+      "accessed": "2026-10-18"
+    },
+    "health-sandalwood-pilot": {
+      "title": "Physiological effects of sandalwood and lavender during experimental stress (Höferl et al., 2016)",
+      "url": "https://journals.sagepub.com/doi/10.1177/1934578X1601101034",
+      "organization": "University of Vienna; Natural Product Communications",
+      "accessed": "2026-10-18"
+    },
+    "health-sandalwood-arousal": {
+      "title": "Santalum album and alpha-santalol odour: physiological and self-rated arousal (Heuberger et al., 2006)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16783696/",
+      "organization": "University of Vienna; Planta Medica",
+      "accessed": "2026-10-18"
+    },
+    "health-teatree-nccih": {
+      "title": "Tea tree oil: usefulness and safety",
+      "url": "https://www.nccih.nih.gov/health/tea-tree-oil",
+      "organization": "US National Center for Complementary and Integrative Health",
+      "accessed": "2026-10-18"
+    },
+    "health-vanillin-mice": {
+      "title": "Inhaled vanillin: behavioural and sedative experiments in mice (Ogawa et al., 2024)",
+      "url": "https://www.jstage.jst.go.jp/article/bpb/47/10/47_b24-00424/_html/-char/en",
+      "organization": "Daiichi University of Pharmacy; Biological and Pharmaceutical Bulletin",
+      "accessed": "2026-10-18"
+    },
+    "health-lavender-nccih": {
+      "title": "Lavandula angustifolia: usefulness and safety",
+      "url": "https://www.nccih.nih.gov/health/lavender",
+      "organization": "US National Center for Complementary and Integrative Health",
+      "accessed": "2026-10-18"
+    },
+    "health-lavender-ema": {
+      "title": "Lavandula angustifolia oil medicines: traditional use, routes and precautions",
+      "url": "https://www.ema.europa.eu/en/medicines/herbal/lavandulae-aetheroleum",
+      "organization": "European Medicines Agency",
+      "accessed": "2026-10-18"
+    },
+    "health-stoechas-cells": {
+      "title": "Lavandula stoechas oil in cultured macrophages and computer models (Baris et al., 2026)",
+      "url": "https://link.springer.com/article/10.1186/s12906-026-05350-1",
+      "organization": "BMC Complementary Medicine and Therapies; original laboratory research",
+      "accessed": "2026-10-18"
+    },
+    "health-poison-control": {
+      "title": "Essential oils: poisonous when misused",
+      "url": "https://www.poison.org/articles/essential-oils",
+      "organization": "US National Capital Poison Center",
+      "accessed": "2026-10-18"
+    },
+    "health-bfr": {
+      "title": "Essential oils: fragrant benefits with limitations",
+      "url": "https://www.bfr.bund.de/en/service/frequently-asked-questions/topic/aetherische-oele-duftende-wirkungen-mit-einschraenkungen/",
+      "organization": "German Federal Institute for Risk Assessment (BfR)",
+      "accessed": "2026-10-18"
+    },
+    "health-anses": {
+      "title": "Essential oil sprays and diffusers: poison-centre surveillance and respiratory precautions",
+      "url": "https://vigilanses.anses.fr/sites/default/files/VigilAnsesN11_July2020_Spray.pdf",
+      "organization": "French Agency for Food, Environmental and Occupational Health & Safety (ANSES)",
+      "accessed": "2026-10-18"
+    }
+  }
+}
