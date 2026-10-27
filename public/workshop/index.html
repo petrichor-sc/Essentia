@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#100b19">
+  <meta name="description" content="An interactive Essentia Resonance workshop companion. Follow scent from the nose to memory, then explore the character of a perfume at your own pace.">
+  <title>The Scent Studio · Essentia Resonance</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/mark.svg">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#studio">Skip to the scent studio</a>
+  <header class="site-header">
+    <a class="brand" href="../" aria-label="Essentia Resonance home"><img src="./assets/mark.svg" width="28" height="42" alt=""><span>ESSENTIA<small>RESONANCE</small></span></a>
+    <nav aria-label="Main navigation"><a class="current" href="./" aria-current="page">The scent studio</a><a href="../atlas/">The atlas <span aria-hidden="true">↗</span></a></nav>
+    <a class="home-link" href="../#workshops">Back to Essentia <span aria-hidden="true">↗</span></a>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <div><p class="eyebrow"><span aria-hidden="true">✦</span> AN ESSENTIA RESONANCE WORKSHOP COMPANION</p><h1 id="page-title">The scent of <em>a feeling.</em></h1></div>
+      <p>If autumn had a scent, what would yours smell like?<br>Discover. Interpret. Create. Share only if you wish.</p>
+    </section>
+    <section class="studio" id="studio" aria-label="Interactive scent workshop">
+      <div class="studio-header">
+        <nav class="chapters" aria-label="Workshop chapters">
+          <button type="button" data-chapter="0" aria-current="step"><span>01</span> How we smell</button>
+          <button type="button" data-chapter="1"><span>02</span> Scent & memory</button>
+          <button type="button" data-chapter="2"><span>03</span> A perfume’s character</button>
+        </nav>
+        <button type="button" class="text-button view-button" id="presentation" aria-label="Workshop view" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg><span>Workshop view</span></button>
+      </div>
+      <div class="studio-grid">
+        <div class="visual" id="visual">
+          <div class="scene-top"><span><i aria-hidden="true"></i><span id="scene-title">THE OLFACTORY PATHWAY</span></span><span id="scene-type">A simplified cutaway</span></div>
+          <div id="scene" role="img" aria-label="A cutaway head showing scent molecules entering the nose and sensory neurons connecting to the olfactory bulb."></div>
+          <div class="diagram-fallback" id="fallback" hidden></div>
+          <div class="labels" id="labels" aria-hidden="true"></div>
+          <div class="scene-bottom"><span class="legend"><i class="gold-dot"></i><span id="legend-gold">Scent molecules</span><i class="violet-dot"></i><span id="legend-purple">Olfactory system</span></span><span class="conceptual">Illustrative · not to scale</span></div>
+        </div>
+        <aside class="explanation" aria-label="Current workshop step">
+          <div class="step-heading"><p class="eyebrow" id="chapter-title">THE SENSE OF SMELL</p><span id="step-counter">01 / 04</span></div>
+          <div class="step-content" aria-live="polite" aria-atomic="true"><h2 id="step-title">It begins with<br>a breath.</h2><p class="step-description" id="step-description">As you breathe in, airborne scent molecules travel into the nose. A small area high inside the nasal cavity is where the story of smell begins.</p></div>
+          <div class="step-pills" id="step-pills" role="group" aria-label="Choose a step"></div>
+          <div class="interactive-controls" id="controls"></div>
+          <div class="takeaway"><span class="eyebrow">A THOUGHT TO TAKE WITH YOU</span><p id="takeaway">Before a scent becomes a feeling, it is a molecule carried on a breath.</p></div>
+          <details class="more" id="learn-more"><summary>A little more detail <span aria-hidden="true">+</span></summary><div id="detail-content"></div></details>
+        </aside>
+      </div>
+      <div class="studio-footer">
+        <div class="motion-controls"><button type="button" id="motion" class="text-button" aria-pressed="false"><svg id="motion-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg><span>Pause motion</span></button><button type="button" id="reset" class="text-button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6"/></svg><span>Start again</span></button></div>
+        <p class="pace-note">Your pace. One idea at a time.</p>
+        <div class="step-navigation"><button type="button" id="previous" class="text-button" aria-label="Previous step">← <span>Previous</span></button><button type="button" id="next" class="next-button"><span>Follow the scent</span><span aria-hidden="true">→</span></button></div>
+      </div>
+      <p class="keyboard-note">Use <kbd>←</kbd> <kbd>→</kbd> to move between ideas. <kbd>Space</kbd> pauses motion. Chapters never advance automatically.</p>
+    </section>
+<section class="autumn-workshop" aria-labelledby="autumn-title">
+ <div class="autumn-heading"><p class="eyebrow">FROM UNDERSTANDING TO SELF-EXPRESSION</p><h2 id="autumn-title">If autumn had a scent,<br><em>what would yours smell like?</em></h2><p>Smell the materials in front of you. Let a word, colour, texture or feeling lead you. A note has no single correct meaning.</p></div>
+ <div class="workshop-prompts"><article><span>01 · DISCOVER</span><h3>Meet a note.</h3><p>Choose one of the workshop materials. Smell gently from a blotter. Notice it before trying to name it.</p><a href="../atlas/">Find its story in the atlas ↗</a></article><article><span>02 · INTERPRET</span><h3>Follow a feeling.</h3><p>Does it feel crisp, soft, warm, distant—or something else? A memory is welcome; no memory is equally welcome.</p></article><article><span>03 · CREATE</span><h3>Make it yours.</h3><p>Use your impressions to guide your scent with the workshop facilitator. Give your creation a name, a colour, or a few words.</p></article><article><span>04 · CONNECT</span><h3>Share, if you wish.</h3><p>Compare interpretations without ranking them. You can share a word, tell a story, or keep your experience private.</p></article></div>
+ <form id="reflection-form" class="reflection" autocomplete="off"><div><p class="eyebrow">YOUR PERSONAL SCENT CARD</p><h3>A few things you noticed.</h3><p>Optional. Notes stay in this browser on this device. On a shared workshop device, download them and clear the form before leaving.</p></div><div class="reflection-fields"><label for="autumn-note">The note I explored</label><select id="autumn-note"><option value="">Choose a workshop note…</option><option>Vanilla</option><option>Lavender</option><option>Balsam fir</option><option>Sandalwood</option><option>Cedarwood</option><option>Bergamot</option><option>Cardamom</option><option>Pink pepper</option><option>Jasmine</option><option>Rosewood</option><option>Geranium</option></select><label for="autumn-words">A colour, texture or feeling</label><input id="autumn-words" maxlength="240" placeholder="In your own words"><label for="autumn-memory">An association, if one comes to mind</label><textarea id="autumn-memory" rows="3" maxlength="1600" placeholder="A place, a moment—or simply what you notice"></textarea><label for="autumn-name">A name for my autumn scent</label><input id="autumn-name" maxlength="160"><div class="reflection-actions"><button type="button" class="outline-link" id="download-reflection">Download my scent card ↓</button><button type="button" class="text-button" id="clear-reflection">Clear my notes</button></div><p id="reflection-status" role="status"></p></div></form>
+</section>
+    <section class="atlas-invitation" aria-labelledby="atlas-title"><div class="atlas-orbit" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="29"/><ellipse cx="50" cy="50" rx="13" ry="29"/><path d="M21 50h58M25 36h50M25 64h50"/><ellipse cx="50" cy="50" rx="46" ry="14" transform="rotate(-28 50 50)"/><circle cx="87" cy="27" r="2"/></svg></div><div><p class="eyebrow">CONTINUE THE EXPLORATION</p><h2>Every note has <em>a story.</em></h2><p>Meet the materials, places and traditions behind the scents in your workshop.</p></div><a class="outline-link" href="../atlas/">Explore the atlas <span aria-hidden="true">↗</span></a></section>
+    <footer class="page-footer"><span>ESSENTIA <b>RESONANCE</b></span><p>Pause. Smell. Discover.</p><button type="button" class="text-button" id="sources-open">Sources & illustration notes <span aria-hidden="true">↗</span></button></footer>
+  </main>
+  <dialog id="sources" aria-labelledby="sources-title"><div class="dialog-header"><p class="eyebrow">BEHIND THE ILLUSTRATIONS</p><button type="button" class="close-button" id="sources-close" aria-label="Close sources">×</button></div><h2 id="sources-title">Grounded in curiosity.<br><em>Guided by evidence.</em></h2><p>The animations explain ideas. Particle sizes, colours, paths and speeds are illustrative. They do not measure an individual brain or predict a perfume’s performance.</p><ol>
+    <li><a href="https://www.nidcd.nih.gov/health/smell-disorders" target="_blank" rel="noopener noreferrer">NIDCD · How your sense of smell works ↗</a><span>Sensory neurons, receptor combinations and scent detection.</span></li>
+    <li><a href="https://pubmed.ncbi.nlm.nih.gov/33640412/" target="_blank" rel="noopener noreferrer">Zhou et al., 2021 · Olfaction and hippocampal connectivity ↗</a><span>Human brain imaging and electrophysiology; connectivity is not a guarantee of a particular emotional response.</span></li>
+    <li><a href="https://pubmed.ncbi.nlm.nih.gov/16892988/" target="_blank" rel="noopener noreferrer">Willander & Larsson, 2006 · Autobiographical odour memory ↗</a><span>A study in older adults, rather than a universal rule about childhood memories.</span></li>
+    <li><a href="https://pubmed.ncbi.nlm.nih.gov/10634894/" target="_blank" rel="noopener noreferrer">Sobel et al., 2000 · Olfactory habituation ↗</a><span>Neural responses can change during continuing exposure.</span></li>
+    <li><a href="https://pubmed.ncbi.nlm.nih.gov/18503438/" target="_blank" rel="noopener noreferrer">Kasting & Saiyasombati, 2001 · Evaporation from skin ↗</a><span>A model accounting for material properties, temperature, airflow and absorption.</span></li>
+    <li><a href="https://ifrafragrance.org/using-the-standards" target="_blank" rel="noopener noreferrer">IFRA · Fragrance concentration terminology ↗</a><span>Typical, overlapping industry ranges; labels are not internationally fixed concentration standards.</span></li>
+  </ol><p class="source-footnote">Visual references: Frag Science reels shared for this workshop. The 3D head is Lee Perry-Smith / Triplegangers (CC BY 3.0); the Michelle human model is from the Three.js examples / Mixamo. See the included asset credits. The anatomy and airflow remain conceptual teaching illustrations. Fragrance examples are teaching examples, not formula recommendations.</p></dialog>
+  <div id="announcement" class="sr-only" role="status"></div>
+  <noscript><p class="noscript">This interactive guide needs JavaScript. Smell begins at receptors in the nose; neural signals pass through the olfactory bulb into connected brain networks. Projection describes reach, sillage a trail, and longevity duration. <a href="../atlas/">Explore the atlas.</a></p></noscript>
+</body>
+</html>

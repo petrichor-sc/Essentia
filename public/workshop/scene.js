@@ -1,0 +1,151 @@
+import * as T from '../atlas/assets/three.module.js';
+import {GLTFLoader} from './assets/GLTFLoader.js';
+import {OrbitControls} from './assets/OrbitControls.js';
+import {humanRig} from './human.js';
+import {SVGRenderer} from './assets/SVGRenderer.js';
+const GOLD=0xc9a465,VIOLET=0xb9a1d9;
+const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z);
+const material=(color,opacity=1)=>new T.MeshStandardMaterial({color,roughness:.48,metalness:.15,transparent:opacity<1,opacity,depthWrite:opacity===1});
+export class ScentScene{
+ constructor(container,labels){
+  this.container=container;this.labels=labels;this.time=0;this.paused=false;this.state={chapter:0,step:0,movement:false,airflow:0,weather:'temperate',age:0,concentration:20,sites:['neck'],doseMode:'fixed',skinZoom:true};
+  this.scene=new T.Scene();this.camera=new T.PerspectiveCamera(37,1,.1,100);this.scene.add(new T.HemisphereLight(0xf1e5ff,0x26132d,2));
+  [[0xffdf9b,3,[-4,8,8]],[0x9c7ed7,2,[5,5,-4]]].forEach(([c,i,p])=>{const l=new T.DirectionalLight(c,i);l.position.set(...p);this.scene.add(l);});
+  const canvas=document.createElement('canvas'),context=canvas.getContext('webgl2',{alpha:true,antialias:true});this.gpu=!!context;
+  if(context){this.renderer=new T.WebGLRenderer({canvas,context,alpha:true,antialias:true});this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));this.renderer.setClearColor(0x100b19,0);this.renderer.toneMapping=T.ACESFilmicToneMapping;}
+  else{this.renderer=new SVGRenderer();this.renderer.setQuality('low');this.renderer.setPrecision(2);}
+  this.renderer.domElement.classList.add('sculpture');this.renderer.domElement.setAttribute('aria-hidden','true');container.append(this.renderer.domElement);container.dataset.renderer=this.gpu?'webgl2':'perspective-3d';
+  this.overlay=document.createElement('canvas');this.overlay.className='scent-light';this.overlay.setAttribute('aria-hidden','true');container.append(this.overlay);this.ctx=this.overlay.getContext('2d');
+  this.controls=new OrbitControls(this.camera,this.renderer.domElement);this.controls.enablePan=false;this.controls.minDistance=8;this.controls.maxDistance=27;this.controls.minPolarAngle=.45;this.controls.maxPolarAngle=2.1;
+  this.controls.addEventListener('change',()=>this.dirty=true);
+  const hint=document.createElement('span');hint.className='orbit-hint';hint.textContent='Drag to turn · Scroll to zoom';container.append(hint);
+  this.groups=Array.from({length:6},()=>{const g=new T.Group();this.scene.add(g);return g;});
+  this.buildNose();this.buildCells();this.buildBrain();this.buildBody();this.buildBottles();this.buildSkin();
+  this.proxies=[];this.cloud=[];this.distance=0;this.walkBlend=0;this.position=V(-2,0,0);this.mode=-1;this.ready=this.load();this.ready.catch(e=>console.error('3D models could not load',e));
+  this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(container);this.resize();this.update(this.state);
+  this.last=performance.now();this.drawAt=0;this.loop=this.loop.bind(this);this.frame=requestAnimationFrame(this.loop);
+ }
+ mesh(parent,geo,mat,p=[0,0,0]){const m=new T.Mesh(geo,mat);m.position.set(...p);parent.add(m);return m;}
+ sphere(parent,p,r,color=GOLD,opacity=1){return this.mesh(parent,new T.SphereGeometry(r,12,8),material(color,opacity),p);}
+ tube(parent,points,r=.025,color=GOLD,opacity=.8){const c=new T.CatmullRomCurve3(points.map(p=>V(...p)));this.mesh(parent,new T.TubeGeometry(c,24,r,5,false),material(color,opacity));return c;}
+ network(parent,center,scale,count=45){
+  const nodes=[],edges=[];for(let i=0;i<count;i++){const a=i*2.39996,y=1-2*(i+.5)/count,r=Math.sqrt(1-y*y),p=V(Math.cos(a)*r*scale[0],y*scale[1],Math.sin(a)*r*scale[2]).add(V(...center));nodes.push(p);this.sphere(parent,p.toArray(),.035,i%4?VIOLET:GOLD,.9);}
+  nodes.forEach((p,i)=>{nodes.map((q,j)=>({j,d:p.distanceTo(q)})).filter(x=>x.j!==i).sort((a,b)=>a.d-b.d).slice(0,3).forEach(({j})=>{if(j<i)return;const geo=new T.BufferGeometry().setFromPoints([p,nodes[j]]);parent.add(new T.Line(geo,new T.LineBasicMaterial({color:i%3?VIOLET:GOLD,transparent:true,opacity:.28})));edges.push([p,nodes[j]]);});});return {parent,nodes,edges};
+ }
+ buildNose(){
+  const g=this.groups[0];this.headRoot=new T.Group();g.add(this.headRoot);this.headRoot.position.set(-1,0,0);this.headRoot.scale.setScalar(.72);
+  this.nosePoint=V(0,1.05,2.45);this.receptorPoint=V(0,1.66,1.45);this.bulbPoint=V(0,1.98,1.3);
+  this.inhale=this.tube(this.headRoot,[[0,1.05,5.7],[0,1.05,3.6],[0,1.05,2.45],[0,1.45,1.6],[0,1.66,1.45]],.026,GOLD,.3);
+  this.sphere(this.headRoot,this.receptorPoint.toArray(),.14,GOLD);this.sphere(this.headRoot,this.bulbPoint.toArray(),.17,0xffe5af);
+  this.tube(this.headRoot,[[0,1.66,1.45],[0,1.98,1.3],[0,2.2,.7],[-.55,1.8,.2]],.03,GOLD,.8);
+ }
+ buildCells(){
+  const g=this.groups[1];this.context=new T.Group();g.add(this.context);this.context.position.set(-3,-.4,0);this.context.scale.setScalar(.35);
+  this.sphere(this.context,[0,1.66,1.45],.22,GOLD);this.tube(g,[[-3,.2,.5],[-1.8,.6,.5],[-1.2,.8,0]],.017,GOLD,.35);
+  this.cells=new T.Group();g.add(this.cells);this.cells.position.x=1;
+  for(let i=0;i<6;i++){const x=-1.8+i*.7,z=Math.sin(i)*.35;
+   this.mesh(this.cells,new T.CapsuleGeometry(.12,.35,4,8),material(i===2?GOLD:VIOLET),[x,.2,z]);
+   this.tube(this.cells,[[x,.45,z],[x,.85,z],[x,1.15,z]],.025,VIOLET);
+   for(let j=-2;j<=2;j++)this.tube(this.cells,[[x,1.05,z],[x+j*.12,1.35,z+j*.08],[x+j*.17,1.55,z+j*.15]],.018,GOLD,.7);
+   this.tube(this.cells,[[x,-.1,z],[x,-.8,z],[x*.65,-1.3,z*.6],[0,-1.7,0]],.022,VIOLET,.7);
+  }
+  this.relay=this.network(this.cells,[0,-2.1,0],[1.15,.45,.65],28);this.signalRoot=new T.Group();g.add(this.signalRoot);this.signalRoot.position.x=1;this.signalNet=this.network(this.signalRoot,[0,0,0],[2,1.7,1.2],55);
+ }
+ buildBrain(){
+  const g=this.groups[2];this.brainRoot=new T.Group();g.add(this.brainRoot);
+  for(const side of [-1,1]){const geo=new T.SphereGeometry(1,36,24),a=geo.attributes.position;
+   for(let i=0;i<a.count;i++){const x=a.getX(i),y=a.getY(i),z=a.getZ(i),groove=1+.035*Math.sin(y*34+x*9)*Math.cos(z*29);a.setXYZ(i,x*groove,y*groove,z*groove);}geo.computeVertexNormals();
+   const m=this.mesh(this.brainRoot,geo,material(0x73588c,.23),[side*.79,.35,0]);m.scale.set(1.07,1.6,1.45);
+  }
+  this.cortex=this.network(this.brainRoot,[0,.35,0],[1.85,1.6,1.42],65);
+  this.emotion=this.sphere(this.brainRoot,[.65,-.55,.5],.13,GOLD);this.memory=this.sphere(this.brainRoot,[-.7,-.2,-.4],.13,VIOLET);
+ }
+ buildBody(){
+  const g=this.groups[3];this.actor=new T.Group();g.add(this.actor);
+  const floor=this.mesh(g,new T.CircleGeometry(6.4,64),material(0x271b34,.6),[0,-.04,-.8]);floor.rotation.x=-Math.PI/2;
+  const grid=new T.GridHelper(12,12,0x806542,0x37263f);grid.position.y=-.02;grid.material.transparent=true;grid.material.opacity=.25;g.add(grid);
+  this.path=new T.CatmullRomCurve3([V(-2,0,0),V(2,0,0),V(3,0,-1.6),V(1.4,0,-3),V(-2.2,0,-3),V(-3,0,-1.5)],true,'centripetal');
+  this.pathLength=this.path.getLength();this.actor.position.copy(this.position||V(-2,0,0));
+ }
+ buildBottles(){
+  this.bottles=[];[5,10,20,30].forEach((percent,i)=>{const b=new T.Group();b.position.set(-3.3+i*2.2,0,0);this.groups[4].add(b);
+   const glass=this.mesh(b,new T.BoxGeometry(1.25,2.7,.8),material(VIOLET,.08));b.add(new T.LineSegments(new T.EdgesGeometry(glass.geometry),new T.LineBasicMaterial({color:VIOLET,transparent:true,opacity:.5})));
+   const h=2.35,oil=h*percent/100;
+   this.mesh(b,new T.BoxGeometry(1.1,oil,.65),material(GOLD,.94),[0,-1.2+oil/2,0]);
+   this.mesh(b,new T.BoxGeometry(1.1,h-oil,.65),material(VIOLET,.16),[0,-1.2+oil+(h-oil)/2,0]);
+   this.mesh(b,new T.CylinderGeometry(.28,.28,.35,20),material(0x4a344d),[0,1.52,0]);this.mesh(b,new T.BoxGeometry(.68,.45,.86),material(GOLD),[0,1.82,0]);this.bottles.push(b);
+  });
+ }
+ buildSkin(){
+  this.skinRoot=new T.Group();this.groups[5].add(this.skinRoot);this.skinRoot.position.set(1.8,2.1,0);this.skinRoot.rotation.z=-.32;
+  this.mesh(this.skinRoot,new T.CylinderGeometry(.62,.83,3.5,48,18),material(0xbc8c76));
+  // Pores follow a curved forearm surface, rather than a flat slab.
+  for(let i=0;i<160;i++){const y=-1.6+(i*.618%1)*3.2,a=-1.15+(i*.381%1)*2.3,r=.725-y*.06;const pore=this.sphere(this.skinRoot,[Math.sin(a)*r,y,Math.cos(a)*r],.009,0x795444,.5);pore.scale.y=.6;}
+  this.deposits=[];this.skinSeeds=[];
+  for(let i=0;i<110;i++){const y=-1.4+(i*.618033%1)*2.8,a=-.88+(i*.41421%1)*1.76,r=.735-y*.06,p=V(Math.sin(a)*r,y,Math.cos(a)*r);const m=this.sphere(this.skinRoot,p.toArray(),.035,GOLD,.85);m.scale.set(1,.38,1);this.deposits.push(m);this.skinSeeds.push(p);}
+  this.skinLink=new T.Line(new T.BufferGeometry().setFromPoints([V(),V(),V()]),new T.LineBasicMaterial({color:GOLD,transparent:true,opacity:.4}));this.groups[5].add(this.skinLink);
+ }
+ async load(){
+  const loader=new GLTFLoader(),[head,human]=await Promise.all([loader.loadAsync('./assets/head.glb'),loader.loadAsync('./assets/human.glb')]);
+  head.scene.traverse(o=>{if(o.isMesh)o.material=material(0x9b7cba,.25);});this.headRoot.add(head.scene);this.context.add(head.scene.clone(true));
+  this.actor.add(human.scene);human.scene.scale.setScalar(2.6);human.scene.traverse(o=>{if(o.isMesh){o.material.roughness=.85;o.material.metalness=0;}});
+  this.rig=humanRig(human.scene,this.actor);this.rig.pose(0,0);this.scene.updateMatrixWorld(true);
+  this.proxies=[];
+  if(!this.gpu)human.scene.traverse(o=>{if(!o.isSkinnedMesh)return;const geo=o.geometry.clone(),proxy=new T.Mesh(geo,material(0xc2a38f));proxy.position.copy(o.position);proxy.quaternion.copy(o.quaternion);proxy.scale.copy(o.scale);o.parent.add(proxy);o.visible=false;this.proxies.push({source:o,proxy,base:o.geometry.attributes.position.array.slice()});});
+  this.dirty=true;
+ }
+ update(s){const old=this.mode,oldZoom=this.state.skinZoom;this.state={...this.state,...s};this.mode=s.chapter===0?(s.step===1||s.step===2?1:s.step===3?2:0):s.chapter===1?2:s.step<2?3:s.step===2?5:4;
+  this.groups.forEach((g,i)=>g.visible=i===this.mode||(this.mode===5&&i===3));this.groups[5].visible=this.mode===5&&s.skinZoom!==false;this.cells.visible=s.step!==2;this.signalRoot.visible=s.chapter===0&&s.step===2;this.cortex.parent.rotation.y=s.chapter===1?.25:0;
+  if(this.mode!==old){const presets={0:[[8,3.4,12],[-1,.3,0]],1:[[7,3,12],[0,0,0]],2:[[6,3.5,10],[0,.2,0]],3:[[8,5.2,12],[0,1.9,-.8]],4:[[4,4,15],[0,.2,0]],5:[[8,5.2,12],[0,1.9,-.8]]};const [p,t]=presets[this.mode];this.camera.position.set(...p);this.controls.target.set(...t);this.controls.update();if(this.mode===5){this.zoomProgress=0;this.distance=0;this.walkBlend=0;this.position.set(-2,0,0);this.actor.position.copy(this.position);this.actor.rotation.y=0;}}
+  if(this.mode===5&&oldZoom!==s.skinZoom){this.zoomProgress=0;this.camera.position.set(8,5.2,12);this.controls.target.set(0,1.9,-.8);this.controls.update();}
+  this.bottles.forEach((b,i)=>b.children[1].material.opacity=[5,10,20,30][i]===s.concentration?1:.35);
+  this.applyDeposits();
+  this.setLabels();this.dirty=true;this.render();
+ }
+ setLabels(){
+  this.labels.replaceChildren();const s=this.state;let list=[];
+  if(this.mode===0)list=[['Roof of the nasal cavity',this.headRoot,V(0,1.66,1.45),.12,.24],['Olfactory bulb',this.headRoot,V(0,1.98,1.3),.65,.15]];
+  if(this.mode===1)list=[['Location in the nose',this.context,V(0,1.66,1.45),.07,.18],['Receptors on cilia',this.cells,V(0,1.4,0),.65,.17],['Sensory neurons',this.cells,V(.4,.2,0),.67,.49],['Olfactory bulb · enlarged',this.cells,V(0,-2.1,0),.48,.82]];
+  if(this.mode===1&&s.step===2)list=[['Location in the nose',this.context,V(0,1.66,1.45),.07,.18],['Electrical activity · enlarged relay',this.signalRoot,V(1,.7,.4),.55,.18],['Connected neurons',this.signalRoot,V(-.5,-.7,0),.55,.8]];
+  if(this.mode===2)list=s.chapter===1?[['Emotion networks',this.brainRoot,this.emotion.position,.65,.25],['Memory networks',this.brainRoot,this.memory.position,.08,.7]]:[['Olfactory processing networks',this.brainRoot,V(.4,.5,1),.08,.2]];
+  if(this.mode===3)list=[[s.step===0?'Projection · around you':'Sillage · left in the air',this.groups[3],V(-1,2,-.5),.07,.2]];
+  if(this.mode===5)list=[['Your chosen application areas',this.actor,V(0,2.8,0),.05,.18],['Selected skin · magnified',this.skinRoot,V(0,1,.7),.6,.15],['Fragrance remaining on skin',this.skinRoot,V(0,-.3,.75),.58,.82]];
+  if(this.mode===4)list=[5,10,20,30].map((p,i)=>[p+'% · '+['Cologne','EDT','EDP','Extrait'][i],this.bottles[i],V(0,-1.6,0),.1+i*.23,.82]);
+  if(this.mode===5&&s.skinZoom===false)list=list.slice(0,1);
+  this.labelItems=list.map(([text,object,p,x,y])=>{const el=document.createElement('span');el.className='anchored-label';el.textContent=text;el.style.left=x*100+'%';el.style.top=y*100+'%';this.labels.append(el);return {object,p,el};});
+ }
+ setPaused(value){this.paused=value;this.dirty=true;}
+ applyDeposits(){const s=this.state,areas=Math.max(1,(s.sites||['neck']).length),vol={bright:1.4,balanced:.85,lasting:.45}[s.material]||.85;const rate=vol*Math.sqrt(areas);const left=Math.exp(-(s.age||0)/100*rate*2.5);this.deposits.forEach((m,i)=>{m.visible=(i*.618033%1)<left;m.material.opacity=s.doseMode==='per-area'?.85:.85/Math.sqrt(areas);});}
+ resetTime(){this.time=0;this.distance=0;this.walkBlend=0;this.cloud=[];this.position.set(-2,0,0);this.actor.position.copy(this.position);this.dirty=true;}
+ resize(){this.width=this.container.clientWidth;this.height=this.container.clientHeight;if(!this.width||!this.height)return;this.camera.aspect=this.width/this.height;this.camera.updateProjectionMatrix();this.renderer.setSize(this.width,this.height);this.overlay.width=this.width*devicePixelRatio;this.overlay.height=this.height*devicePixelRatio;this.overlay.style.width=this.width+'px';this.overlay.style.height=this.height+'px';this.ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);this.dirty=true;}
+ project(p){const q=p.clone().project(this.camera);return [(q.x+1)*this.width/2,(1-q.y)*this.height/2,q.z];}
+ glow(p,r=4,alpha=.6,color='201,164,101'){const [x,y,z]=this.project(p);if(z>1||z< -1)return;const c=this.ctx,g=c.createRadialGradient(x,y,0,x,y,r*3);g.addColorStop(0,'rgba('+color+','+alpha+')');g.addColorStop(.18,'rgba('+color+','+alpha*.6+')');g.addColorStop(1,'rgba('+color+',0)');c.fillStyle=g;c.fillRect(x-r*3,y-r*3,r*6,r*6);}
+ advance(dt){
+  const s=this.state;this.time+=dt;
+  if(this.mode===3||this.mode===5){const moving=this.mode===3&&s.step===1&&s.movement;this.walkBlend+=(Number(moving)-this.walkBlend)*(1-Math.exp(-dt*3));this.distance+=dt*1.35*this.walkBlend;
+   if(this.distance>0){const u=(this.distance/this.pathLength)%1;this.position.copy(this.path.getPointAt(u));const tangent=this.path.getTangentAt(u);this.actor.rotation.y=Math.atan2(tangent.x,tangent.z);}
+   this.actor.position.copy(this.position);if(this.rig)this.rig.pose(this.time,this.walkBlend);
+   this.scene.updateMatrixWorld(true);
+   if(this.rig){const sites=s.sites||['neck'],areas=Math.max(1,sites.length),warm=s.weather==='summer'?1.4:s.weather==='winter'?.7:1;
+    const sources=sites.flatMap(site=>this.rig.point(site));
+    if(this.mode===3)for(let i=0;i<Math.ceil(dt*65*(s.doseMode==='per-area'?areas:1)*Math.sqrt(areas));i++){const source=sources[Math.floor(Math.random()*sources.length)];if(!source)continue;this.cloud.push({p:source.clone().add(V((Math.random()-.5)*.12,(Math.random()-.5)*.12,(Math.random()-.5)*.12)),v:V((Math.random()-.5)*.45+(s.airflow||0)/100*.6,.18*warm+Math.random()*.25,(Math.random()-.5)*.5),age:0,life:3+Math.random()*3});}
+   }
+   this.cloud.forEach(p=>{p.age+=dt;p.p.addScaledVector(p.v,dt);});this.cloud=this.cloud.filter(p=>p.age<p.life).slice(-500);
+   if(!this.gpu&&this.proxies.length){this.scene.updateMatrixWorld(true);const temp=V();for(const {source,proxy,base} of this.proxies){source.skeleton.update();const attr=proxy.geometry.attributes.position;for(let i=0;i<attr.count;i++){temp.fromArray(base,i*3);source.applyBoneTransform(i,temp);attr.setXYZ(i,temp.x,temp.y,temp.z);}attr.needsUpdate=true;proxy.geometry.computeVertexNormals();proxy.geometry.computeBoundingSphere();}}
+  }
+  if(this.mode===5){this.zoomProgress=Math.min(1,(this.zoomProgress||0)+dt*.7);const t=this.zoomProgress*this.zoomProgress*(3-2*this.zoomProgress);this.skinRoot.scale.setScalar(.03+t*.97);if(this.state.skinZoom!==false&&this.zoomProgress<1){this.camera.position.lerpVectors(V(8,5.2,12),V(5,4.3,8),t);this.controls.target.lerpVectors(V(0,1.9,-.8),V(.7,2,0),t);this.controls.update();}}
+ }
+ render(){
+  if(!this.width)return;this.renderer.render(this.scene,this.camera);const c=this.ctx;c.clearRect(0,0,this.width,this.height);
+  if(this.mode===3)this.cloud.forEach(p=>this.glow(p.p,2.8,(1-p.age/p.life)*.65));
+  if((this.mode===3||this.mode===5)&&this.rig){for(const site of (this.state.sites||['neck']))for(const p of this.rig.point(site))this.glow(p,7,.9);}
+  if(this.mode===5&&this.rig){const point=this.rig.point(this.state.sites[0])[0];if(point){const end=this.skinRoot.localToWorld(V(-.5,.5,.5)),mid=point.clone().lerp(end,.5).add(V(0,.6,.2)),a=this.skinLink.geometry.attributes.position;[point,mid,end].forEach((p,i)=>a.setXYZ(i,p.x,p.y,p.z));a.needsUpdate=true;this.skinLink.geometry.computeBoundingSphere();}}
+  if(this.mode===5&&this.state.skinZoom!==false){const s=this.state,age=(s.age||0)/100,left=Math.exp(-age*2.5*Math.sqrt(Math.max(1,s.sites.length))*({bright:1.4,balanced:.85,lasting:.45}[s.material]||.85));for(let i=0;i<55;i++){const phase=(i*.618+this.time*.17)%1,base=this.skinSeeds[i*2].clone();base.y+=phase*1.8;base.z+=phase*.7;this.glow(this.skinRoot.localToWorld(base),2,(1-phase)*left*.65);}}
+  if(this.mode===0)for(let i=0;i<35;i++)this.glow(this.headRoot.localToWorld(this.inhale.getPoint((i/35+this.time*.13)%1)),3,.8);
+  if(this.mode===1||this.mode===2){const net=this.mode===1?(this.state.step===2?this.signalNet:this.relay):this.cortex;for(let i=0;i<net.edges.length;i+=2){const [a,b]=net.edges[i],p=a.clone().lerp(b,(this.time*.5+i*.13)%1);this.glow(net.parent.localToWorld(p),2.5,.8,i%3?'185,161,217':'244,217,161');}}
+  // Labels occupy separated margin positions; leaders end at real 3D objects.
+  this.labelItems?.forEach(({object,p,el})=>{const [x,y]=this.project(object.localToWorld(p.clone())),box=el.getBoundingClientRect(),r=this.container.getBoundingClientRect(),ex=box.left-r.left+box.width/2,ey=box.bottom-r.top+3;c.strokeStyle='rgba(201,164,101,.42)';c.lineWidth=.8;c.beginPath();c.moveTo(ex,ey);c.lineTo(x,y);c.stroke();c.fillStyle='#c9a465';c.beginPath();c.arc(x,y,2,0,7);c.fill();});
+ }
+ loop(now){this.frame=requestAnimationFrame(this.loop);if(now-this.drawAt<(this.gpu?28:150))return;const dt=Math.min((now-this.last)/1000,.22);this.last=now;this.drawAt=now;if(document.hidden)return;if(!this.paused)this.advance(dt);if(!this.paused||this.dirty){this.render();this.dirty=false;}}
+ dispose(){cancelAnimationFrame(this.frame);this.observer.disconnect();this.controls.dispose();this.renderer.dispose?.();}
+}
