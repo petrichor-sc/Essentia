@@ -1,6 +1,6 @@
-import {WORKSHOP_MATERIALS,PALETTE_NOTE,materialAtlasURL} from './palette.js?v=studio-palette-r11';
-import {TodayPalette} from './palette-view.js?v=studio-palette-r11';
-import { fallbackIllustration } from './illustration.js?v=studio-palette-r11';
+import {WORKSHOP_MATERIALS,PALETTE_NOTE,materialAtlasURL} from './palette.js?v=long-hair-r12';
+import {TodayPalette} from './palette-view.js?v=long-hair-r12';
+import { fallbackIllustration } from './illustration.js?v=long-hair-r12';
 const $=id=>document.getElementById(id);
 const chapters=[
   {slug:'smell',name:'THE SENSE OF SMELL',scene:'THE OLFACTORY PATHWAY',type:'A breath in the Himalayas',legend:['Scent molecules','Olfactory system'],steps:[
@@ -125,7 +125,7 @@ document.addEventListener('keydown',e=>{if(e.defaultPrevented||$('sources').open
 window.addEventListener('hashchange',()=>{readHash();render();});
 matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',e=>setPaused(e.matches));
 renderWorkshopPalette();readHash();render();setPaused(paused);
-try{const module=await import('./scene.js?v=studio-palette-r11');scene=new module.ScentScene($('scene'),$('labels'),useFallback);syncVisual();await scene.ready;}catch(error){console.error('3D scene unavailable.',error);useFallback();if(state.chapter!==3)$('scene-type').textContent='Static backup · 3D could not load';}
+try{const module=await import('./scene.js?v=long-hair-r12');scene=new module.ScentScene($('scene'),$('labels'),useFallback);syncVisual();await scene.ready;}catch(error){console.error('3D scene unavailable.',error);useFallback();if(state.chapter!==3)$('scene-type').textContent='Static backup · 3D could not load';}
 window.addEventListener('pagehide',()=>{scene?.dispose();today.dispose();},{once:true});
 
 // Personal workshop reflection stays in this browser; sharing is optional.

@@ -1,8 +1,8 @@
 import * as T from '../atlas/assets/three.module.js';
-import {jasmineShrub} from './jasmine.js?v=studio-palette-r11';
-import {cloneRiggedModel,fitStreetHuman} from './street.js?v=studio-palette-r11';
-import {humanRig} from './human.js?v=studio-palette-r11';
-import {styleWorkshopVisitor} from './character.js?v=studio-palette-r11';
+import {jasmineShrub} from './jasmine.js?v=long-hair-r12';
+import {cloneRiggedModel,fitStreetHuman} from './street.js?v=long-hair-r12';
+import {humanRig} from './human.js?v=long-hair-r12';
+import {styleWorkshopVisitor} from './character.js?v=long-hair-r12';
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z);
 const smooth=(a,b,t)=>T.MathUtils.smoothstep(t,a,b);
 
@@ -31,7 +31,7 @@ export function jasmineMemory(){
  function captureMaterials(){root.traverse(o=>{if(!o.isMesh)return;for(const m of Array.isArray(o.material)?o.material:[o.material])if(!materials.has(m)){materials.set(m,m.opacity);m.transparent=true;}});}
  captureMaterials();
  return {root,childRoot,jasmine,scent,get rig(){return rig;},attachHuman(source,gpu=true){
-  const model=cloneRiggedModel(source);fitStreetHuman(model,1.10);styleWorkshopVisitor(model);childRoot.add(model);rig=humanRig(model,childRoot);
+  const model=cloneRiggedModel(source);fitStreetHuman(model,1.10);styleWorkshopVisitor(model,{young:true});childRoot.add(model);rig=humanRig(model,childRoot);
   if(!gpu)model.traverse(o=>{if(!o.isSkinnedMesh)return;const geo=o.geometry.clone(),proxy=new T.Mesh(geo,mat(0xb69c79));proxy.position.copy(o.position);proxy.quaternion.copy(o.quaternion);proxy.scale.copy(o.scale);o.parent.add(proxy);o.visible=false;proxies.push({source:o,proxy,base:o.geometry.attributes.position.array.slice()});});
   captureMaterials();
  },update(t,reveal){

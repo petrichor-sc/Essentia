@@ -1,4 +1,4 @@
-# Essentia Scent Studio — studio-palette-r11
+# Essentia Scent Studio — long-hair-r12
 
 ## Integrate into your existing Git repo
 
@@ -15,7 +15,7 @@ cd /home/sarthak/Documents/GitHub/Essentia
 git status --short
 git diff --stat
 git add public/workshop src/App.tsx src/WorkshopMenu.tsx public/atlas/index.html WORKSHOP_INTEGRATION.md
-git commit -m "Add today’s palette Atlas, white dress and fuller jasmine"
+git commit -m "Refine the visitor face, long hair and white V-neck dress"
 git push
 ```
 
@@ -40,9 +40,11 @@ The standalone palette list below the studio has moved into chapter 04. Reflecti
 
 ### Visitor and dress
 
-The adult visitor wears a fitted, sleeveless ivory-white satin dress with a scoop neckline, shaped waist, fitted hips and a knee-length skirt, plus low cream flats. The dress is a continuous skinned mesh bound to the same skeleton. The source trousers are reshaped into slim calves beneath it; the original rig, hands, reach and spray gestures remain.
+The adult visitor wears a fitted, sleeveless ivory-white satin dress with a lower V neckline, shaped waist, fitted hips and a knee-length skirt, plus low cream flats. The dress is a continuous skinned mesh bound to the same skeleton. The restored upper chest sits inside its surface to give the lower V edge a clean finish. The source trousers are reshaped into slim calves beneath it; the original rig, hands, reach and spray gestures remain.
 
-The lower face is softened, the mouth corners have a slight smile, and the skin shader adds subtle rose lips and cheek colour. Forehead-fitted brows, preserved eyes and one continuous dark bob remain. Headphones and sunglasses remain removed. The dress and face are shared by the street visitor and perfume wearer, and the smaller memory illustration retains the same character continuity.
+The visitor now has long, side-parted chestnut waves that fall past the shoulders, with an exposed forehead and no straight fringe. The crown is less bulky, and the fall blends head, neck and upper-spine weights so it follows the animation. A single closed skinned hair mesh contains the crown and long layers.
+
+The face has gently opened eyes with brown irises and small catchlights, softly arched brows fitted to the forehead, a refined nose bridge, fuller cheeks, a smoothed jaw contour and subtle rose lips with a defined cupid’s bow. The adult visitor’s white dress has a lower V neckline and a softly shaped bodice. The younger memory visitor wears a higher round-neck version with a looser waist and skirt. Headphones and sunglasses remain removed. These changes retain the existing rig, hands, walking, sniff and spray gestures.
 
 ### Fuller jasmine
 
@@ -55,12 +57,13 @@ Stems are batched into one mesh and leaves/petals/centres are instanced. All flo
 - Production build, all workshop JavaScript syntax and relative module paths passed.
 - Four-chapter navigation data, eleven-material filtering, source selection, body-topic filtering and triangle selection passed targeted checks.
 - The triangle includes all eleven materials exactly once, in bands of 2 / 6 / 3.
-- A 240-pose check keeps the soles within 4.5 mm of the pavement and the illustrated sniff gap below 8.2 cm.
+- A 240-pose check keeps the soles within 4.6 mm of the pavement and the illustrated sniff gap below 8.2 cm.
 - A 480-frame sample confirms continuous emission from all 453 flowers, including when no inhalation is active.
-- Spray tests confirm no cloud before actuation and approximately 18–19 winter particles versus 63 summer particles in the comparison sample.
+- Spray tests confirm no cloud before actuation and approximately 18–20 winter particles versus 62–64 summer particles in the comparison sample.
 - Travelling signal pulses, all 55 firing network nodes, finite memory transforms and the intact hand close-up still pass.
+- The long hair has 12,888 vertices in one skinned mesh, with finite positions and normalized joint weights. The adult V neckline and higher round neckline for the younger memory figure were checked separately.
 
-Front, three-quarter and profile character projections were inspected through direct CPU model renders. No browser testing, full-scene GPU verification or publishing was performed. The studio and runtime URLs use `studio-palette-r11` to refresh the changed modules and character asset.
+Front, three-quarter and profile character projections were inspected through direct CPU model renders. No browser testing, full-scene GPU verification or publishing was performed. The studio and runtime URLs use `long-hair-r12` to refresh the changed modules and character asset.
 
 ## This workshop's material palette
 
