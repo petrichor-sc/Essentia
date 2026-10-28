@@ -1,21 +1,24 @@
-import {receptorCloseup} from './receptors.js?v=grounded-garden-r3';
-import {hillStreet,cloneRiggedModel,fitStreetHuman,streetMotion,STREET_BUILD,STREET_POLE,STREET_GROUND,STREET_WALKWAY} from './street.js?v=grounded-garden-r3';
+import {receptorCloseup} from './receptors.js?v=ambient-sky-r4';
+import {hillStreet,cloneRiggedModel,fitStreetHuman,streetMotion,STREET_BUILD,STREET_POLE,STREET_GROUND,STREET_WALKWAY} from './street.js?v=ambient-sky-r4';
 import * as T from '../atlas/assets/three.module.js';
-import {GLTFLoader} from './assets/GLTFLoader.js?v=grounded-garden-r3';
-import {OrbitControls} from './assets/OrbitControls.js?v=grounded-garden-r3';
+import {GLTFLoader} from './assets/GLTFLoader.js?v=ambient-sky-r4';
+import {OrbitControls} from './assets/OrbitControls.js?v=ambient-sky-r4';
 
-import {cerebralSculpture} from './sculptures.js?v=grounded-garden-r3';
-import {jasmineShrub} from './jasmine.js?v=grounded-garden-r3';
-import {humanRig} from './human.js?v=grounded-garden-r3';
-import {SVGRenderer} from './assets/SVGRenderer.js?v=grounded-garden-r3';
+import {cerebralSculpture} from './sculptures.js?v=ambient-sky-r4';
+import {jasmineShrub} from './jasmine.js?v=ambient-sky-r4';
+import {humanRig} from './human.js?v=ambient-sky-r4';
+import {SVGRenderer} from './assets/SVGRenderer.js?v=ambient-sky-r4';
+import {hillAtmosphere} from './atmosphere.js?v=ambient-sky-r4';
+import {styleWorkshopVisitor} from './character.js?v=ambient-sky-r4';
+import {jasmineScent} from './scent.js?v=ambient-sky-r4';
 const GOLD=0xc9a465,VIOLET=0xb9a1d9;
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z);
 const material=(color,opacity=1)=>new T.MeshStandardMaterial({color,roughness:.48,metalness:.15,transparent:opacity<1,opacity,depthWrite:opacity===1});
 export class ScentScene{
  constructor(container,labels){
   this.container=container;this.container.setAttribute('role','group');this.labels=labels;this.time=0;this.paused=false;this.state={chapter:0,step:0,movement:false,airflow:0,weather:'temperate',age:0,concentration:20,sites:['neck'],doseMode:'fixed',skinZoom:true};
-  this.scene=new T.Scene();this.camera=new T.PerspectiveCamera(37,1,.1,170);this.scene.add(new T.HemisphereLight(0xf1e5ff,0x26132d,2));
-  [[0xffdf9b,3,[-4,8,8]],[0x9c7ed7,2,[5,5,-4]]].forEach(([c,i,p])=>{const l=new T.DirectionalLight(c,i);l.position.set(...p);this.scene.add(l);});
+  this.scene=new T.Scene();this.camera=new T.PerspectiveCamera(37,1,.1,220);this.hemi=new T.HemisphereLight(0xf1e5ff,0x26132d,2);this.scene.add(this.hemi);this.daySky=new T.Color(0xc1cbd0);this.dayFog=new T.FogExp2(0xc4ccbf,.009);
+  this.keyLights=[];[[0xffdf9b,3,[-4,8,8]],[0x9c7ed7,2,[5,5,-4]]].forEach(([c,i,p])=>{const l=new T.DirectionalLight(c,i);l.position.set(...p);this.scene.add(l);this.keyLights.push(l);});
   const canvas=document.createElement('canvas'),context=canvas.getContext('webgl2',{alpha:true,antialias:true});this.gpu=!!context;
   if(context){this.renderer=new T.WebGLRenderer({canvas,context,alpha:true,antialias:true});this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));this.renderer.setClearColor(0x100b19,0);this.renderer.toneMapping=T.ACESFilmicToneMapping;}
   else{this.renderer=new SVGRenderer();this.renderer.setQuality('low');this.renderer.setPrecision(2);}
@@ -41,6 +44,7 @@ export class ScentScene{
   const g=this.groups[0];this.headRoot=new T.Group();g.add(this.headRoot);this.headRoot.position.set(-2.2,0,0);this.headRoot.scale.setScalar(.045);
   this.nosePoint=V(0,.72,2.4);this.receptorPoint=V(0,1.66,1.45);this.bulbPoint=V(0,1.98,1.3);
   this.jasmine=jasmineShrub();g.add(this.jasmine.root);this.jasmine.root.position.copy(STREET_POLE).add(V(-.5,0,.25));this.jasmine.root.scale.setScalar(1);this.village=hillStreet();g.add(this.village.root);this.streetActor=new T.Group();g.add(this.streetActor);this.streetCameraFollow=true;
+  this.atmosphere=hillAtmosphere(STREET_GROUND);g.add(this.atmosphere.root);this.scent=jasmineScent(this.jasmine.sources);this.jasmine.root.add(this.scent.points);this.scent.points.visible=this.gpu;
   const shadowCanvas=document.createElement('canvas');shadowCanvas.width=128;shadowCanvas.height=128;const shadowContext=shadowCanvas.getContext('2d'),gradient=shadowContext.createRadialGradient(64,64,4,64,64,64);gradient.addColorStop(0,'rgba(20,17,18,.48)');gradient.addColorStop(.45,'rgba(20,17,18,.2)');gradient.addColorStop(1,'rgba(20,17,18,0)');shadowContext.fillStyle=gradient;shadowContext.fillRect(0,0,128,128);
   this.streetShadow=new T.Mesh(new T.PlaneGeometry(.9,.65),new T.MeshBasicMaterial({map:new T.CanvasTexture(shadowCanvas),transparent:true,depthWrite:false}));this.streetShadow.rotation.x=-Math.PI/2;g.add(this.streetShadow);
   // No visible tube, arrow, or continuous line enters the face.
@@ -112,6 +116,7 @@ export class ScentScene{
   // The scanned bust is confined to the memory location diagram. It cannot enter the street scene.
   head.scene.traverse(o=>{if(o.isMesh)o.material=material(0x9b7cba,1);});this.memoryContext.add(head.scene);
   const streetModel=cloneRiggedModel(human.scene),anatomyModel=cloneRiggedModel(human.scene);
+  [human.scene,streetModel,anatomyModel].forEach(styleWorkshopVisitor);
   this.actor.add(human.scene);human.scene.scale.setScalar(2.6);fitStreetHuman(streetModel);this.streetActor.add(streetModel);this.anatomyActor.add(anatomyModel);anatomyModel.scale.setScalar(1.9);
   [human.scene,streetModel,anatomyModel].forEach(model=>model.traverse(o=>{if(o.isMesh){o.material.roughness=.85;o.material.metalness=0;}}));
   this.rig=humanRig(human.scene,this.actor);this.streetRig=humanRig(streetModel,this.streetActor);this.anatomyRig=humanRig(anatomyModel,this.anatomyActor);
@@ -123,9 +128,10 @@ export class ScentScene{
  }
  skinSoftware(proxies=[]){for(const {source,proxy,base} of proxies){source.skeleton.update();const p=proxy.geometry.attributes.position,v=V();for(let i=0;i<p.count;i++){v.fromArray(base,i*3);source.applyBoneTransform(i,v);p.setXYZ(i,v.x,v.y,v.z);}p.needsUpdate=true;proxy.geometry.computeVertexNormals();proxy.geometry.computeBoundingSphere();}}
  prepareStreet(){
-  this.streetState=streetMotion(this.time);const motion=this.streetState;this.village.update(this.time);this.streetActor.position.copy(motion.position);this.streetActor.rotation.y=motion.yaw;this.streetActor.scale.setScalar(1);
+  this.streetState=streetMotion(this.time);const motion=this.streetState;this.village.update(this.time);this.atmosphere.update(this.time);this.streetActor.position.copy(motion.position);this.streetActor.rotation.y=motion.yaw;this.streetActor.scale.setScalar(1);
   this.streetShadow.position.set(motion.position.x,STREET_WALKWAY+.004,motion.position.z);
   if(this.streetRig){const target=this.jasmine.root.localToWorld((this.flowerSource||this.jasmine.sources[0]).clone());this.streetRig.pose(this.time,motion.walk,{reach:motion.reach,handTarget:target.clone().add(V(-.08,-.06,.02)),breath:motion.breath});const q=this.streetActor.getWorldQuaternion(new T.Quaternion()),head=this.streetRig.bones.Head.bone.getWorldPosition(V());this.headRoot.position.copy(head).add(V(0,.035,0).applyQuaternion(q));this.headRoot.quaternion.copy(q);this.headRoot.scale.set(.065,.12,.065);if(!this.gpu)this.skinSoftware(this.streetProxies);}
+  this.scent.update(this.time,{nose:this.streetRig?this.jasmine.root.worldToLocal(this.headRoot.localToWorld(this.nosePoint.clone())):null,capture:this.streetRig?motion.capture:-1,flower:this.flowerSource||this.jasmine.sources[0]});
   if(this.streetCameraFollow){const close=T.MathUtils.smoothstep(motion.reach,0,1),focus=this.streetRig?this.headRoot.localToWorld(V(0,1,1.4)).lerp(this.jasmine.root.localToWorld((this.flowerSource||this.jasmine.sources[0]).clone()),.4):V(-.25,-1.25,1);this.camera.position.lerpVectors(V(-4.8,.15,7.3),focus.clone().add(V(-1.45,.55,2.1)),close);this.controls.target.lerpVectors(V(-.8,-1.6,1.5),focus,close);this.controls.update();}
  }
  prepareDetect(){
@@ -142,7 +148,7 @@ export class ScentScene{
   this.bottles.forEach((b,i)=>b.children[1].material.opacity=[5,10,20,30][i]===s.concentration?1:.35);
   this.applyDeposits();
   this.actor.visible=this.mode===3||this.mode===5;this.anatomyActor.visible=this.mode===1;this.streetActor.visible=this.mode===0;
-  if(this.mode===0){this.streetCameraFollow=true;this.controls.minDistance=1.5;this.controls.maxDistance=18;this.controls.maxPolarAngle=Math.PI/2-.03;}else{this.controls.minDistance=8;this.controls.maxDistance=27;this.controls.maxPolarAngle=2.1;}
+  if(this.mode===0){this.streetCameraFollow=true;this.controls.minDistance=1.5;this.controls.maxDistance=18;this.controls.maxPolarAngle=Math.PI/2-.03;this.scene.background=this.daySky;this.scene.fog=this.dayFog;this.hemi.color.setHex(0xdde7e5);this.hemi.groundColor.setHex(0x7a7060);this.hemi.intensity=1.65;this.keyLights[0].color.setHex(0xffe6bc);this.keyLights[0].intensity=1.8;this.keyLights[1].color.setHex(0xb3ced6);this.keyLights[1].intensity=.8;}else{this.controls.minDistance=8;this.controls.maxDistance=27;this.controls.maxPolarAngle=2.1;this.scene.background=null;this.scene.fog=null;this.hemi.color.setHex(0xf1e5ff);this.hemi.groundColor.setHex(0x26132d);this.hemi.intensity=2;this.keyLights[0].color.setHex(0xffdf9b);this.keyLights[0].intensity=3;this.keyLights[1].color.setHex(0x9c7ed7);this.keyLights[1].intensity=2;}
   this.hotspotLayer.hidden=this.mode!==0;this.breathBadge.hidden=!(this.mode===0||this.mode===1);if(this.mode!==0)this.closePathwayInfo();
   this.setLabels();this.dirty=true;this.render();
  }
@@ -189,11 +195,11 @@ export class ScentScene{
    const motion=this.streetState,phase=motion.phase,neural=motion.neural;this.breathBadge.textContent=this.paused?'Scene paused':motion.stage;
    for(const source of this.village.sources())for(let i=0;i<9;i++){const f=(i*.618+this.time*.2)%1;this.glow(source.clone().add(V(-f*.5,f*.8,Math.sin(i+f)*f*.3)),1,.16*(1-f),'202,167,123');}
    const nose=this.headRoot.localToWorld(this.nosePoint.clone());
-   for(const seed of this.aromaSeeds){
+   for(const seed of (this.gpu?[]:this.aromaSeeds)){
     const start=this.jasmine.root.localToWorld(seed.source.clone()),f=(seed.phase+this.time*seed.speed)%1,p=start.clone();
     // Independent smooth eddies suggest wind and dispersion, not straight molecular trajectories.
     p.x-=f*(1.4+seed.phase*2);p.y+=f*(.6+seed.phase*.9)+Math.sin(seed.angle+this.time*.5)*f*.35;p.z+=Math.sin(seed.angle+f*5+this.time*.25)*f*1.3;
-    if(seed.phase<.3||motion.capture>=0)this.glow(p,1.4+seed.phase,(motion.capture>=0?.3:.1)*Math.sin(Math.PI*f),'255,184,76');
+    this.glow(p,1.8+seed.phase,.4*Math.min(1,f*18)*Math.pow(1-f,.85),'255,184,76');
     if(seed.inhaled&&motion.reach>.7){
      const capture=motion.capture<0?-1:(motion.capture-seed.phase*.25)/.75;
      if(capture>=0&&capture<=1){const flower=this.jasmine.root.localToWorld((this.flowerSource||seed.source).clone()),q=flower.lerp(nose,capture*capture*(3-2*capture)),spread=Math.sin(capture*Math.PI);q.y+=spread*(.3+Math.sin(seed.angle+capture*4)*.3);q.z+=spread*Math.sin(seed.angle)*.6;

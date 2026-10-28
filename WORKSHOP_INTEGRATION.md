@@ -93,3 +93,14 @@ Seventeen additional trees, including twelve gently swaying cedars, seven low pl
 The sequence walks to the jasmine, reaches, then inhales particles from the selected flower. Light travels into the nasal sensory area, then indicates receptor, bulb and cortical activity. Beyond the receptors, the light represents neural signals. Activity markers follow the head. The anatomy buttons are in a fixed legend visible during inhalation and neural activity; no separate markers float above the street. The camera moves closer during the sniff. HTML, module and CSS versions change together to avoid mixing cached revisions.
 
 Production build, workshop syntax/import checks and 240 ground-contact poses passed. The ground check reproduces model loading after the actor has already moved, and the largest sole deviation through the full cycle is less than 4.2 mm. No browser visual testing or publishing was performed.
+
+
+## Continuous scent, visitor palette and full backdrop — ambient-sky-r4
+
+Every jasmine flower now emits depth-tested amber 3D particles continuously while the animation runs. A separate inhaled subset approaches the nose during the sniff. Pausing freezes both. No emission filter depends on the breath. The 2D fallback also keeps ambient scent visible. The visual stream is a teaching illustration.
+
+The fictional visitor has warm olive skin, dark brown hair and a muted stone/sage clothing palette. This is a material and texture-shader styling revision to the existing continuous model, preserving its skeleton and grounded motion; it is not a replacement character model. Character materials are cloned separately for the street, anatomy and perfume-character scenes.
+
+A gradient sky dome, soft clouds, three layers of 360-degree foothills and 96 distant trees surround the street. The scene has an opaque sky, daylight lighting and distance haze, removing the transparent dark void. The other anatomy chapters retain the purple-and-gold studio background.
+
+Production build and workshop syntax/import checks passed. A geometry check covers 480 time samples over two complete scene cycles with no inhalation, verifying that all 20 flowers continue to emit, plus a separate check of the inhaled stream and finite atmosphere geometry. No browser testing, shader compilation in a graphics context, visual verification or publishing was performed.

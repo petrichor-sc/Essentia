@@ -1,5 +1,5 @@
 import * as T from '../atlas/assets/three.module.js';
-export const STREET_BUILD='street-20261028-grounded-garden-r3';
+export const STREET_BUILD='street-20261028-ambient-sky-r4';
 export const STREET_GROUND=-2.72;
 export const STREET_WALKWAY=STREET_GROUND+.015;
 export const STREET_POLE=new T.Vector3(.35,STREET_GROUND,1.35);
@@ -104,12 +104,7 @@ export function hillStreet(){
  cylinder(root,.075,.13,4.8,STREET_POLE.clone().add(V(0,2.4,0)),wood);
  box(root,1.1,.1,.13,STREET_POLE.clone().add(V(0,4.45,0)),wood);
  for(const dx of [-.42,-.14,.14,.42]){cylinder(root,.05,.045,.12,STREET_POLE.clone().add(V(dx,4.56,0)),cream);const line=new T.CatmullRomCurve3([STREET_POLE.clone().add(V(dx-14,4.7,-.8)),STREET_POLE.clone().add(V(dx-6,3.9,-.3)),STREET_POLE.clone().add(V(dx,4.62,0)),STREET_POLE.clone().add(V(dx+7,3.85,.2)),STREET_POLE.clone().add(V(dx+15,4.6,.5))]);root.add(new T.Line(new T.BufferGeometry().setFromPoints(line.getPoints(80)),new T.LineBasicMaterial({color:0x6a625d,transparent:true,opacity:.55})));}
- // Rounded, low distant foothills surround the street below the skyline.
- for(let layer=0;layer<3;layer++){
-  const positions=[],r=62+layer*20,base=STREET_GROUND-2;
-  for(let i=0;i<128;i++){const a=i/128*Math.PI*2,b=(i+1)/128*Math.PI*2,height=t=>2.1+layer*1.5+Math.sin(t*5+layer)*1.2+Math.sin(t*9-layer)*.8;const p=V(Math.cos(a)*r,height(a),Math.sin(a)*r),q=V(Math.cos(b)*r,height(b),Math.sin(b)*r);positions.push(p.x,base,p.z,...p.toArray(),...q.toArray(),p.x,base,p.z,...q.toArray(),q.x,base,q.z);}
-  const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.computeVertexNormals();root.add(new T.Mesh(geo,new T.MeshBasicMaterial({color:[0x637677,0x829294,0xa2abab][layer],side:T.DoubleSide})));
- }
+ // The sky, forest and surrounding ridges are provided by atmosphere.js.
  // Quiet ambient figures remain away from the main interaction.
  const walkers=[];for(let i=0;i<3;i++){
   const person=new T.Group();root.add(person);const coat=surface([0x71637d,0x8d7668,0x63837b][i]),skin=surface(0xbe9a7e),hair=surface(0x423834);
