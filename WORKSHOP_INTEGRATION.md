@@ -42,3 +42,7 @@ The autumn activity and optional personal scent card are below the interactive s
 ## Checks and limits
 
 Production build and local import/asset checks were performed. No browser testing or live publication was performed, as requested. Please review the live page after GitHub finishes deploying. The scent, dose and skin illustrations are teaching comparisons, not calibrated wear-time predictions or safe-use limits for a perfume formula.
+
+## Jasmine opening scene update
+
+The Breathe step now shows a 3D jasmine shrub, scattered airborne scent particles, and a small fraction approaching the nostril. The solid stream and internal anatomy markers have been removed from this opening view. The later receptor and neural steps remain. The new jasmine.js module is copied by the included merge script. Syntax and production build passed; no browser testing was performed.

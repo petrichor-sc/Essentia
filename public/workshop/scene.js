@@ -1,6 +1,7 @@
 import * as T from '../atlas/assets/three.module.js';
 import {GLTFLoader} from './assets/GLTFLoader.js';
 import {OrbitControls} from './assets/OrbitControls.js';
+import {jasmineShrub} from './jasmine.js';
 import {humanRig} from './human.js';
 import {SVGRenderer} from './assets/SVGRenderer.js';
 const GOLD=0xc9a465,VIOLET=0xb9a1d9;
@@ -33,11 +34,11 @@ export class ScentScene{
   nodes.forEach((p,i)=>{nodes.map((q,j)=>({j,d:p.distanceTo(q)})).filter(x=>x.j!==i).sort((a,b)=>a.d-b.d).slice(0,3).forEach(({j})=>{if(j<i)return;const geo=new T.BufferGeometry().setFromPoints([p,nodes[j]]);parent.add(new T.Line(geo,new T.LineBasicMaterial({color:i%3?VIOLET:GOLD,transparent:true,opacity:.28})));edges.push([p,nodes[j]]);});});return {parent,nodes,edges};
  }
  buildNose(){
-  const g=this.groups[0];this.headRoot=new T.Group();g.add(this.headRoot);this.headRoot.position.set(-1,0,0);this.headRoot.scale.setScalar(.72);
-  this.nosePoint=V(0,1.05,2.45);this.receptorPoint=V(0,1.66,1.45);this.bulbPoint=V(0,1.98,1.3);
-  this.inhale=this.tube(this.headRoot,[[0,1.05,5.7],[0,1.05,3.6],[0,1.05,2.45],[0,1.45,1.6],[0,1.66,1.45]],.026,GOLD,.3);
-  this.sphere(this.headRoot,this.receptorPoint.toArray(),.14,GOLD);this.sphere(this.headRoot,this.bulbPoint.toArray(),.17,0xffe5af);
-  this.tube(this.headRoot,[[0,1.66,1.45],[0,1.98,1.3],[0,2.2,.7],[-.55,1.8,.2]],.03,GOLD,.8);
+  const g=this.groups[0];this.headRoot=new T.Group();g.add(this.headRoot);this.headRoot.position.set(-2.2,0,0);this.headRoot.scale.setScalar(.72);
+  this.nosePoint=V(0,.72,2.4);this.receptorPoint=V(0,1.66,1.45);this.bulbPoint=V(0,1.98,1.3);
+  this.jasmine=jasmineShrub();g.add(this.jasmine.root);this.jasmine.root.position.set(2,-1.95,1.3);
+  // No visible tube, arrow, or continuous line enters the face.
+  this.aromaSeeds=Array.from({length:125},(_,i)=>({source:this.jasmine.sources[i%this.jasmine.sources.length],phase:(i*.61803398875)%1,speed:.065+(i%7)*.006,angle:i*2.39996,inhaled:i%4===0}));
  }
  buildCells(){
   const g=this.groups[1];this.context=new T.Group();g.add(this.context);this.context.position.set(-3,-.4,0);this.context.scale.setScalar(.35);
@@ -87,7 +88,7 @@ export class ScentScene{
  }
  async load(){
   const loader=new GLTFLoader(),[head,human]=await Promise.all([loader.loadAsync('./assets/head.glb'),loader.loadAsync('./assets/human.glb')]);
-  head.scene.traverse(o=>{if(o.isMesh)o.material=material(0x9b7cba,.25);});this.headRoot.add(head.scene);this.context.add(head.scene.clone(true));
+  head.scene.traverse(o=>{if(o.isMesh)o.material=material(0x9b7cba,.62);});this.headRoot.add(head.scene);this.context.add(head.scene.clone(true));
   this.actor.add(human.scene);human.scene.scale.setScalar(2.6);human.scene.traverse(o=>{if(o.isMesh){o.material.roughness=.85;o.material.metalness=0;}});
   this.rig=humanRig(human.scene,this.actor);this.rig.pose(0,0);this.scene.updateMatrixWorld(true);
   this.proxies=[];
@@ -96,7 +97,7 @@ export class ScentScene{
  }
  update(s){const old=this.mode,oldZoom=this.state.skinZoom;this.state={...this.state,...s};this.mode=s.chapter===0?(s.step===1||s.step===2?1:s.step===3?2:0):s.chapter===1?2:s.step<2?3:s.step===2?5:4;
   this.groups.forEach((g,i)=>g.visible=i===this.mode||(this.mode===5&&i===3));this.groups[5].visible=this.mode===5&&s.skinZoom!==false;this.cells.visible=s.step!==2;this.signalRoot.visible=s.chapter===0&&s.step===2;this.cortex.parent.rotation.y=s.chapter===1?.25:0;
-  if(this.mode!==old){const presets={0:[[8,3.4,12],[-1,.3,0]],1:[[7,3,12],[0,0,0]],2:[[6,3.5,10],[0,.2,0]],3:[[8,5.2,12],[0,1.9,-.8]],4:[[4,4,15],[0,.2,0]],5:[[8,5.2,12],[0,1.9,-.8]]};const [p,t]=presets[this.mode];this.camera.position.set(...p);this.controls.target.set(...t);this.controls.update();if(this.mode===5){this.zoomProgress=0;this.distance=0;this.walkBlend=0;this.position.set(-2,0,0);this.actor.position.copy(this.position);this.actor.rotation.y=0;}}
+  if(this.mode!==old){const presets={0:[[7,3.3,13],[0,.1,.5]],1:[[7,3,12],[0,0,0]],2:[[6,3.5,10],[0,.2,0]],3:[[8,5.2,12],[0,1.9,-.8]],4:[[4,4,15],[0,.2,0]],5:[[8,5.2,12],[0,1.9,-.8]]};const [p,t]=presets[this.mode];this.camera.position.set(...p);this.controls.target.set(...t);this.controls.update();if(this.mode===5){this.zoomProgress=0;this.distance=0;this.walkBlend=0;this.position.set(-2,0,0);this.actor.position.copy(this.position);this.actor.rotation.y=0;}}
   if(this.mode===5&&oldZoom!==s.skinZoom){this.zoomProgress=0;this.camera.position.set(8,5.2,12);this.controls.target.set(0,1.9,-.8);this.controls.update();}
   this.bottles.forEach((b,i)=>b.children[1].material.opacity=[5,10,20,30][i]===s.concentration?1:.35);
   this.applyDeposits();
@@ -104,7 +105,7 @@ export class ScentScene{
  }
  setLabels(){
   this.labels.replaceChildren();const s=this.state;let list=[];
-  if(this.mode===0)list=[['Roof of the nasal cavity',this.headRoot,V(0,1.66,1.45),.12,.24],['Olfactory bulb',this.headRoot,V(0,1.98,1.3),.65,.15]];
+  if(this.mode===0)list=[['Jasmine · scent released into the air',this.jasmine.root,V(0,2.2,0),.59,.8]];
   if(this.mode===1)list=[['Location in the nose',this.context,V(0,1.66,1.45),.07,.18],['Receptors on cilia',this.cells,V(0,1.4,0),.65,.17],['Sensory neurons',this.cells,V(.4,.2,0),.67,.49],['Olfactory bulb · enlarged',this.cells,V(0,-2.1,0),.48,.82]];
   if(this.mode===1&&s.step===2)list=[['Location in the nose',this.context,V(0,1.66,1.45),.07,.18],['Electrical activity · enlarged relay',this.signalRoot,V(1,.7,.4),.55,.18],['Connected neurons',this.signalRoot,V(-.5,-.7,0),.55,.8]];
   if(this.mode===2)list=s.chapter===1?[['Emotion networks',this.brainRoot,this.emotion.position,.65,.25],['Memory networks',this.brainRoot,this.memory.position,.08,.7]]:[['Olfactory processing networks',this.brainRoot,V(.4,.5,1),.08,.2]];
@@ -141,7 +142,20 @@ export class ScentScene{
   if((this.mode===3||this.mode===5)&&this.rig){for(const site of (this.state.sites||['neck']))for(const p of this.rig.point(site))this.glow(p,7,.9);}
   if(this.mode===5&&this.rig){const point=this.rig.point(this.state.sites[0])[0];if(point){const end=this.skinRoot.localToWorld(V(-.5,.5,.5)),mid=point.clone().lerp(end,.5).add(V(0,.6,.2)),a=this.skinLink.geometry.attributes.position;[point,mid,end].forEach((p,i)=>a.setXYZ(i,p.x,p.y,p.z));a.needsUpdate=true;this.skinLink.geometry.computeBoundingSphere();}}
   if(this.mode===5&&this.state.skinZoom!==false){const s=this.state,age=(s.age||0)/100,left=Math.exp(-age*2.5*Math.sqrt(Math.max(1,s.sites.length))*({bright:1.4,balanced:.85,lasting:.45}[s.material]||.85));for(let i=0;i<55;i++){const phase=(i*.618+this.time*.17)%1,base=this.skinSeeds[i*2].clone();base.y+=phase*1.8;base.z+=phase*.7;this.glow(this.skinRoot.localToWorld(base),2,(1-phase)*left*.65);}}
-  if(this.mode===0)for(let i=0;i<35;i++)this.glow(this.headRoot.localToWorld(this.inhale.getPoint((i/35+this.time*.13)%1)),3,.8);
+  if(this.mode===0){
+   const nose=this.headRoot.localToWorld(this.nosePoint.clone());
+   for(const seed of this.aromaSeeds){
+    const f=(seed.phase+this.time*seed.speed)%1,start=this.jasmine.root.localToWorld(seed.source.clone()),p=start.clone();
+    if(seed.inhaled){
+     // Broad, individually drifting paths converge only near the nostril, then fade.
+     const ease=f*f*(3-2*f);p.lerp(nose,ease);const spread=Math.sin(Math.PI*f);
+     p.y+=spread*(.25+Math.sin(seed.angle+f*5)*.48);p.z+=spread*Math.cos(seed.angle+f*4)*.65;
+    }else{
+     p.x-=f*(1.1+Math.sin(seed.angle)*.6);p.y+=f*(1.4+Math.cos(seed.angle)*.6);p.z+=Math.sin(seed.angle+f*3)*f*1.2;
+    }
+    const fade=Math.sin(Math.PI*f)**1.2*(seed.inhaled?.44:.3);this.glow(p,1.2+(seed.phase*.65),fade,'226,211,165');
+   }
+  }
   if(this.mode===1||this.mode===2){const net=this.mode===1?(this.state.step===2?this.signalNet:this.relay):this.cortex;for(let i=0;i<net.edges.length;i+=2){const [a,b]=net.edges[i],p=a.clone().lerp(b,(this.time*.5+i*.13)%1);this.glow(net.parent.localToWorld(p),2.5,.8,i%3?'185,161,217':'244,217,161');}}
   // Labels occupy separated margin positions; leaders end at real 3D objects.
   this.labelItems?.forEach(({object,p,el})=>{const [x,y]=this.project(object.localToWorld(p.clone())),box=el.getBoundingClientRect(),r=this.container.getBoundingClientRect(),ex=box.left-r.left+box.width/2,ey=box.bottom-r.top+3;c.strokeStyle='rgba(201,164,101,.42)';c.lineWidth=.8;c.beginPath();c.moveTo(ex,ey);c.lineTo(x,y);c.stroke();c.fillStyle='#c9a465';c.beginPath();c.arc(x,y,2,0,7);c.fill();});
