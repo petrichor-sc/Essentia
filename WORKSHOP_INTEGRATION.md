@@ -70,3 +70,15 @@ Three complete terrain rings now surround the scene, so orbiting reveals mountai
 ## Opaque head correction
 
 The scanned head and reaching arm now use opaque materials with normal depth writing. Internal region meshes no longer render as solid shapes through the face; the amber glow and accessible anatomy points remain. This also lets the face correctly occlude telephone wires behind it. This ZIP includes the preceding reaching-pose, Detect, brain, 360-degree terrain, climbing-vine and village changes. Production build and syntax checks passed. No browser testing was performed.
+
+## Detect continuity and receptor sequence
+
+Detect now reuses the original opaque breathing bust rather than a separate small head. A staged camera move approaches the nasal sensory area and reveals a clearly labelled magnified view with a location leader. The receptor diagram places the cilia at the nasal lining, cell bodies above them, and axons leading up to the bulb. An 11-second teaching cycle shows arriving odour particles, cilia activation, staggered neuron firing in a new randomized order each cycle, bulb activity and an onward pulse to a schematic cortical target. Timing and neuron selection are illustrative rather than a measured biological response.
+
+Detect annotation cards open on hover, click or focus and describe the nose location, enlargement, cilia, bulb and cortex. The existing breathing and amber anatomical interaction in Breathe are retained. New module: receptors.js. Syntax and production build passed; no browser testing was performed.
+
+## Human scale correction
+
+The village scene now uses the existing continuous full-body human model at approximately 1.7 m equivalent height, comparable to the background walkers. The person stands on the same ground plane, reaches toward the lower jasmine flowers, and breathes with subtle spine deformation. The large scanned bust is hidden in the village and appears only as an explicitly magnified anatomy view in Detect. Anatomy hover points follow the full-body model’s head position. The feet correction now accounts for the actor’s current scale and ground placement.
+
+This cumulative ZIP includes the Detect transition, receptor sequence and interactive labels, the surrounding mountain terrain, climbing jasmine, village, and the preceding opacity fixes. Syntax and production build passed; no browser testing was performed.
