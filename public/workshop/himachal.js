@@ -4,30 +4,30 @@ const matte=(color)=>new T.MeshStandardMaterial({color,roughness:.95,metalness:0
 export function himachalLandscape(){
  const root=new T.Group(),wood=matte(0x65504a),dark=matte(0x302f3a);
  const mesh=(geo,mat,p)=>{const m=new T.Mesh(geo,mat);m.position.copy(p);root.add(m);return m;};
- // Layered ridgelines are landscape-inspired, not a geographic reconstruction.
+ // Three complete terrain rings surround the viewer; no flat backdrop plane.
  for(let layer=0;layer<3;layer++){
-  const positions=[],colors=[],base=-3.05,z=-7-layer*3;
-  const color=new T.Color([0x383047,0x51445e,0x72647e][layer]);
-  for(let i=0;i<25;i++){
-   const x=-18+i*1.5,y=base+1.4+layer*.6+Math.abs(Math.sin(i*1.73+layer*2))*(2+layer*.6);
-   const nextY=base+1.4+layer*.6+Math.abs(Math.sin((i+1)*1.73+layer*2))*(2+layer*.6);
-   positions.push(x,base,z,x,y,z,x+1.5,nextY,z,x,base,z,x+1.5,nextY,z,x+1.5,base,z);
-   for(let n=0;n<6;n++)colors.push(color.r,color.g,color.b);
-   if(layer===2&&y>1.2){const snow=new T.BufferGeometry().setFromPoints([V(x,y,z+.02),V(x-.24,y-.6,z+.02),V(x+.45,y-.5,z+.02)]);snow.setIndex([0,1,2]);snow.computeVertexNormals();root.add(new T.Mesh(snow,new T.MeshBasicMaterial({color:0xccc0ce,transparent:true,opacity:.55,side:T.DoubleSide})));}
+  const radius=34+layer*9,segments=96,positions=[],colors=[],colour=new T.Color([0x393242,0x51455e,0x796b81][layer]);
+  const summit=a=>5+layer*2+Math.abs(Math.sin(a*11+layer))*5+Math.abs(Math.sin(a*23+layer*1.7))*3;
+  for(let i=0;i<segments;i++){
+   const a=i/segments*Math.PI*2,b=(i+1)/segments*Math.PI*2,r1=radius+Math.sin(a*7)*2,r2=radius+Math.sin(b*7)*2;
+   const p=V(Math.cos(a)*r1,summit(a),Math.sin(a)*r1),q=V(Math.cos(b)*r2,summit(b),Math.sin(b)*r2);
+   positions.push(p.x,-2.72,p.z,...p.toArray(),...q.toArray(),p.x,-2.72,p.z,...q.toArray(),q.x,-2.72,q.z);
+   for(let n=0;n<6;n++)colors.push(colour.r,colour.g,colour.b);
+   if(layer===2&&p.y>11){const tangent=V(-Math.sin(a),0,Math.cos(a)),near=p.clone().multiply(V(.998,1,.998)),left=near.clone().addScaledVector(tangent,-.8).add(V(0,-2.5,0)),right=near.clone().addScaledVector(tangent,1.1).add(V(0,-2,0));const snow=new T.BufferGeometry().setFromPoints([near,left,right]);snow.setIndex([0,1,2]);snow.computeVertexNormals();root.add(new T.Mesh(snow,new T.MeshBasicMaterial({color:0xc6bacd,side:T.DoubleSide,transparent:true,opacity:.65})));}
   }
-  const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.setAttribute('color',new T.Float32BufferAttribute(colors,3));geo.computeVertexNormals();root.add(new T.Mesh(geo,new T.MeshBasicMaterial({vertexColors:true,side:T.DoubleSide,transparent:true,opacity:.6-layer*.08})));
+  const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.setAttribute('color',new T.Float32BufferAttribute(colors,3));geo.computeVertexNormals();root.add(new T.Mesh(geo,new T.MeshBasicMaterial({vertexColors:true,side:T.DoubleSide})));
  }
- const ground=mesh(new T.CircleGeometry(8,48),matte(0x29252f),V(0,-2.72,-.3));ground.rotation.x=-Math.PI/2;
+ const ground=mesh(new T.CircleGeometry(59,96),matte(0x29252f),V(0,-2.73,0));ground.rotation.x=-Math.PI/2;
  // A weathered timber telephone pole with sagging wires.
- mesh(new T.CylinderGeometry(.085,.14,5.5,12),wood,V(2.55,0,-.25));
- mesh(new T.BoxGeometry(1.35,.12,.14),wood,V(2.55,2.45,-.25));
- for(const x of [2.02,2.38,2.74,3.08]){
-  mesh(new T.CylinderGeometry(.065,.055,.15,10),matte(0x9b9395),V(x,2.6,-.25));
-  const curve=new T.CatmullRomCurve3([V(x-9,3.1,-3),V(x-4,2.2,-1.7),V(x,2.64,-.25),V(x+5,2.05,-1),V(x+10,2.8,-2)]);
+ mesh(new T.CylinderGeometry(.085,.14,5.5,12),wood,V(-.7,0,3.35));
+ mesh(new T.BoxGeometry(1.35,.12,.14),wood,V(-.7,2.45,3.35));
+ for(const x of [-1.23,-.87,-.51,-.17]){
+  mesh(new T.CylinderGeometry(.065,.055,.15,10),matte(0x9b9395),V(x,2.6,3.35));
+  const curve=new T.CatmullRomCurve3([V(x-9,3.1,.6),V(x-4,2.2,1.9),V(x,2.64,3.35),V(x+5,2.05,2.6),V(x+10,2.8,1.6)]);
   root.add(new T.Line(new T.BufferGeometry().setFromPoints(curve.getPoints(55)),new T.LineBasicMaterial({color:0x82727e,transparent:true,opacity:.3})));
  }
  for(let i=0;i<20;i++){
-  const a=i*2.39996,p=V(2.5+Math.cos(a)*(.5+i%4*.25),-2.65,Math.sin(a)*.6);
+  const a=i*2.39996,p=V(-.75+Math.cos(a)*(.5+i%4*.25),-2.65,3.6+Math.sin(a)*.6);
   const rock=mesh(new T.DodecahedronGeometry(.12+i%3*.05,0),dark,p);rock.scale.set(1.5,.6,1);
  }
  return root;

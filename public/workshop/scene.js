@@ -1,7 +1,9 @@
+import {hillsideVillage} from './village.js';
 import * as T from '../atlas/assets/three.module.js';
 import {GLTFLoader} from './assets/GLTFLoader.js';
 import {OrbitControls} from './assets/OrbitControls.js';
 import {himachalLandscape,rigBreathingBust} from './himachal.js';
+import {reachingArm,cerebralSculpture} from './sculptures.js';
 import {jasmineShrub} from './jasmine.js';
 import {humanRig} from './human.js';
 import {SVGRenderer} from './assets/SVGRenderer.js';
@@ -37,7 +39,7 @@ export class ScentScene{
  buildNose(){
   const g=this.groups[0];this.headRoot=new T.Group();g.add(this.headRoot);this.headRoot.position.set(-2.2,0,0);this.headRoot.scale.setScalar(.72);
   this.nosePoint=V(0,.72,2.4);this.receptorPoint=V(0,1.66,1.45);this.bulbPoint=V(0,1.98,1.3);
-  this.jasmine=jasmineShrub();g.add(this.jasmine.root);this.jasmine.root.position.set(2,-2.72,0);this.jasmine.root.scale.setScalar(1.1);g.add(himachalLandscape());
+  this.jasmine=jasmineShrub();g.add(this.jasmine.root);this.jasmine.root.position.set(-1.25,-2.72,3.6);this.jasmine.root.scale.setScalar(1.1);g.add(himachalLandscape());this.village=hillsideVillage();g.add(this.village.root);this.reachArm=reachingArm(this.headRoot);
   // No visible tube, arrow, or continuous line enters the face.
   this.aromaSeeds=Array.from({length:180},(_,i)=>({source:this.jasmine.sources[i%this.jasmine.sources.length],phase:(i*.61803398875)%1,speed:.065+(i%7)*.006,angle:i*2.39996,inhaled:i%4===0}));
   this.olfactoryRegions=[
@@ -46,7 +48,7 @@ export class ScentScene{
    {name:'Olfactory bulbs',position:V(0,2.02,1.3),scale:V(.48,.15,.23),center:3.9,text:'The olfactory bulbs sit just above the nasal cavity and receive signals from olfactory sensory neurons. They process patterns of activity before sending information onward.'},
    {name:'Olfactory cortex',position:V(-.85,1.8,.2),scale:V(.42,.24,.45),center:4.9,text:'Connected regions, including the piriform cortex, help process odour information. Connections with other brain networks support identification, emotion and memory. The highlighted area is a simplified location marker, not a full anatomical segmentation.'}
   ];
-  this.olfactoryRegions.forEach(region=>{const m=new T.Mesh(new T.SphereGeometry(1,18,12),new T.MeshBasicMaterial({color:0xffbb58,transparent:true,opacity:.12,depthTest:false,depthWrite:false,blending:T.AdditiveBlending}));m.position.copy(region.position);m.scale.copy(region.scale);m.renderOrder=9;this.headRoot.add(m);region.mesh=m;});
+  this.olfactoryRegions.forEach(region=>{const m=new T.Mesh(new T.SphereGeometry(1,18,12),new T.MeshBasicMaterial({color:0xffbb58,transparent:true,opacity:.12,depthTest:false,depthWrite:false,blending:T.AdditiveBlending}));m.position.copy(region.position);m.scale.copy(region.scale);m.renderOrder=9;this.headRoot.add(m);region.mesh=m;m.visible=false;});
   this.neuralPath=new T.CatmullRomCurve3([this.receptorPoint,V(0,1.87,1.4),this.bulbPoint,V(-.38,1.96,.9),V(-.85,1.8,.2)]);
 
  }
@@ -63,11 +65,13 @@ export class ScentScene{
  closePathwayInfo(){this.openRegion=null;this.info.hidden=true;this.olfactoryRegions.forEach(r=>r.button.setAttribute('aria-expanded','false'));}
  positionPathwayInfo(){if(!this.openRegion)return;const [x,y]=this.project(this.headRoot.localToWorld(this.openRegion.position.clone()));const w=Math.min(300,Math.max(180,this.width-24));this.info.style.width=w+'px';this.info.style.left=Math.max(12,Math.min(this.width-w-12,x+24))+'px';this.info.style.top=Math.max(46,Math.min(this.height-this.info.offsetHeight-12,y+24))+'px';}
  buildCells(){
-  const g=this.groups[1];this.context=new T.Group();g.add(this.context);this.context.position.set(-3,-.4,0);this.context.scale.setScalar(.35);
-  this.sphere(this.context,[0,1.66,1.45],.22,GOLD);this.tube(g,[[-3,.2,.5],[-1.8,.6,.5],[-1.2,.8,0]],.017,GOLD,.35);
-  this.cells=new T.Group();g.add(this.cells);this.cells.position.x=1;
+  const g=this.groups[1];this.context=new T.Group();g.add(this.context);this.context.position.set(-3.4,0,0);this.context.scale.setScalar(.48);this.context.rotation.y=.5;
+  this.detectPatch=this.sphere(this.context,[0,1.66,1.45],.18,GOLD);this.detectFlower=jasmineShrub();g.add(this.detectFlower.root);this.detectFlower.root.position.set(-2.8,-1.5,1.8);this.detectFlower.root.scale.setScalar(.36);
+  this.tube(g,[[-3.1,.8,.5],[-1.4,1.8,.3],[.4,1.5,0]],.012,GOLD,.23);
+  const divider=new T.BufferGeometry().setFromPoints([V(-.6,-2.4,-.7),V(-.6,2.6,-.7)]);g.add(new T.Line(divider,new T.LineBasicMaterial({color:VIOLET,transparent:true,opacity:.12})));
+  this.cells=new T.Group();g.add(this.cells);this.cells.position.x=2;this.cellBodies=[];
   for(let i=0;i<6;i++){const x=-1.8+i*.7,z=Math.sin(i)*.35;
-   this.mesh(this.cells,new T.CapsuleGeometry(.12,.35,4,8),material(i===2?GOLD:VIOLET),[x,.2,z]);
+   const soma=this.sphere(this.cells,[x,.2,z],.19,VIOLET,.8);soma.scale.set(.75,1.5,.75);this.cellBodies.push(soma);
    this.tube(this.cells,[[x,.45,z],[x,.85,z],[x,1.15,z]],.025,VIOLET);
    for(let j=-2;j<=2;j++)this.tube(this.cells,[[x,1.05,z],[x+j*.12,1.35,z+j*.08],[x+j*.17,1.55,z+j*.15]],.018,GOLD,.7);
    this.tube(this.cells,[[x,-.1,z],[x,-.8,z],[x*.65,-1.3,z*.6],[0,-1.7,0]],.022,VIOLET,.7);
@@ -76,11 +80,10 @@ export class ScentScene{
  }
  buildBrain(){
   const g=this.groups[2];this.brainRoot=new T.Group();g.add(this.brainRoot);
-  for(const side of [-1,1]){const geo=new T.SphereGeometry(1,36,24),a=geo.attributes.position;
-   for(let i=0;i<a.count;i++){const x=a.getX(i),y=a.getY(i),z=a.getZ(i),groove=1+.035*Math.sin(y*34+x*9)*Math.cos(z*29);a.setXYZ(i,x*groove,y*groove,z*groove);}geo.computeVertexNormals();
-   const m=this.mesh(this.brainRoot,geo,material(0x73588c,.23),[side*.79,.35,0]);m.scale.set(1.07,1.6,1.45);
-  }
-  this.cortex=this.network(this.brainRoot,[0,.35,0],[1.85,1.6,1.42],65);
+  this.brainRoot.add(cerebralSculpture());this.brainRoot.position.set(.8,.2,0);
+  this.memoryContext=new T.Group();g.add(this.memoryContext);this.memoryContext.position.set(-3,0,0);this.memoryContext.scale.setScalar(.32);this.memoryContext.rotation.y=.55;
+  this.sphere(this.memoryContext,[0,2.6,-.1],.8,GOLD,.18);
+  this.cortex=this.network(this.brainRoot,[0,.35,0],[1.42,1.04,1.15],55);
   this.emotion=this.sphere(this.brainRoot,[.65,-.55,.5],.13,GOLD);this.memory=this.sphere(this.brainRoot,[-.7,-.2,-.4],.13,VIOLET);
  }
  buildBody(){
@@ -110,7 +113,7 @@ export class ScentScene{
  }
  async load(){
   const loader=new GLTFLoader(),[head,human]=await Promise.all([loader.loadAsync('./assets/head.glb'),loader.loadAsync('./assets/human.glb')]);
-  head.scene.traverse(o=>{if(o.isMesh)o.material=material(0x9b7cba,.62);});this.context.add(head.scene.clone(true));this.headRoot.add(head.scene);this.breathRig=rigBreathingBust(head.scene,!this.gpu);
+  head.scene.traverse(o=>{if(o.isMesh)o.material=material(0x9b7cba,1);});this.context.add(head.scene.clone(true));this.memoryContext.add(head.scene.clone(true));this.headRoot.add(head.scene);this.breathRig=rigBreathingBust(head.scene,!this.gpu);
   this.actor.add(human.scene);human.scene.scale.setScalar(2.6);human.scene.traverse(o=>{if(o.isMesh){o.material.roughness=.85;o.material.metalness=0;}});
   this.rig=humanRig(human.scene,this.actor);this.rig.pose(0,0);this.scene.updateMatrixWorld(true);
   this.proxies=[];
@@ -119,7 +122,7 @@ export class ScentScene{
  }
  update(s){const old=this.mode,oldZoom=this.state.skinZoom;this.state={...this.state,...s};this.mode=s.chapter===0?(s.step===1||s.step===2?1:s.step===3?2:0):s.chapter===1?2:s.step<2?3:s.step===2?5:4;
   this.groups.forEach((g,i)=>g.visible=i===this.mode||(this.mode===5&&i===3));this.groups[5].visible=this.mode===5&&s.skinZoom!==false;this.cells.visible=s.step!==2;this.signalRoot.visible=s.chapter===0&&s.step===2;this.cortex.parent.rotation.y=s.chapter===1?.25:0;
-  if(this.mode!==old){const presets={0:[[7,3.6,14],[0,.15,0]],1:[[7,3,12],[0,0,0]],2:[[6,3.5,10],[0,.2,0]],3:[[8,5.2,12],[0,1.9,-.8]],4:[[4,4,15],[0,.2,0]],5:[[8,5.2,12],[0,1.9,-.8]]};const [p,t]=presets[this.mode];this.camera.position.set(...p);this.controls.target.set(...t);this.controls.update();if(this.mode===5){this.zoomProgress=0;this.distance=0;this.walkBlend=0;this.position.set(-2,0,0);this.actor.position.copy(this.position);this.actor.rotation.y=0;}}
+  if(this.mode!==old){const presets={0:[[10,3.2,12],[-.9,-.1,1.5]],1:[[.4,1.3,16],[0,0,0]],2:[[5,3.5,12],[0,.1,0]],3:[[8,5.2,12],[0,1.9,-.8]],4:[[4,4,15],[0,.2,0]],5:[[8,5.2,12],[0,1.9,-.8]]};const [p,t]=presets[this.mode];this.camera.position.set(...p);this.controls.target.set(...t);this.controls.update();if(this.mode===5){this.zoomProgress=0;this.distance=0;this.walkBlend=0;this.position.set(-2,0,0);this.actor.position.copy(this.position);this.actor.rotation.y=0;}}
   if(this.mode===5&&oldZoom!==s.skinZoom){this.zoomProgress=0;this.camera.position.set(8,5.2,12);this.controls.target.set(0,1.9,-.8);this.controls.update();}
   this.bottles.forEach((b,i)=>b.children[1].material.opacity=[5,10,20,30][i]===s.concentration?1:.35);
   this.applyDeposits();
@@ -129,9 +132,9 @@ export class ScentScene{
  setLabels(){
   this.labels.replaceChildren();const s=this.state;let list=[];
   if(this.mode===0)list=[['Wild jasmine · Himachal-inspired landscape',this.jasmine.root,V(0,2.2,0),.55,.84]];
-  if(this.mode===1)list=[['Location in the nose',this.context,V(0,1.66,1.45),.07,.18],['Receptors on cilia',this.cells,V(0,1.4,0),.65,.17],['Sensory neurons',this.cells,V(.4,.2,0),.67,.49],['Olfactory bulb · enlarged',this.cells,V(0,-2.1,0),.48,.82]];
-  if(this.mode===1&&s.step===2)list=[['Location in the nose',this.context,V(0,1.66,1.45),.07,.18],['Electrical activity · enlarged relay',this.signalRoot,V(1,.7,.4),.55,.18],['Connected neurons',this.signalRoot,V(-.5,-.7,0),.55,.8]];
-  if(this.mode===2)list=s.chapter===1?[['Emotion networks',this.brainRoot,this.emotion.position,.65,.25],['Memory networks',this.brainRoot,this.memory.position,.08,.7]]:[['Olfactory processing networks',this.brainRoot,V(.4,.5,1),.08,.2]];
+  if(this.mode===1)list=[['In the body · sensory tissue high in the nose',this.context,V(0,1.66,1.45),.04,.16],['Airborne scent meets receptors',this.cells,V(0,1.4,0),.61,.17],['Sensory neurons',this.cells,V(.4,.2,0),.67,.49],['Olfactory bulb · enlarged',this.cells,V(0,-2.1,0),.48,.82]];
+  if(this.mode===1&&s.step===2)list=[['In the body · sensory tissue high in the nose',this.context,V(0,1.66,1.45),.04,.16],['Electrical activity · enlarged relay',this.signalRoot,V(1,.7,.4),.55,.18],['Connected neurons',this.signalRoot,V(-.5,-.7,0),.55,.8]];
+  if(this.mode===2)list=s.chapter===1?[['Emotion networks',this.brainRoot,this.emotion.position,.65,.25],['Memory networks',this.brainRoot,this.memory.position,.52,.8],['Brain location in the head',this.memoryContext,V(0,2.6,-.1),.04,.25]]:[['Olfactory processing networks',this.brainRoot,V(.4,.5,1),.08,.2]];
   if(this.mode===3)list=[[s.step===0?'Projection · around you':'Sillage · left in the air',this.groups[3],V(-1,2,-.5),.07,.2]];
   if(this.mode===5)list=[['Your chosen application areas',this.actor,V(0,2.8,0),.05,.18],['Selected skin · magnified',this.skinRoot,V(0,1,.7),.6,.15],['Fragrance remaining on skin',this.skinRoot,V(0,-.3,.75),.58,.82]];
   if(this.mode===4)list=[5,10,20,30].map((p,i)=>[p+'% · '+['Cologne','EDT','EDP','Extrait'][i],this.bottles[i],V(0,-1.6,0),.1+i*.23,.82]);
@@ -167,8 +170,9 @@ export class ScentScene{
   if(this.mode===5&&this.state.skinZoom!==false){const s=this.state,age=(s.age||0)/100,left=Math.exp(-age*2.5*Math.sqrt(Math.max(1,s.sites.length))*({bright:1.4,balanced:.85,lasting:.45}[s.material]||.85));for(let i=0;i<55;i++){const phase=(i*.618+this.time*.17)%1,base=this.skinSeeds[i*2].clone();base.y+=phase*1.8;base.z+=phase*.7;this.glow(this.skinRoot.localToWorld(base),2,(1-phase)*left*.65);}}
   if(this.mode===0){
    const phase=this.time%8,inhaling=phase<3,breathe=inhaling?.5-.5*Math.cos(phase/3*Math.PI):phase<6.5?.5+.5*Math.cos((phase-3)/3.5*Math.PI):0;
-   this.breathRig?.update(breathe);this.scene.updateMatrixWorld(true);
+   this.village.update(this.time);this.breathRig?.update(breathe);this.scene.updateMatrixWorld(true);
    this.breathBadge.textContent=this.paused?'Breath paused':inhaling?'Breathe in':phase<6.5?'Breathe out':'A quiet pause';
+   for(const source of this.village.sources())for(let i=0;i<9;i++){const f=(i*.618+this.time*.2)%1;this.glow(source.clone().add(V(-f*.5,f*.8,Math.sin(i+f)*f*.3)),1,.16*(1-f),'202,167,123');}
    const nose=this.headRoot.localToWorld(this.nosePoint.clone());
    for(const seed of this.aromaSeeds){
     const start=this.jasmine.root.localToWorld(seed.source.clone()),f=(seed.phase+this.time*seed.speed)%1,p=start.clone();
@@ -189,6 +193,13 @@ export class ScentScene{
    // This pulse begins at the receptors: it is neural activity, not a molecule entering the brain.
    if(phase>3&&phase<5.2){const p=this.neuralPath.getPoint((phase-3)/2.2);this.glow(this.headRoot.localToWorld(p),3.6,.95,'255,202,113');}
    this.positionPathwayInfo();
+  }
+  if(this.mode===1&&this.state.step===1){
+   const cycle=this.time%5,breath=(Math.sin(this.time*.8)+1)*.5;this.context.scale.set(.48,.48*(1+breath*.006),.48*(1+breath*.012));
+   const nose=this.context.localToWorld(V(0,.72,2.4));
+   for(let i=0;i<30;i++){const f=(i*.618+this.time*.16)%1,source=this.detectFlower.root.localToWorld(this.detectFlower.sources[i%this.detectFlower.sources.length].clone()),p=source.lerp(nose,f);p.y+=Math.sin(f*Math.PI)*Math.sin(i)*.2;p.z+=Math.sin(f*Math.PI)*Math.cos(i)*.3;this.glow(p,2,.65*Math.sin(f*Math.PI),'255,188,82');}
+   for(let i=0;i<6;i++){const x=-1.8+i*.7,z=Math.sin(i)*.35,f=(this.time*.24+i*.17)%1,p=V(x+Math.sin(i+f*5)*.15,2.6-f*1.12,z);this.glow(this.cells.localToWorld(p),2.8,.8*Math.sin(f*Math.PI),'255,188,82');const activation=Math.exp(-Math.pow((cycle-(i%3)*.35-1.8)/.5,2));this.cellBodies[i].material.color.set(activation>.3?GOLD:VIOLET);this.cellBodies[i].material.emissive.set(GOLD);this.cellBodies[i].material.emissiveIntensity=activation*.7;}
+   const pulse=(this.time*.3)%1;this.glow(this.cells.localToWorld(V(0,-.2-pulse*1.7,0)),3,.85,'255,205,127');
   }
   if(this.mode===1||this.mode===2){const net=this.mode===1?(this.state.step===2?this.signalNet:this.relay):this.cortex;for(let i=0;i<net.edges.length;i+=2){const [a,b]=net.edges[i],p=a.clone().lerp(b,(this.time*.5+i*.13)%1);this.glow(net.parent.localToWorld(p),2.5,.8,i%3?'185,161,217':'244,217,161');}}
   // Labels occupy separated margin positions; leaders end at real 3D objects.

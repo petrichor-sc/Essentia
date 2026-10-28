@@ -56,3 +56,17 @@ Amber particles disperse along separate, gently varying paths. An eight-second i
 Nose, olfactory sensory neurons, olfactory bulbs and olfactory cortex have projected interaction targets. Hover, keyboard focus or tap opens the description; use Close or Escape to dismiss it. The cortex highlight is a simplified location marker, not full anatomical segmentation.
 
 New code modules are himachal.js and jasmine.js. The included integration script copies these automatically. Production build, local imports, finite geometry and breathing deformation/return-to-rest checks passed. No browser testing was performed.
+
+## Organic interaction and clearer anatomy revision
+
+The jasmine and pole are now in front of the figure rather than next to it. A continuous tapered reaching arm and relaxed hand establish a still sculptural interaction with the flowers. The scanned bust's existing breathing rig and amber anatomy sequence remain. Detect now has a larger head-and-shoulders view on the left with a flower and arriving scent, and enlarged receptor cells on the right with incoming scent, receptor activation and neural pulses. The memory/perception brain is now a single folded cerebral form with a fissure, cerebellum and brainstem, accompanied by a small head for location context. These are simplified teaching sculptures rather than anatomical segmentations.
+
+New module: sculptures.js. Build, syntax, local imports and geometry checks passed. No browser testing was performed.
+
+## Surrounding village and climbing jasmine
+
+Three complete terrain rings now surround the scene, so orbiting reveals mountain ridges in every direction. Jasmine stems wind around the pole, with branching leaves and scattered flowers along their height. Four stylised timber houses and two distant walking villagers add context. The villagers emit faint illustrative scent trails; the jasmine-to-nose pathway retains the main amber emphasis. Background scent dots are conceptual cues, not measured human emissions. New module: village.js. The same integration script copies all modules. No browser testing was performed.
+
+## Opaque head correction
+
+The scanned head and reaching arm now use opaque materials with normal depth writing. Internal region meshes no longer render as solid shapes through the face; the amber glow and accessible anatomy points remain. This also lets the face correctly occlude telephone wires behind it. This ZIP includes the preceding reaching-pose, Detect, brain, 360-degree terrain, climbing-vine and village changes. Production build and syntax checks passed. No browser testing was performed.
