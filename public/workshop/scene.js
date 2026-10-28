@@ -1,20 +1,20 @@
-import {receptorCloseup} from './receptors.js';
-import {hillsideVillage} from './village.js';
+import {receptorCloseup} from './receptors.js?v=hillstreet-r2';
+import {hillStreet,cloneRiggedModel,streetMotion,STREET_BUILD,STREET_POLE,STREET_GROUND} from './street.js?v=hillstreet-r2';
 import * as T from '../atlas/assets/three.module.js';
-import {GLTFLoader} from './assets/GLTFLoader.js';
-import {OrbitControls} from './assets/OrbitControls.js';
-import {himachalLandscape,rigBreathingBust} from './himachal.js';
-import {reachingArm,cerebralSculpture} from './sculptures.js';
-import {jasmineShrub} from './jasmine.js';
-import {humanRig} from './human.js';
-import {SVGRenderer} from './assets/SVGRenderer.js';
+import {GLTFLoader} from './assets/GLTFLoader.js?v=hillstreet-r2';
+import {OrbitControls} from './assets/OrbitControls.js?v=hillstreet-r2';
+
+import {cerebralSculpture} from './sculptures.js?v=hillstreet-r2';
+import {jasmineShrub} from './jasmine.js?v=hillstreet-r2';
+import {humanRig} from './human.js?v=hillstreet-r2';
+import {SVGRenderer} from './assets/SVGRenderer.js?v=hillstreet-r2';
 const GOLD=0xc9a465,VIOLET=0xb9a1d9;
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z);
 const material=(color,opacity=1)=>new T.MeshStandardMaterial({color,roughness:.48,metalness:.15,transparent:opacity<1,opacity,depthWrite:opacity===1});
 export class ScentScene{
  constructor(container,labels){
   this.container=container;this.container.setAttribute('role','group');this.labels=labels;this.time=0;this.paused=false;this.state={chapter:0,step:0,movement:false,airflow:0,weather:'temperate',age:0,concentration:20,sites:['neck'],doseMode:'fixed',skinZoom:true};
-  this.scene=new T.Scene();this.camera=new T.PerspectiveCamera(37,1,.1,100);this.scene.add(new T.HemisphereLight(0xf1e5ff,0x26132d,2));
+  this.scene=new T.Scene();this.camera=new T.PerspectiveCamera(37,1,.1,170);this.scene.add(new T.HemisphereLight(0xf1e5ff,0x26132d,2));
   [[0xffdf9b,3,[-4,8,8]],[0x9c7ed7,2,[5,5,-4]]].forEach(([c,i,p])=>{const l=new T.DirectionalLight(c,i);l.position.set(...p);this.scene.add(l);});
   const canvas=document.createElement('canvas'),context=canvas.getContext('webgl2',{alpha:true,antialias:true});this.gpu=!!context;
   if(context){this.renderer=new T.WebGLRenderer({canvas,context,alpha:true,antialias:true});this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));this.renderer.setClearColor(0x100b19,0);this.renderer.toneMapping=T.ACESFilmicToneMapping;}
@@ -22,7 +22,7 @@ export class ScentScene{
   this.renderer.domElement.classList.add('sculpture');this.renderer.domElement.setAttribute('aria-hidden','true');container.append(this.renderer.domElement);container.dataset.renderer=this.gpu?'webgl2':'perspective-3d';
   this.overlay=document.createElement('canvas');this.overlay.className='scent-light';this.overlay.setAttribute('aria-hidden','true');container.append(this.overlay);this.ctx=this.overlay.getContext('2d');
   this.controls=new OrbitControls(this.camera,this.renderer.domElement);this.controls.enablePan=false;this.controls.minDistance=8;this.controls.maxDistance=27;this.controls.minPolarAngle=.45;this.controls.maxPolarAngle=2.1;
-  this.controls.addEventListener('change',()=>this.dirty=true);
+  this.controls.addEventListener('change',()=>this.dirty=true);this.controls.addEventListener('start',()=>this.streetCameraFollow=false);
   const hint=document.createElement('span');hint.className='orbit-hint';hint.textContent='Drag to turn · Scroll to zoom';container.append(hint);
   this.groups=Array.from({length:6},()=>{const g=new T.Group();this.scene.add(g);return g;});
   this.buildNose();this.buildPathwayUI();this.buildCells();this.buildBrain();this.buildBody();this.buildBottles();this.buildSkin();
@@ -38,9 +38,9 @@ export class ScentScene{
   nodes.forEach((p,i)=>{nodes.map((q,j)=>({j,d:p.distanceTo(q)})).filter(x=>x.j!==i).sort((a,b)=>a.d-b.d).slice(0,3).forEach(({j})=>{if(j<i)return;const geo=new T.BufferGeometry().setFromPoints([p,nodes[j]]);parent.add(new T.Line(geo,new T.LineBasicMaterial({color:i%3?VIOLET:GOLD,transparent:true,opacity:.28})));edges.push([p,nodes[j]]);});});return {parent,nodes,edges};
  }
  buildNose(){
-  const g=this.groups[0];this.headRoot=new T.Group();g.add(this.headRoot);this.headRoot.position.set(-2.2,0,0);this.headRoot.scale.setScalar(.72);
+  const g=this.groups[0];this.headRoot=new T.Group();g.add(this.headRoot);this.headRoot.position.set(-2.2,0,0);this.headRoot.scale.setScalar(.045);
   this.nosePoint=V(0,.72,2.4);this.receptorPoint=V(0,1.66,1.45);this.bulbPoint=V(0,1.98,1.3);
-  this.jasmine=jasmineShrub();g.add(this.jasmine.root);this.jasmine.root.position.set(-1.25,-2.72,3.6);this.jasmine.root.scale.setScalar(1.1);g.add(himachalLandscape());this.village=hillsideVillage();g.add(this.village.root);this.reachArm=reachingArm(this.headRoot);
+  this.jasmine=jasmineShrub();g.add(this.jasmine.root);this.jasmine.root.position.copy(STREET_POLE).add(V(-.5,0,.25));this.jasmine.root.scale.setScalar(1);this.village=hillStreet();g.add(this.village.root);this.streetActor=new T.Group();g.add(this.streetActor);this.streetCameraFollow=true;
   // No visible tube, arrow, or continuous line enters the face.
   this.aromaSeeds=Array.from({length:180},(_,i)=>({source:this.jasmine.sources[i%this.jasmine.sources.length],phase:(i*.61803398875)%1,speed:.065+(i%7)*.006,angle:i*2.39996,inhaled:i%4===0}));
   this.olfactoryRegions=[
@@ -67,7 +67,7 @@ export class ScentScene{
  positionPathwayInfo(){if(!this.openRegion&&!this.activeAnnotation)return;const [x,y]=this.activeAnnotation?this.project(this.activeAnnotation.object.localToWorld(this.activeAnnotation.p.clone())):this.project(this.headRoot.localToWorld(this.openRegion.position.clone()));const w=Math.min(300,Math.max(180,this.width-24));this.info.style.width=w+'px';this.info.style.left=Math.max(12,Math.min(this.width-w-12,x+24))+'px';this.info.style.top=Math.max(46,Math.min(this.height-this.info.offsetHeight-12,y+24))+'px';}
  openAnnotation(text,object,p){this.openRegion=null;this.activeAnnotation={object,p};this.infoTitle.textContent=text;this.infoText.textContent=text.includes('cilia')?'Odour molecules meet receptor proteins on the fine cilia. Receptor activation changes the sensory neuron’s electrical activity.':text.includes('cortex')?'Signals reach connected olfactory cortical regions. The amber pulse here represents neural activity, not a scent molecule.':text.includes('bulb')?'Sensory neuron axons send activity to the olfactory bulb, located above the nasal cavity. This diagram enlarges and separates the structures for clarity.':text.includes('nose')?'The highlighted point is the small area of olfactory tissue high in the nasal cavity. The leader connects this location to its enlarged view on the right.':'An enlarged teaching view of olfactory sensory neurons. The lower branches are cilia in the nasal lining; the axons above carry signals to the olfactory bulb.';this.info.hidden=false;this.positionPathwayInfo();this.dirty=true;}
  buildCells(){
-  const g=this.groups[1];this.context=new T.Group();g.add(this.context);this.context.visible=false;
+  const g=this.groups[1];this.context=new T.Group();g.add(this.context);this.context.visible=false;this.anatomyActor=new T.Group();this.anatomyActor.position.set(-3.3,-2.15,0);g.add(this.anatomyActor);
   this.detector=receptorCloseup();this.cells=this.detector.root;this.cells.position.set(2,-.25,0);g.add(this.cells);
   this.relay=this.network(this.cells,[0,1.7,0],[.6,.2,.3],20);this.signalRoot=new T.Group();g.add(this.signalRoot);this.signalRoot.position.x=1;this.signalNet=this.network(this.signalRoot,[0,0,0],[2,1.7,1.2],55);
   this.magnifier=new T.Line(new T.BufferGeometry().setFromPoints([V(),V(),V()]),new T.LineBasicMaterial({color:GOLD,transparent:true,opacity:.35}));g.add(this.magnifier);
@@ -107,27 +107,45 @@ export class ScentScene{
  }
  async load(){
   const loader=new GLTFLoader(),[head,human]=await Promise.all([loader.loadAsync('./assets/head.glb'),loader.loadAsync('./assets/human.glb')]);
-  head.scene.traverse(o=>{if(o.isMesh)o.material=material(0x9b7cba,1);});this.context.add(head.scene.clone(true));this.memoryContext.add(head.scene.clone(true));this.headRoot.add(head.scene);this.mainBust=head.scene;this.mainBust.visible=this.mode!==0;this.breathRig=rigBreathingBust(head.scene,!this.gpu);
-  this.actor.add(human.scene);human.scene.scale.setScalar(2.6);human.scene.traverse(o=>{if(o.isMesh){o.material.roughness=.85;o.material.metalness=0;}});
-  this.rig=humanRig(human.scene,this.actor);this.rig.pose(0,0);this.scene.updateMatrixWorld(true);
-  this.proxies=[];
-  if(!this.gpu)human.scene.traverse(o=>{if(!o.isSkinnedMesh)return;const geo=o.geometry.clone(),proxy=new T.Mesh(geo,material(0xc2a38f));proxy.position.copy(o.position);proxy.quaternion.copy(o.quaternion);proxy.scale.copy(o.scale);o.parent.add(proxy);o.visible=false;this.proxies.push({source:o,proxy,base:o.geometry.attributes.position.array.slice()});});
+  // The scanned bust is confined to the memory location diagram. It cannot enter the street scene.
+  head.scene.traverse(o=>{if(o.isMesh)o.material=material(0x9b7cba,1);});this.memoryContext.add(head.scene);
+  const streetModel=cloneRiggedModel(human.scene),anatomyModel=cloneRiggedModel(human.scene);
+  this.actor.add(human.scene);human.scene.scale.setScalar(2.6);this.streetActor.add(streetModel);streetModel.scale.setScalar(1);streetModel.updateMatrixWorld(true);const streetBounds=new T.Box3().setFromObject(streetModel);const streetHeight=streetBounds.max.y-streetBounds.min.y;if(!Number.isFinite(streetHeight)||streetHeight<=0)throw new Error('Invalid human model bounds');streetModel.scale.setScalar(1.72/streetHeight);streetModel.updateMatrixWorld(true);streetModel.position.y-=new T.Box3().setFromObject(streetModel).min.y;this.anatomyActor.add(anatomyModel);anatomyModel.scale.setScalar(1.9);
+  [human.scene,streetModel,anatomyModel].forEach(model=>model.traverse(o=>{if(o.isMesh){o.material.roughness=.85;o.material.metalness=0;}}));
+  this.rig=humanRig(human.scene,this.actor);this.streetRig=humanRig(streetModel,this.streetActor);this.anatomyRig=humanRig(anatomyModel,this.anatomyActor);
+  this.rig.pose(0,0);this.streetRig.pose(0,0);this.anatomyRig.pose(0,0);this.scene.updateMatrixWorld(true);
+  const desired=V(.05,STREET_GROUND+1.25,1.02);this.flowerSource=this.jasmine.sources.reduce((best,p)=>{const point=this.jasmine.root.localToWorld(p.clone());return !best||point.distanceTo(desired)<best.distance?{point,distance:point.distanceTo(desired),local:p}:best;},null).local.clone();
+  this.proxies=[];this.streetProxies=[];this.anatomyProxies=[];
+  if(!this.gpu){for(const [model,list] of [[human.scene,this.proxies],[streetModel,this.streetProxies],[anatomyModel,this.anatomyProxies]])model.traverse(o=>{if(!o.isSkinnedMesh)return;const geo=o.geometry.clone(),proxy=new T.Mesh(geo,material(0xbda68e));proxy.position.copy(o.position);proxy.quaternion.copy(o.quaternion);proxy.scale.copy(o.scale);o.parent.add(proxy);o.visible=false;list.push({source:o,proxy,base:o.geometry.attributes.position.array.slice()});});}
   this.dirty=true;
  }
+ skinSoftware(proxies=[]){for(const {source,proxy,base} of proxies){source.skeleton.update();const p=proxy.geometry.attributes.position,v=V();for(let i=0;i<p.count;i++){v.fromArray(base,i*3);source.applyBoneTransform(i,v);p.setXYZ(i,v.x,v.y,v.z);}p.needsUpdate=true;proxy.geometry.computeVertexNormals();proxy.geometry.computeBoundingSphere();}}
+ prepareStreet(){
+  this.streetState=streetMotion(this.time);const motion=this.streetState;this.village.update(this.time);this.streetActor.position.copy(motion.position);this.streetActor.rotation.y=motion.yaw;this.streetActor.scale.setScalar(1);
+  if(this.streetRig){const target=this.jasmine.root.localToWorld((this.flowerSource||this.jasmine.sources[0]).clone());this.streetRig.pose(this.time,motion.walk,{reach:motion.reach,handTarget:target.clone().add(V(-.08,-.06,.02)),breath:motion.breath});const q=this.streetActor.getWorldQuaternion(new T.Quaternion()),head=this.streetRig.bones.Head.bone.getWorldPosition(V());this.headRoot.position.copy(head).add(V(0,.07,.01).applyQuaternion(q));this.headRoot.quaternion.copy(q);this.headRoot.scale.setScalar(.045);if(!this.gpu)this.skinSoftware(this.streetProxies);}
+  if(this.streetCameraFollow){const close=T.MathUtils.smoothstep(motion.reach,0,1)*.65;this.camera.position.lerpVectors(V(-4.8,.15,7.3),V(-2.2,-.55,4.3),close);this.controls.target.lerpVectors(V(-.8,-1.6,1.5),V(-.25,-1.25,1),close);this.controls.update();}
+ }
+ prepareDetect(){
+  const elapsed=this.paused?3:Math.max(0,this.time-(this.detectStart||0)),q=Math.min(1,elapsed/2.5),ease=q*q*(3-2*q);this.detectProgress=q;
+  this.anatomyActor.position.set(T.MathUtils.lerp(-.32,-3.3,ease),T.MathUtils.lerp(STREET_GROUND,-2.15,ease),T.MathUtils.lerp(.55,0,ease));this.anatomyActor.scale.setScalar(T.MathUtils.lerp(.55,1,ease));
+  if(this.anatomyRig){this.anatomyRig.pose(this.time,0,{breath:(1-Math.cos(this.time*.8))*.5});const head=this.anatomyRig.bones.Head.bone.getWorldPosition(V());this.headRoot.position.copy(head).add(V(0,.12,.02));this.headRoot.quaternion.identity();this.headRoot.scale.setScalar(.08);if(!this.gpu)this.skinSoftware(this.anatomyProxies);}
+  if(q<1&&this.detectCamera){const mid=V(-1,-.2,5),end=V(.4,1.3,16),nose=V(-.3,-1.1,.7);if(q<.42){this.camera.position.lerpVectors(this.detectCamera,mid,q/.42);this.controls.target.lerpVectors(this.detectTarget,nose,q/.42);}else{this.camera.position.lerpVectors(mid,end,(q-.42)/.58);this.controls.target.lerpVectors(nose,V(0,.2,0),(q-.42)/.58);}this.controls.update();}
+  this.cells.visible=q>.42;this.cells.scale.setScalar(.2+ease*.8);this.magnifier.visible=q>.42;
+ }
  update(s){const old=this.mode,oldZoom=this.state.skinZoom;this.state={...this.state,...s};this.mode=s.chapter===0?(s.step===1||s.step===2?1:s.step===3?2:0):s.chapter===1?2:s.step<2?3:s.step===2?5:4;
-  this.groups.forEach((g,i)=>g.visible=i===this.mode||(this.mode===5&&i===3)||(this.mode===1&&i===0));this.groups[0].children.forEach(o=>o.visible=this.mode===0||o===this.headRoot);this.reachArm.visible=this.mode===0;this.context.visible=false;this.groups[5].visible=this.mode===5&&s.skinZoom!==false;this.cells.visible=s.step!==2;this.signalRoot.visible=s.chapter===0&&s.step===2;this.cortex.parent.rotation.y=s.chapter===1?.25:0;
-  if(this.mode!==old){if(this.mode===1&&s.step===1){this.detectStart=this.time;this.detectCamera=this.camera.position.clone();this.detectTarget=this.controls.target.clone();}const presets={0:[[4,.5,8],[-1,-1.7,3]],1:[[.4,1.3,16],[0,0,0]],2:[[5,3.5,12],[0,.1,0]],3:[[8,5.2,12],[0,1.9,-.8]],4:[[4,4,15],[0,.2,0]],5:[[8,5.2,12],[0,1.9,-.8]]};const [p,t]=presets[this.mode];this.camera.position.set(...p);this.controls.target.set(...t);this.controls.update();if(this.mode===5){this.zoomProgress=0;this.distance=0;this.walkBlend=0;this.position.set(-2,0,0);this.actor.position.copy(this.position);this.actor.rotation.y=0;}}
+  this.groups.forEach((g,i)=>g.visible=i===this.mode||(this.mode===5&&i===3)||(this.mode===1&&i===0));this.groups[0].children.forEach(o=>o.visible=this.mode===0||o===this.headRoot);this.context.visible=false;this.groups[5].visible=this.mode===5&&s.skinZoom!==false;this.cells.visible=s.step!==2;this.signalRoot.visible=s.chapter===0&&s.step===2;this.cortex.parent.rotation.y=s.chapter===1?.25:0;
+  if(this.mode!==old){if(this.mode===1&&s.step===1){this.detectStart=this.time;this.detectCamera=this.camera.position.clone();this.detectTarget=this.controls.target.clone();}const presets={0:[[-4.8,.15,7.3],[-.8,-1.6,1.5]],1:[[.4,1.3,16],[0,0,0]],2:[[5,3.5,12],[0,.1,0]],3:[[8,5.2,12],[0,1.9,-.8]],4:[[4,4,15],[0,.2,0]],5:[[8,5.2,12],[0,1.9,-.8]]};const [p,t]=presets[this.mode];this.camera.position.set(...p);this.controls.target.set(...t);this.controls.update();if(this.mode===5){this.zoomProgress=0;this.distance=0;this.walkBlend=0;this.position.set(-2,0,0);this.actor.position.copy(this.position);this.actor.rotation.y=0;}}
   if(this.mode===5&&oldZoom!==s.skinZoom){this.zoomProgress=0;this.camera.position.set(8,5.2,12);this.controls.target.set(0,1.9,-.8);this.controls.update();}
   this.bottles.forEach((b,i)=>b.children[1].material.opacity=[5,10,20,30][i]===s.concentration?1:.35);
   this.applyDeposits();
-  if(this.mode===0){this.groups[0].add(this.actor);this.actor.visible=true;this.actor.scale.setScalar(.4);this.actor.position.set(-1.6,-2.72,2.25);this.actor.rotation.y=0;this.reachArm.visible=false;}else{this.groups[3].add(this.actor);this.actor.scale.setScalar(1);this.actor.position.copy(this.position);this.actor.visible=this.mode===3||this.mode===5;}if(this.mainBust)this.mainBust.visible=this.mode!==0;
-  if(this.mode===1){this.headRoot.position.set(-3.3,0,0);this.headRoot.scale.setScalar(.43);}
+  this.actor.visible=this.mode===3||this.mode===5;this.anatomyActor.visible=this.mode===1;this.streetActor.visible=this.mode===0;
+  if(this.mode===0){this.streetCameraFollow=true;this.controls.minDistance=3;this.controls.maxDistance=18;this.controls.maxPolarAngle=Math.PI/2-.03;}else{this.controls.minDistance=8;this.controls.maxDistance=27;this.controls.maxPolarAngle=2.1;}
   this.hotspotLayer.hidden=this.mode!==0;this.breathBadge.hidden=!(this.mode===0||this.mode===1);if(this.mode!==0)this.closePathwayInfo();
   this.setLabels();this.dirty=true;this.render();
  }
  setLabels(){
   this.labels.replaceChildren();const s=this.state;let list=[];
-  if(this.mode===0)list=[['Wild jasmine · Himachal-inspired landscape',this.jasmine.root,V(0,2.2,0),.55,.84]];
+  if(this.mode===0)list=[['Jasmine beside the old café street',this.jasmine.root,V(.2,1.3,0),.57,.82]];
   if(this.mode===1)list=[['Sensory tissue in the nose',this.headRoot,V(0,1.66,1.45),.04,.15],['Magnified olfactory sensory neurons',this.cells,V(0,0,0),.5,.1],['Odour molecules → receptors on cilia',this.cells,V(0,-.9,0),.55,.85],['Olfactory bulb',this.cells,V(0,1.7,0),.46,.29],['Olfactory cortex · schematic',this.detector.cortex,V(),.7,.21]];
   if(this.mode===1&&s.step===2)list=[['Sensory tissue in the nose',this.headRoot,V(0,1.66,1.45),.04,.15],['Electrical activity · enlarged relay',this.signalRoot,V(1,.7,.4),.55,.18],['Connected neurons',this.signalRoot,V(-.5,-.7,0),.55,.8]];
   if(this.mode===2)list=s.chapter===1?[['Emotion networks',this.brainRoot,this.emotion.position,.65,.25],['Memory networks',this.brainRoot,this.memory.position,.52,.8],['Brain location in the head',this.memoryContext,V(0,2.6,-.1),.04,.25]]:[['Olfactory processing networks',this.brainRoot,V(.4,.5,1),.08,.2]];
@@ -139,7 +157,7 @@ export class ScentScene{
  }
  setPaused(value){this.paused=value;this.dirty=true;}
  applyDeposits(){const s=this.state,areas=Math.max(1,(s.sites||['neck']).length),vol={bright:1.4,balanced:.85,lasting:.45}[s.material]||.85;const rate=vol*Math.sqrt(areas);const left=Math.exp(-(s.age||0)/100*rate*2.5);this.deposits.forEach((m,i)=>{m.visible=(i*.618033%1)<left;m.material.opacity=s.doseMode==='per-area'?.85:.85/Math.sqrt(areas);});}
- resetTime(){this.time=0;this.distance=0;this.walkBlend=0;this.cloud=[];this.position.set(-2,0,0);this.actor.position.copy(this.position);this.dirty=true;}
+ resetTime(){this.time=0;this.streetCameraFollow=true;this.distance=0;this.walkBlend=0;this.cloud=[];this.position.set(-2,0,0);this.actor.position.copy(this.position);this.dirty=true;}
  resize(){this.width=this.container.clientWidth;this.height=this.container.clientHeight;if(!this.width||!this.height)return;this.camera.aspect=this.width/this.height;this.camera.updateProjectionMatrix();this.renderer.setSize(this.width,this.height);this.overlay.width=this.width*devicePixelRatio;this.overlay.height=this.height*devicePixelRatio;this.overlay.style.width=this.width+'px';this.overlay.style.height=this.height+'px';this.ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);this.dirty=true;}
  project(p){const q=p.clone().project(this.camera);return [(q.x+1)*this.width/2,(1-q.y)*this.height/2,q.z];}
  glow(p,r=4,alpha=.6,color='201,164,101'){const [x,y,z]=this.project(p);if(z>1||z< -1)return;const c=this.ctx,g=c.createRadialGradient(x,y,0,x,y,r*3);g.addColorStop(0,'rgba('+color+','+alpha+')');g.addColorStop(.18,'rgba('+color+','+alpha*.6+')');g.addColorStop(1,'rgba('+color+',0)');c.fillStyle=g;c.fillRect(x-r*3,y-r*3,r*6,r*6);}
@@ -159,15 +177,13 @@ export class ScentScene{
   if(this.mode===5){this.zoomProgress=Math.min(1,(this.zoomProgress||0)+dt*.7);const t=this.zoomProgress*this.zoomProgress*(3-2*this.zoomProgress);this.skinRoot.scale.setScalar(.03+t*.97);if(this.state.skinZoom!==false&&this.zoomProgress<1){this.camera.position.lerpVectors(V(8,5.2,12),V(5,4.3,8),t);this.controls.target.lerpVectors(V(0,1.9,-.8),V(.7,2,0),t);this.controls.update();}}
  }
  render(){
-  if(!this.width)return;this.renderer.render(this.scene,this.camera);const c=this.ctx;c.clearRect(0,0,this.width,this.height);
+  if(!this.width)return;if(this.mode===0)this.prepareStreet();if(this.mode===1&&this.state.step===1)this.prepareDetect();this.scene.updateMatrixWorld(true);this.renderer.render(this.scene,this.camera);const c=this.ctx;c.clearRect(0,0,this.width,this.height);
   if(this.mode===3)this.cloud.forEach(p=>this.glow(p.p,2.8,(1-p.age/p.life)*.65));
   if((this.mode===3||this.mode===5)&&this.rig){for(const site of (this.state.sites||['neck']))for(const p of this.rig.point(site))this.glow(p,7,.9);}
   if(this.mode===5&&this.rig){const point=this.rig.point(this.state.sites[0])[0];if(point){const end=this.skinRoot.localToWorld(V(-.5,.5,.5)),mid=point.clone().lerp(end,.5).add(V(0,.6,.2)),a=this.skinLink.geometry.attributes.position;[point,mid,end].forEach((p,i)=>a.setXYZ(i,p.x,p.y,p.z));a.needsUpdate=true;this.skinLink.geometry.computeBoundingSphere();}}
   if(this.mode===5&&this.state.skinZoom!==false){const s=this.state,age=(s.age||0)/100,left=Math.exp(-age*2.5*Math.sqrt(Math.max(1,s.sites.length))*({bright:1.4,balanced:.85,lasting:.45}[s.material]||.85));for(let i=0;i<55;i++){const phase=(i*.618+this.time*.17)%1,base=this.skinSeeds[i*2].clone();base.y+=phase*1.8;base.z+=phase*.7;this.glow(this.skinRoot.localToWorld(base),2,(1-phase)*left*.65);}}
   if(this.mode===0){
-   const phase=this.time%8,inhaling=phase<3,breathe=inhaling?.5-.5*Math.cos(phase/3*Math.PI):phase<6.5?.5+.5*Math.cos((phase-3)/3.5*Math.PI):0;
-   this.village.update(this.time);if(this.rig){this.rig.pose(this.time,0,{reach:true,breath:breathe});this.actor.updateMatrixWorld(true);const head=this.rig.bones.Head.bone.getWorldPosition(V());this.headRoot.position.copy(head).add(V(0,-.035,0));this.headRoot.scale.setScalar(.045);if(!this.gpu){for(const {source,proxy,base} of this.proxies){source.skeleton.update();const a=proxy.geometry.attributes.position,v=V();for(let i=0;i<a.count;i++){v.fromArray(base,i*3);source.applyBoneTransform(i,v);a.setXYZ(i,v.x,v.y,v.z);}a.needsUpdate=true;proxy.geometry.computeVertexNormals();proxy.geometry.computeBoundingSphere();}}}this.scene.updateMatrixWorld(true);
-   this.breathBadge.textContent=this.paused?'Breath paused':inhaling?'Breathe in':phase<6.5?'Breathe out':'A quiet pause';
+   const motion=this.streetState,phase=motion.phase,neural=motion.neural;this.breathBadge.textContent=this.paused?'Scene paused':motion.stage;
    for(const source of this.village.sources())for(let i=0;i<9;i++){const f=(i*.618+this.time*.2)%1;this.glow(source.clone().add(V(-f*.5,f*.8,Math.sin(i+f)*f*.3)),1,.16*(1-f),'202,167,123');}
    const nose=this.headRoot.localToWorld(this.nosePoint.clone());
    for(const seed of this.aromaSeeds){
@@ -175,25 +191,23 @@ export class ScentScene{
     // Independent smooth eddies suggest wind and dispersion, not straight molecular trajectories.
     p.x-=f*(1.4+seed.phase*2);p.y+=f*(.6+seed.phase*.9)+Math.sin(seed.angle+this.time*.5)*f*.35;p.z+=Math.sin(seed.angle+f*5+this.time*.25)*f*1.3;
     this.glow(p,1.7+seed.phase,.36*Math.sin(Math.PI*f),'255,184,76');
-    if(seed.inhaled){
-     const capture=(phase-seed.phase*1.2)/2.1;
+    if(seed.inhaled&&motion.reach>.7){
+     const capture=motion.capture<0?-1:(motion.capture-seed.phase*.25)/.75;
      if(capture>=0&&capture<=1){const q=start.clone().lerp(nose,capture*capture*(3-2*capture)),spread=Math.sin(capture*Math.PI);q.y+=spread*(.3+Math.sin(seed.angle+capture*4)*.3);q.z+=spread*Math.sin(seed.angle)*.6;
       const fade=Math.min(1,capture*5)*Math.min(1,(1-capture)*12);this.glow(q,2.1+seed.phase,.8*fade,'255,189,85');}
     }
    }
    const hotspotPositions=[];
    this.olfactoryRegions.forEach(region=>{
-    const strength=Math.exp(-(((phase-region.center)/.65)**2));region.mesh.material.opacity=.05+strength*.48;this.glow(this.headRoot.localToWorld(region.position.clone()),4+strength*5,.18+strength*.7,'255,184,76');
+    const phaseSignal=neural>=0?neural*4+2:-20;const strength=region.name==='Nose'&&motion.capture>=0?Math.sin(motion.capture*Math.PI):Math.exp(-(((phaseSignal-region.center)/.65)**2));region.mesh.material.opacity=.05+strength*.48;this.glow(this.headRoot.localToWorld(region.position.clone()),4+strength*5,.18+strength*.7,'255,184,76');
     region.button.classList.toggle('is-lit',strength>.28);let [x,y,z]=this.project(this.headRoot.localToWorld(region.position.clone()));const originX=x,originY=y;for(let i=0;i<12&&hotspotPositions.some(p=>Math.hypot(p.x-x,p.y-y)<32);i++){x+=22;y-=10;}hotspotPositions.push({x,y});if(x!==originX){c.strokeStyle='rgba(255,190,100,.3)';c.lineWidth=.7;c.beginPath();c.moveTo(originX,originY);c.lineTo(x,y);c.stroke();}region.button.style.left=x+'px';region.button.style.top=y+'px';region.button.hidden=z>1||z< -1;
    });
    // This pulse begins at the receptors: it is neural activity, not a molecule entering the brain.
-   if(phase>3&&phase<5.2){const p=this.neuralPath.getPoint((phase-3)/2.2);this.glow(this.headRoot.localToWorld(p),3.6,.95,'255,202,113');}
+   if(neural>=0){const p=this.neuralPath.getPoint(neural);this.glow(this.headRoot.localToWorld(p),3.6,.95,'255,202,113');}
    this.positionPathwayInfo();
   }
   if(this.mode===1&&this.state.step===1){
-   const elapsed=this.paused?3:Math.max(0,this.time-(this.detectStart||0)),q=Math.min(1,elapsed/2.5),ease=q*q*(3-2*q);
-   if(q<1&&this.detectCamera){const nose=V(-2.2,.9,1.8),mid=V(1.5,2,7),end=V(.4,1.3,16);if(q<.42){this.camera.position.lerpVectors(this.detectCamera,mid,q/.42);this.controls.target.lerpVectors(this.detectTarget,nose,q/.42);}else{this.camera.position.lerpVectors(mid,end,(q-.42)/.58);this.controls.target.lerpVectors(nose,V(0,.2,0),(q-.42)/.58);}this.controls.update();}
-   this.headRoot.position.set(T.MathUtils.lerp(-1.6,-3.3,ease),T.MathUtils.lerp(-1.3,0,ease),T.MathUtils.lerp(2.25,0,ease));this.headRoot.scale.setScalar(T.MathUtils.lerp(.06,.43,ease));this.cells.visible=q>.42;this.cells.scale.setScalar(.2+ease*.8);this.magnifier.visible=q>.42;this.breathRig?.update((1-Math.cos(this.time*.8))*.5);this.scene.updateMatrixWorld(true);
+   const elapsed=this.paused?3:Math.max(0,this.time-(this.detectStart||0)),q=this.detectProgress||0;
    const nose=this.headRoot.localToWorld(V(0,1.66,1.45)),edge=this.cells.localToWorld(V(-2.2,-.6,0)),middle=nose.clone().lerp(edge,.5).add(V(0,.5,0)),points=this.magnifier.geometry.attributes.position;[nose,middle,edge].forEach((p,i)=>points.setXYZ(i,p.x,p.y,p.z));points.needsUpdate=true;this.magnifier.geometry.computeBoundingSphere();
    const activity=this.detector.update(Math.max(0,elapsed-2.5));this.breathBadge.textContent=q<1?'Following the nose into a magnified view':activity.stage;
    for(const event of activity.events)this.glow(this.cells.localToWorld(event.p.clone()),event.neural?3.5:2.8,event.alpha*.9,'255,192,90');

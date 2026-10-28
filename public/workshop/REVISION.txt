@@ -1,0 +1,2 @@
+hillstreet-r2
+Full-body scale normalised to 1.72m; 4.8m pole. Café street and low foothills. Walk/reach/inhale/neural sequence. Skeleton names support mixamorig: prefix. Versioned module imports. Build and 160 headless pose checks passed. No browser visual testing.
