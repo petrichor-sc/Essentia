@@ -35,3 +35,11 @@ body.presenting{overflow:hidden}.studio.presenting{position:fixed;inset:0;z-inde
 .anatomy-sequence .olfactory-hotspot.is-lit:before{background:#ffd080;box-shadow:0 0 8px #ffbc59}
 .olfactory-hotspots.anatomy-sequence[hidden]{display:none}
 @media(max-width:760px){.olfactory-hotspots.anatomy-sequence{right:8px;bottom:50px;width:180px;max-width:48%;padding:7px}.anatomy-sequence .olfactory-hotspot{font-size:9px}.anatomy-sequence-title{font-size:8px}}
+
+.memory-caption{position:absolute;right:7%;bottom:72px;z-index:3;width:39%;text-align:center;pointer-events:none;font-family:var(--display);font-size:19px;color:#f1d7a8;line-height:1.25;text-shadow:0 2px 10px #100b19}
+.memory-caption span{display:block;font-family:var(--body);font-size:9px;letter-spacing:.06em;color:var(--muted);margin-top:6px}
+.memory-replay{position:absolute;right:20px;bottom:15px;z-index:5;font-size:10px;color:var(--gold);padding:6px 9px;border:1px solid var(--line);border-radius:3px;background:#17101fe6}
+.memory-replay:hover{border-color:var(--gold)}
+@media(max-width:760px){.memory-caption{font-size:14px;right:4%;width:43%;bottom:75px}.memory-caption span{font-size:8px}.memory-replay{font-size:9px;bottom:10px}}
+
+.clear-fragrance{font-size:10px;color:var(--gold);border-bottom:1px solid var(--line);padding:3px 0;margin:5px 0 17px}

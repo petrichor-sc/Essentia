@@ -1,4 +1,9 @@
 import * as T from '../atlas/assets/three.module.js';
+export function settleForSniff(rig,root,flower,amount,noseOffset=new T.Vector3(0,.1214,.156),gap=.08){
+ if(amount<=0)return;
+ root.updateWorldMatrix(true,true);const q=root.getWorldQuaternion(new T.Quaternion()),scale=root.getWorldScale(new T.Vector3()),nose=rig.bones.Head.bone.getWorldPosition(new T.Vector3()).add(noseOffset.clone().multiply(scale).applyQuaternion(q)),forward=new T.Vector3(0,0,1).applyQuaternion(q),desired=flower.clone().addScaledVector(forward,-gap),delta=desired.sub(nose);delta.y=0;delta.clampLength(0,.7);
+ const position=root.getWorldPosition(new T.Vector3()).addScaledVector(delta,amount);root.position.copy(root.parent?root.parent.worldToLocal(position):position);root.updateWorldMatrix(true,true);
+}
 // Pose the model's existing skeleton. Hands remain part of the original continuous mesh.
 export function humanRig(model,root){
  root.updateWorldMatrix(true,true);
@@ -24,6 +29,7 @@ export function humanRig(model,root){
   const minFoot=Math.min(...['LeftToeBase','RightToeBase'].map(n=>bones[n].bone.getWorldPosition(new T.Vector3()).y)),correction=root.localToWorld(new T.Vector3(0,footRootY,0)).y-minFoot,current=hips.bone.getWorldPosition(new T.Vector3());current.y+=correction;hips.bone.position.copy(hips.bone.parent.worldToLocal(current));root.updateWorldMatrix(true,true);
   const b=options.breath||0;bones.Spine.bone.scale.multiply(new T.Vector3(1+b*.012,1+b*.012,1+b*.025));root.updateWorldMatrix(true,true);
   turn('Head',.015*Math.sin(time*.7)-(options.reach||0)*.06,.01*Math.sin(time*.5),.02*Math.sin(time*.4));
+  if(options.young)bones.Head.bone.scale.multiplyScalar(1.12);
   if(options.handTarget&&options.reach>0)reach(options.handTarget,options.reach);
   root.updateWorldMatrix(true,true);
  },point(site){const pos=n=>bones[n]?.bone.getWorldPosition(new T.Vector3());if(site==='neck')return [pos('Neck')].filter(Boolean);if(site==='wrists')return ['LeftHand','RightHand'].map(pos).filter(Boolean);return [['LeftForeArm','LeftHand'],['RightForeArm','RightHand']].map(([a,b])=>{const p=pos(a),q=pos(b);return p&&q?p.lerp(q,.5):null;}).filter(Boolean);}};

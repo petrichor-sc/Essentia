@@ -7,14 +7,14 @@ export function ambientScentPosition(source,seed,time,target=new T.Vector3()){
 }
 
 export function jasmineScent(sources){
- const ambientCount=280,inhaledCount=40,count=ambientCount+inhaledCount;
- const seeds=Array.from({length:count},(_,i)=>({phase:(i*.61803398875)%1,speed:.105+(i%7)*.009,angle:i*2.39996,source:i%sources.length}));
+ const ambientCount=sources.length*6,inhaledCount=40,count=ambientCount+inhaledCount;
+ const seeds=Array.from({length:count},(_,i)=>({phase:i<ambientCount?(Math.floor(i/sources.length)/6+(i%sources.length)*.61803398875)%1:(i*.61803398875)%1,speed:.105+((i%sources.length)%7)*.009,angle:i*2.39996,source:i%sources.length}));
  const geometry=new T.BufferGeometry(),positions=new T.Float32BufferAttribute(new Float32Array(count*3),3),colours=new T.Float32BufferAttribute(new Float32Array(count*4),4);geometry.setAttribute('position',positions);geometry.setAttribute('color',colours);
  const canvas=document.createElement('canvas');canvas.width=64;canvas.height=64;const c=canvas.getContext('2d'),glow=c.createRadialGradient(32,32,0,32,32,32);glow.addColorStop(0,'rgba(255,255,255,1)');glow.addColorStop(.13,'rgba(255,255,255,.95)');glow.addColorStop(.32,'rgba(255,255,255,.35)');glow.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=glow;c.fillRect(0,0,64,64);
  const points=new T.Points(geometry,new T.PointsMaterial({map:new T.CanvasTexture(canvas),size:.11,vertexColors:true,transparent:true,depthWrite:false,depthTest:true,blending:T.AdditiveBlending,toneMapped:false}));
  points.frustumCulled=false;points.name='Continuous jasmine scent';
  const amber=new T.Color(0xffbf65),position=new T.Vector3();
- return {points,seeds,update(time,{nose=null,capture=-1,flower=sources[0]}={}){
+ return {points,seeds,ambientCount,update(time,{nose=null,capture=-1,flower=sources[0]}={}){
   for(let i=0;i<count;i++){
    const seed=seeds[i];let alpha=0;
    if(i<ambientCount){const sample=ambientScentPosition(sources[seed.source],seed,time,position);alpha=sample.alpha*.8;}

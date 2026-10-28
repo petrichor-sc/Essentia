@@ -6,3 +6,7 @@
 - Anatomical points, neural connections, and particle paths are illustrative teaching geometry added for this application.
 
 - Continuous scent emitter, gradient sky, procedural clouds/forest/ridges and visitor palette shader are original workshop code. Visitor geometry and original texture attribution remain as above.
+
+- The bundled Michelle mesh is modified to remove the headphones, sunglasses and original braid-hair component, preserving the body, face, eyes, UVs, skeleton and skin weights. Soft skinned hair is original procedural geometry. See tools/clean_workshop_character.py in the repo snapshot for preparation.
+- The enlarged hand is derived from the same modified Michelle mesh; original model attribution still applies. Neural relay/cascade and the imagined garden memory are original procedural workshop geometry.
+- Common jasmine's flower scale and terminal clusters follow RHS, Jasminum officinale: https://www.rhs.org.uk/plants/9454/jasminum-officinale/details.
