@@ -1,13 +1,13 @@
-import {receptorCloseup} from './receptors.js?v=hillstreet-r2';
-import {hillStreet,cloneRiggedModel,streetMotion,STREET_BUILD,STREET_POLE,STREET_GROUND} from './street.js?v=hillstreet-r2';
+import {receptorCloseup} from './receptors.js?v=grounded-garden-r3';
+import {hillStreet,cloneRiggedModel,fitStreetHuman,streetMotion,STREET_BUILD,STREET_POLE,STREET_GROUND,STREET_WALKWAY} from './street.js?v=grounded-garden-r3';
 import * as T from '../atlas/assets/three.module.js';
-import {GLTFLoader} from './assets/GLTFLoader.js?v=hillstreet-r2';
-import {OrbitControls} from './assets/OrbitControls.js?v=hillstreet-r2';
+import {GLTFLoader} from './assets/GLTFLoader.js?v=grounded-garden-r3';
+import {OrbitControls} from './assets/OrbitControls.js?v=grounded-garden-r3';
 
-import {cerebralSculpture} from './sculptures.js?v=hillstreet-r2';
-import {jasmineShrub} from './jasmine.js?v=hillstreet-r2';
-import {humanRig} from './human.js?v=hillstreet-r2';
-import {SVGRenderer} from './assets/SVGRenderer.js?v=hillstreet-r2';
+import {cerebralSculpture} from './sculptures.js?v=grounded-garden-r3';
+import {jasmineShrub} from './jasmine.js?v=grounded-garden-r3';
+import {humanRig} from './human.js?v=grounded-garden-r3';
+import {SVGRenderer} from './assets/SVGRenderer.js?v=grounded-garden-r3';
 const GOLD=0xc9a465,VIOLET=0xb9a1d9;
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z);
 const material=(color,opacity=1)=>new T.MeshStandardMaterial({color,roughness:.48,metalness:.15,transparent:opacity<1,opacity,depthWrite:opacity===1});
@@ -41,6 +41,8 @@ export class ScentScene{
   const g=this.groups[0];this.headRoot=new T.Group();g.add(this.headRoot);this.headRoot.position.set(-2.2,0,0);this.headRoot.scale.setScalar(.045);
   this.nosePoint=V(0,.72,2.4);this.receptorPoint=V(0,1.66,1.45);this.bulbPoint=V(0,1.98,1.3);
   this.jasmine=jasmineShrub();g.add(this.jasmine.root);this.jasmine.root.position.copy(STREET_POLE).add(V(-.5,0,.25));this.jasmine.root.scale.setScalar(1);this.village=hillStreet();g.add(this.village.root);this.streetActor=new T.Group();g.add(this.streetActor);this.streetCameraFollow=true;
+  const shadowCanvas=document.createElement('canvas');shadowCanvas.width=128;shadowCanvas.height=128;const shadowContext=shadowCanvas.getContext('2d'),gradient=shadowContext.createRadialGradient(64,64,4,64,64,64);gradient.addColorStop(0,'rgba(20,17,18,.48)');gradient.addColorStop(.45,'rgba(20,17,18,.2)');gradient.addColorStop(1,'rgba(20,17,18,0)');shadowContext.fillStyle=gradient;shadowContext.fillRect(0,0,128,128);
+  this.streetShadow=new T.Mesh(new T.PlaneGeometry(.9,.65),new T.MeshBasicMaterial({map:new T.CanvasTexture(shadowCanvas),transparent:true,depthWrite:false}));this.streetShadow.rotation.x=-Math.PI/2;g.add(this.streetShadow);
   // No visible tube, arrow, or continuous line enters the face.
   this.aromaSeeds=Array.from({length:180},(_,i)=>({source:this.jasmine.sources[i%this.jasmine.sources.length],phase:(i*.61803398875)%1,speed:.065+(i%7)*.006,angle:i*2.39996,inhaled:i%4===0}));
   this.olfactoryRegions=[
@@ -54,12 +56,12 @@ export class ScentScene{
 
  }
  buildPathwayUI(){
-  this.hotspotLayer=document.createElement('div');this.hotspotLayer.className='olfactory-hotspots';this.hotspotLayer.setAttribute('aria-label','Explore the sense of smell');this.container.append(this.hotspotLayer);
+  this.hotspotLayer=document.createElement('div');this.hotspotLayer.className='olfactory-hotspots anatomy-sequence';this.hotspotLayer.setAttribute('aria-label','Inside the nose — follow the smell pathway');const title=document.createElement('span');title.className='anatomy-sequence-title';title.textContent='Inside the nose · then neural signals';this.hotspotLayer.append(title);this.container.append(this.hotspotLayer);
   this.breathBadge=document.createElement('span');this.breathBadge.className='breath-badge';this.container.append(this.breathBadge);
   this.info=document.createElement('section');this.info.className='olfactory-info';this.info.id='olfactory-info';this.info.hidden=true;this.info.setAttribute('aria-label','About this part of the smell system');
   const close=document.createElement('button');close.type='button';close.className='olfactory-close';close.textContent='×';close.setAttribute('aria-label','Close anatomy description');close.addEventListener('click',()=>this.closePathwayInfo());
   this.infoTitle=document.createElement('h3');this.infoText=document.createElement('p');this.info.append(close,this.infoTitle,this.infoText);this.container.append(this.info);
-  this.olfactoryRegions.forEach(region=>{const button=document.createElement('button');button.type='button';button.className='olfactory-hotspot';button.setAttribute('aria-label',region.name+' — open description');button.setAttribute('aria-expanded','false');button.setAttribute('aria-controls',this.info.id);button.addEventListener('pointerenter',()=>this.openPathwayInfo(region));button.addEventListener('focus',()=>this.openPathwayInfo(region));button.addEventListener('click',()=>this.openPathwayInfo(region));button.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();this.closePathwayInfo();}});this.hotspotLayer.append(button);region.button=button;});
+  this.olfactoryRegions.forEach(region=>{const button=document.createElement('button');button.type='button';button.className='olfactory-hotspot';button.textContent=region.name;button.setAttribute('aria-label',region.name+' — open description');button.setAttribute('aria-expanded','false');button.setAttribute('aria-controls',this.info.id);button.addEventListener('pointerenter',()=>this.openPathwayInfo(region));button.addEventListener('focus',()=>this.openPathwayInfo(region));button.addEventListener('click',()=>this.openPathwayInfo(region));button.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();this.closePathwayInfo();}});this.hotspotLayer.append(button);region.button=button;});
   this.info.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();const region=this.openRegion;this.closePathwayInfo();region?.button.focus();this.closePathwayInfo();}});
  }
  openPathwayInfo(region){this.activeAnnotation=null;this.openRegion=region;this.infoTitle.textContent=region.name;this.infoText.textContent=region.text;this.info.hidden=false;this.olfactoryRegions.forEach(r=>r.button.setAttribute('aria-expanded',String(r===region)));this.positionPathwayInfo();this.dirty=true;}
@@ -110,11 +112,11 @@ export class ScentScene{
   // The scanned bust is confined to the memory location diagram. It cannot enter the street scene.
   head.scene.traverse(o=>{if(o.isMesh)o.material=material(0x9b7cba,1);});this.memoryContext.add(head.scene);
   const streetModel=cloneRiggedModel(human.scene),anatomyModel=cloneRiggedModel(human.scene);
-  this.actor.add(human.scene);human.scene.scale.setScalar(2.6);this.streetActor.add(streetModel);streetModel.scale.setScalar(1);streetModel.updateMatrixWorld(true);const streetBounds=new T.Box3().setFromObject(streetModel);const streetHeight=streetBounds.max.y-streetBounds.min.y;if(!Number.isFinite(streetHeight)||streetHeight<=0)throw new Error('Invalid human model bounds');streetModel.scale.setScalar(1.72/streetHeight);streetModel.updateMatrixWorld(true);streetModel.position.y-=new T.Box3().setFromObject(streetModel).min.y;this.anatomyActor.add(anatomyModel);anatomyModel.scale.setScalar(1.9);
+  this.actor.add(human.scene);human.scene.scale.setScalar(2.6);fitStreetHuman(streetModel);this.streetActor.add(streetModel);this.anatomyActor.add(anatomyModel);anatomyModel.scale.setScalar(1.9);
   [human.scene,streetModel,anatomyModel].forEach(model=>model.traverse(o=>{if(o.isMesh){o.material.roughness=.85;o.material.metalness=0;}}));
   this.rig=humanRig(human.scene,this.actor);this.streetRig=humanRig(streetModel,this.streetActor);this.anatomyRig=humanRig(anatomyModel,this.anatomyActor);
   this.rig.pose(0,0);this.streetRig.pose(0,0);this.anatomyRig.pose(0,0);this.scene.updateMatrixWorld(true);
-  const desired=V(.05,STREET_GROUND+1.25,1.02);this.flowerSource=this.jasmine.sources.reduce((best,p)=>{const point=this.jasmine.root.localToWorld(p.clone());return !best||point.distanceTo(desired)<best.distance?{point,distance:point.distanceTo(desired),local:p}:best;},null).local.clone();
+  const desired=V(.05,STREET_GROUND+1.5,1.12);this.flowerSource=this.jasmine.sources.reduce((best,p)=>{const point=this.jasmine.root.localToWorld(p.clone());return !best||point.distanceTo(desired)<best.distance?{point,distance:point.distanceTo(desired),local:p}:best;},null).local.clone();
   this.proxies=[];this.streetProxies=[];this.anatomyProxies=[];
   if(!this.gpu){for(const [model,list] of [[human.scene,this.proxies],[streetModel,this.streetProxies],[anatomyModel,this.anatomyProxies]])model.traverse(o=>{if(!o.isSkinnedMesh)return;const geo=o.geometry.clone(),proxy=new T.Mesh(geo,material(0xbda68e));proxy.position.copy(o.position);proxy.quaternion.copy(o.quaternion);proxy.scale.copy(o.scale);o.parent.add(proxy);o.visible=false;list.push({source:o,proxy,base:o.geometry.attributes.position.array.slice()});});}
   this.dirty=true;
@@ -122,8 +124,9 @@ export class ScentScene{
  skinSoftware(proxies=[]){for(const {source,proxy,base} of proxies){source.skeleton.update();const p=proxy.geometry.attributes.position,v=V();for(let i=0;i<p.count;i++){v.fromArray(base,i*3);source.applyBoneTransform(i,v);p.setXYZ(i,v.x,v.y,v.z);}p.needsUpdate=true;proxy.geometry.computeVertexNormals();proxy.geometry.computeBoundingSphere();}}
  prepareStreet(){
   this.streetState=streetMotion(this.time);const motion=this.streetState;this.village.update(this.time);this.streetActor.position.copy(motion.position);this.streetActor.rotation.y=motion.yaw;this.streetActor.scale.setScalar(1);
-  if(this.streetRig){const target=this.jasmine.root.localToWorld((this.flowerSource||this.jasmine.sources[0]).clone());this.streetRig.pose(this.time,motion.walk,{reach:motion.reach,handTarget:target.clone().add(V(-.08,-.06,.02)),breath:motion.breath});const q=this.streetActor.getWorldQuaternion(new T.Quaternion()),head=this.streetRig.bones.Head.bone.getWorldPosition(V());this.headRoot.position.copy(head).add(V(0,.07,.01).applyQuaternion(q));this.headRoot.quaternion.copy(q);this.headRoot.scale.setScalar(.045);if(!this.gpu)this.skinSoftware(this.streetProxies);}
-  if(this.streetCameraFollow){const close=T.MathUtils.smoothstep(motion.reach,0,1)*.65;this.camera.position.lerpVectors(V(-4.8,.15,7.3),V(-2.2,-.55,4.3),close);this.controls.target.lerpVectors(V(-.8,-1.6,1.5),V(-.25,-1.25,1),close);this.controls.update();}
+  this.streetShadow.position.set(motion.position.x,STREET_WALKWAY+.004,motion.position.z);
+  if(this.streetRig){const target=this.jasmine.root.localToWorld((this.flowerSource||this.jasmine.sources[0]).clone());this.streetRig.pose(this.time,motion.walk,{reach:motion.reach,handTarget:target.clone().add(V(-.08,-.06,.02)),breath:motion.breath});const q=this.streetActor.getWorldQuaternion(new T.Quaternion()),head=this.streetRig.bones.Head.bone.getWorldPosition(V());this.headRoot.position.copy(head).add(V(0,.035,0).applyQuaternion(q));this.headRoot.quaternion.copy(q);this.headRoot.scale.set(.065,.12,.065);if(!this.gpu)this.skinSoftware(this.streetProxies);}
+  if(this.streetCameraFollow){const close=T.MathUtils.smoothstep(motion.reach,0,1),focus=this.streetRig?this.headRoot.localToWorld(V(0,1,1.4)).lerp(this.jasmine.root.localToWorld((this.flowerSource||this.jasmine.sources[0]).clone()),.4):V(-.25,-1.25,1);this.camera.position.lerpVectors(V(-4.8,.15,7.3),focus.clone().add(V(-1.45,.55,2.1)),close);this.controls.target.lerpVectors(V(-.8,-1.6,1.5),focus,close);this.controls.update();}
  }
  prepareDetect(){
   const elapsed=this.paused?3:Math.max(0,this.time-(this.detectStart||0)),q=Math.min(1,elapsed/2.5),ease=q*q*(3-2*q);this.detectProgress=q;
@@ -139,13 +142,13 @@ export class ScentScene{
   this.bottles.forEach((b,i)=>b.children[1].material.opacity=[5,10,20,30][i]===s.concentration?1:.35);
   this.applyDeposits();
   this.actor.visible=this.mode===3||this.mode===5;this.anatomyActor.visible=this.mode===1;this.streetActor.visible=this.mode===0;
-  if(this.mode===0){this.streetCameraFollow=true;this.controls.minDistance=3;this.controls.maxDistance=18;this.controls.maxPolarAngle=Math.PI/2-.03;}else{this.controls.minDistance=8;this.controls.maxDistance=27;this.controls.maxPolarAngle=2.1;}
+  if(this.mode===0){this.streetCameraFollow=true;this.controls.minDistance=1.5;this.controls.maxDistance=18;this.controls.maxPolarAngle=Math.PI/2-.03;}else{this.controls.minDistance=8;this.controls.maxDistance=27;this.controls.maxPolarAngle=2.1;}
   this.hotspotLayer.hidden=this.mode!==0;this.breathBadge.hidden=!(this.mode===0||this.mode===1);if(this.mode!==0)this.closePathwayInfo();
   this.setLabels();this.dirty=true;this.render();
  }
  setLabels(){
   this.labels.replaceChildren();const s=this.state;let list=[];
-  if(this.mode===0)list=[['Jasmine beside the old café street',this.jasmine.root,V(.2,1.3,0),.57,.82]];
+  if(this.mode===0)list=[];
   if(this.mode===1)list=[['Sensory tissue in the nose',this.headRoot,V(0,1.66,1.45),.04,.15],['Magnified olfactory sensory neurons',this.cells,V(0,0,0),.5,.1],['Odour molecules → receptors on cilia',this.cells,V(0,-.9,0),.55,.85],['Olfactory bulb',this.cells,V(0,1.7,0),.46,.29],['Olfactory cortex · schematic',this.detector.cortex,V(),.7,.21]];
   if(this.mode===1&&s.step===2)list=[['Sensory tissue in the nose',this.headRoot,V(0,1.66,1.45),.04,.15],['Electrical activity · enlarged relay',this.signalRoot,V(1,.7,.4),.55,.18],['Connected neurons',this.signalRoot,V(-.5,-.7,0),.55,.8]];
   if(this.mode===2)list=s.chapter===1?[['Emotion networks',this.brainRoot,this.emotion.position,.65,.25],['Memory networks',this.brainRoot,this.memory.position,.52,.8],['Brain location in the head',this.memoryContext,V(0,2.6,-.1),.04,.25]]:[['Olfactory processing networks',this.brainRoot,V(.4,.5,1),.08,.2]];
@@ -190,19 +193,20 @@ export class ScentScene{
     const start=this.jasmine.root.localToWorld(seed.source.clone()),f=(seed.phase+this.time*seed.speed)%1,p=start.clone();
     // Independent smooth eddies suggest wind and dispersion, not straight molecular trajectories.
     p.x-=f*(1.4+seed.phase*2);p.y+=f*(.6+seed.phase*.9)+Math.sin(seed.angle+this.time*.5)*f*.35;p.z+=Math.sin(seed.angle+f*5+this.time*.25)*f*1.3;
-    this.glow(p,1.7+seed.phase,.36*Math.sin(Math.PI*f),'255,184,76');
+    if(seed.phase<.3||motion.capture>=0)this.glow(p,1.4+seed.phase,(motion.capture>=0?.3:.1)*Math.sin(Math.PI*f),'255,184,76');
     if(seed.inhaled&&motion.reach>.7){
      const capture=motion.capture<0?-1:(motion.capture-seed.phase*.25)/.75;
-     if(capture>=0&&capture<=1){const q=start.clone().lerp(nose,capture*capture*(3-2*capture)),spread=Math.sin(capture*Math.PI);q.y+=spread*(.3+Math.sin(seed.angle+capture*4)*.3);q.z+=spread*Math.sin(seed.angle)*.6;
+     if(capture>=0&&capture<=1){const flower=this.jasmine.root.localToWorld((this.flowerSource||seed.source).clone()),q=flower.lerp(nose,capture*capture*(3-2*capture)),spread=Math.sin(capture*Math.PI);q.y+=spread*(.3+Math.sin(seed.angle+capture*4)*.3);q.z+=spread*Math.sin(seed.angle)*.6;
       const fade=Math.min(1,capture*5)*Math.min(1,(1-capture)*12);this.glow(q,2.1+seed.phase,.8*fade,'255,189,85');}
     }
    }
-   const hotspotPositions=[];
+   this.hotspotLayer.hidden=!this.streetRig||!(motion.capture>=0||neural>=0);if(this.hotspotLayer.hidden&&this.openRegion)this.closePathwayInfo();
    this.olfactoryRegions.forEach(region=>{
-    const phaseSignal=neural>=0?neural*4+2:-20;const strength=region.name==='Nose'&&motion.capture>=0?Math.sin(motion.capture*Math.PI):Math.exp(-(((phaseSignal-region.center)/.65)**2));region.mesh.material.opacity=.05+strength*.48;this.glow(this.headRoot.localToWorld(region.position.clone()),4+strength*5,.18+strength*.7,'255,184,76');
-    region.button.classList.toggle('is-lit',strength>.28);let [x,y,z]=this.project(this.headRoot.localToWorld(region.position.clone()));const originX=x,originY=y;for(let i=0;i<12&&hotspotPositions.some(p=>Math.hypot(p.x-x,p.y-y)<32);i++){x+=22;y-=10;}hotspotPositions.push({x,y});if(x!==originX){c.strokeStyle='rgba(255,190,100,.3)';c.lineWidth=.7;c.beginPath();c.moveTo(originX,originY);c.lineTo(x,y);c.stroke();}region.button.style.left=x+'px';region.button.style.top=y+'px';region.button.hidden=z>1||z< -1;
+    const phaseSignal=neural>=0?neural*4+2:-20;const strength=region.name==='Nose'&&motion.capture>=0?Math.sin(motion.capture*Math.PI):Math.exp(-(((phaseSignal-region.center)/.65)**2));region.mesh.material.opacity=strength*.48;if(strength>.035)this.glow(this.headRoot.localToWorld(region.position.clone()),2+strength*3,strength*.75,'255,184,76');
+    region.button.classList.toggle('is-lit',strength>.28);
    });
    // This pulse begins at the receptors: it is neural activity, not a molecule entering the brain.
+   if(motion.capture>.7){const f=(motion.capture-.7)/.3,p=this.nosePoint.clone().lerp(this.receptorPoint,f);this.glow(this.headRoot.localToWorld(p),2,.65*Math.sin(Math.PI*f),'255,202,113');}
    if(neural>=0){const p=this.neuralPath.getPoint(neural);this.glow(this.headRoot.localToWorld(p),3.6,.95,'255,202,113');}
    this.positionPathwayInfo();
   }

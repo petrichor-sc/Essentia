@@ -1,4 +1,4 @@
-import { fallbackIllustration } from './illustration.js?v=hillstreet-r2';
+import { fallbackIllustration } from './illustration.js?v=grounded-garden-r3';
 const $=id=>document.getElementById(id);
 const chapters=[
   {slug:'smell',name:'THE SENSE OF SMELL',scene:'THE OLFACTORY PATHWAY',type:'A breath in the Himalayas',legend:['Scent molecules','Olfactory system'],steps:[
@@ -97,7 +97,7 @@ document.addEventListener('keydown',e=>{if($('sources').open)return;if(e.key==='
 window.addEventListener('hashchange',()=>{readHash();render();});
 matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',e=>setPaused(e.matches));
 readHash();render();setPaused(paused);
-try{const module=await import('./scene.js?v=hillstreet-r2');scene=new module.ScentScene($('scene'),$('labels'),useFallback);scene.setPaused(paused);scene.update(state);await scene.ready;}catch(error){console.error('3D scene unavailable.',error);useFallback();$('scene-type').textContent='Static backup · 3D could not load';}
+try{const module=await import('./scene.js?v=grounded-garden-r3');scene=new module.ScentScene($('scene'),$('labels'),useFallback);scene.setPaused(paused);scene.update(state);await scene.ready;}catch(error){console.error('3D scene unavailable.',error);useFallback();$('scene-type').textContent='Static backup · 3D could not load';}
 try{const response=await fetch('../atlas/data/palette.json');if(!response.ok)throw new Error('Atlas response unavailable');const data=await response.json();const preferred=['vanilla','lavender','balsam-fir','sandalwood','cedar','bergamot','cardamom','pink-pepper','jasmine','rosewood','geranium'];materials=data.PALETTE.filter(m=>preferred.some(id=>m.id===id||m.id.startsWith(id+'-')));if(materials.length<3)materials=data.PALETTE.filter(m=>!m.id.startsWith('sunday-')).slice(0,20);if(state.chapter===1&&state.step===2)renderControls();}catch{materials=[];}
 window.addEventListener('pagehide',()=>scene?.dispose(),{once:true});
 

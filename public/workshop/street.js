@@ -1,11 +1,12 @@
 import * as T from '../atlas/assets/three.module.js';
-export const STREET_BUILD='street-20261028-r1';
+export const STREET_BUILD='street-20261028-grounded-garden-r3';
 export const STREET_GROUND=-2.72;
+export const STREET_WALKWAY=STREET_GROUND+.015;
 export const STREET_POLE=new T.Vector3(.35,STREET_GROUND,1.35);
 const V=(x,y,z)=>new T.Vector3(x,y,z);
 const surface=(color,extra={})=>new T.MeshStandardMaterial({color,roughness:.88,metalness:0,...extra});
 export function hillStreet(){
- const root=new T.Group(),lanterns=[];
+ const root=new T.Group(),lanterns=[],foliage=[];
  const box=(parent,w,h,d,p,mat)=>{const m=new T.Mesh(new T.BoxGeometry(w,h,d),mat);m.position.copy(p);parent.add(m);return m;};
  const cylinder=(parent,r1,r2,h,p,mat,n=14)=>{const m=new T.Mesh(new T.CylinderGeometry(r1,r2,h,n),mat);m.position.copy(p);parent.add(m);return m;};
  const wood=surface(0x58443a),cream=surface(0xe4d4b5),iron=surface(0x383c3d),stone=surface(0x8e877c),glass=surface(0x584c42,{emissive:0xffce7e,emissiveIntensity:.18}),roofMat=surface(0x4d6263);
@@ -37,6 +38,15 @@ export function hillStreet(){
   for(const px of [-w*.43,w*.43]){
    const lamp=cylinder(building,.08,.08,.24,V(px,2.05,1.98),glass);box(building,.17,.04,.19,V(px,2.21,1.98),iron);lanterns.push(lamp);
   }
+  // Window boxes belong to the façade, including the rotated side cafés.
+  for(const px of [-w*.28,w*.28]){
+   box(building,w*.25,.18,.32,V(px,3.12,2.02),wood);
+   for(let i=0;i<7;i++){
+    const leaf=new T.Mesh(new T.SphereGeometry(1,8,6),surface(i%2?0x547455:0x789163));
+    leaf.position.set(px+(i-3)*w*.032,3.25+Math.sin(i)*.035,2.08);leaf.scale.set(.13,.15,.17);building.add(leaf);
+    if(i%2===0){const bloom=new T.Mesh(new T.SphereGeometry(.045,8,6),surface(i%3?0xe5c9b0:0xdfd6ae));bloom.position.copy(leaf.position).add(V(0,.12,.05));building.add(bloom);}
+   }
+  }
   return building;
  }
  // Adjacent shopfronts define a pedestrian street rather than isolated toy houses.
@@ -62,6 +72,34 @@ export function hillStreet(){
  const board=new T.Group();board.position.set(1.2,STREET_GROUND,-1.8);board.rotation.y=-.2;root.add(board);box(board,.65,.9,.07,V(0,.6,0),wood);sign(board,'COFFEE • TEA',.55,.6,V(0,.65,.04),'#303d39');
  function tree(x,z,h=4.5){const trunk=surface(0x6d5b4e);cylinder(root,.12,.2,h,V(x,STREET_GROUND+h/2,z),trunk);for(let j=0;j<5;j++){const a=j*2.4;const canopy=new T.Mesh(new T.IcosahedronGeometry(1,1),surface(j%2?0x5e735f:0x71826b));canopy.position.set(x+Math.cos(a)*.8,STREET_GROUND+h+Math.sin(j)*.45,z+Math.sin(a)*.7);canopy.scale.set(1.35,1,1.2);root.add(canopy);}}
  tree(-10,-1);tree(10,-.2);tree(-8,6);tree(8,7);
+ // Keep the actor's route and the jasmine-to-nose sight line open.
+ // Smaller street trees alternate with taller cedars around the perimeter.
+ for(const [x,z,h] of [[-6,6.7,3.1],[-3,7.8,3.3],[3.8,7.6,3.5],[11.8,7,3.7],[-12,7.5,3.6]])tree(x,z,h);
+ function cedar(x,z,h){
+  const g=new T.Group();g.position.set(x,STREET_GROUND,z);root.add(g);cylinder(g,.06,.14,h,V(0,h/2,0),wood,10);
+  for(let tier=0;tier<7;tier++){
+   const y=h*(.25+tier*.095),r=h*(.23-tier*.025);
+   const crown=new T.Mesh(new T.ConeGeometry(r,h*.28,13,1),surface(tier%2?0x486a58:0x5f7e61));
+   crown.position.set(Math.sin(tier*2)*.07,y,Math.cos(tier*2)*.06);crown.rotation.z=Math.sin(tier)*.05;g.add(crown);
+  }
+  foliage.push({g,phase:x*.6+z});
+ }
+ for(const [x,z,h] of [[-14,-8,6.2],[-10,-10,6.8],[-5,-10,6.1],[0,-11,7.1],[6,-10,6.5],[11,-9,6.9],[15,-4,5.5],[-16,4,5.4],[15,9,5.7],[-11,11,6],[0,13,5.8],[10,13,6.1]])cedar(x,z,h);
+ // Low planted beds, with instanced leaves and flowers to limit draw calls.
+ const beds=[[-7,5.4,2.3],[-3.8,5.4,2.2],[3.6,5.4,2.1],[9.6,3.3,1.7],[-9.5,2.8,1.6],[8.8,-2.5,1.7],[-6.8,-2.55,1.7]];
+ const leafGeo=new T.SphereGeometry(1,9,6),leafMat=surface(0x78916a),leaves=new T.InstancedMesh(leafGeo,leafMat,beds.length*65),flowers=new T.InstancedMesh(new T.SphereGeometry(1,7,5),surface(0xf1dabe),beds.length*12),plantDummy=new T.Object3D();
+ beds.forEach(([x,z,w],b)=>{
+  box(root,w,.22,.67,V(x,STREET_GROUND+.11,z),stone);
+  box(root,w-.12,.025,.55,V(x,STREET_GROUND+.23,z),surface(0x594e3e));
+  for(let i=0;i<65;i++){
+   const a=i*2.39996,f=(i*.618033)%1;plantDummy.position.set(x+(f-.5)*(w-.2),STREET_GROUND+.3+(i%5)*.07,z+Math.sin(a)*.21);plantDummy.scale.set(.08,.15+(i%4)*.035,.065);plantDummy.rotation.set(Math.cos(a)*.3,a,Math.sin(a)*.5);plantDummy.updateMatrix();leaves.setMatrixAt(b*65+i,plantDummy.matrix);leaves.setColorAt(b*65+i,new T.Color().setHSL(.26+(i%4)*.016,.19,.32+(i%5)*.03));
+  }
+  for(let i=0;i<12;i++){
+   plantDummy.position.set(x+((i*.618)%1-.5)*(w-.2),STREET_GROUND+.55+(i%3)*.055,z+Math.sin(i*2.4)*.19);plantDummy.scale.set(.045,.025,.045);plantDummy.rotation.set(.2,i,0);plantDummy.updateMatrix();flowers.setMatrixAt(b*12+i,plantDummy.matrix);flowers.setColorAt(b*12+i,new T.Color([0xffedcf,0xd3bdc8,0xc9b16f][i%3]));
+  }
+ });
+ leaves.instanceMatrix.needsUpdate=true;flowers.instanceMatrix.needsUpdate=true;root.add(leaves,flowers);
+ for(const [x,z] of [[-5.3,3.8],[4.2,3.8],[5.4,3.8],[-8.8,.3],[8.8,1.4],[-4.1,-2.1],[2.1,-2.1],[6,-2.1]])planter(x,z);
  // The old pole, insulators and gently sagging telephone lines use metre-like scale.
  cylinder(root,.075,.13,4.8,STREET_POLE.clone().add(V(0,2.4,0)),wood);
  box(root,1.1,.1,.13,STREET_POLE.clone().add(V(0,4.45,0)),wood);
@@ -78,7 +116,19 @@ export function hillStreet(){
   const torso=new T.Mesh(new T.CapsuleGeometry(.14,.47,5,10),coat);torso.position.y=1.07;person.add(torso);const head=new T.Mesh(new T.SphereGeometry(.135,14,10),skin);head.position.y=1.59;person.add(head);const cap=new T.Mesh(new T.SphereGeometry(.14,12,8),hair);cap.position.set(0,1.66,-.02);cap.scale.y=.65;person.add(cap);const limbs=[];
   for(const side of [-1,1]){const leg=new T.Group();leg.position.set(side*.085,.78,0);person.add(leg);const m=new T.Mesh(new T.CapsuleGeometry(.061,.57,4,8),coat);m.position.y=-.32;leg.add(m);const arm=new T.Group();arm.position.set(side*.22,1.25,0);person.add(arm);const a=new T.Mesh(new T.CapsuleGeometry(.045,.42,4,8),coat);a.position.y=-.25;arm.add(a);limbs.push({leg,arm,side});}walkers.push({person,limbs,index:i});
  }
- return {root,pole:STREET_POLE.clone(),ground:STREET_GROUND,update(t){walkers.forEach(({person,limbs,index})=>{const phase=t*.075+index*2.1;person.position.set(Math.sin(phase)*8,STREET_GROUND,-.8-index*.38);person.rotation.y=Math.cos(phase)>0?Math.PI/2:-Math.PI/2;limbs.forEach(({leg,arm,side})=>{const gait=Math.sin(t*3.8+side*Math.PI/2+index)*.28;leg.rotation.x=gait;arm.rotation.x=-gait;});});},sources(){return walkers.map(w=>w.person.localToWorld(V(0,1.25,0)));}};
+ return {root,pole:STREET_POLE.clone(),ground:STREET_WALKWAY,update(t){foliage.forEach(({g,phase})=>{g.rotation.z=Math.sin(t*.42+phase)*.008;});walkers.forEach(({person,limbs,index})=>{const phase=t*.075+index*2.1;person.position.set(Math.sin(phase)*8,STREET_WALKWAY,-.8-index*.38);person.rotation.y=Math.cos(phase)>0?Math.PI/2:-Math.PI/2;limbs.forEach(({leg,arm,side})=>{const gait=Math.sin(t*3.8+side*Math.PI/2+index)*.28;leg.rotation.x=gait;arm.rotation.x=-gait;});});},sources(){return walkers.map(w=>w.person.localToWorld(V(0,1.25,0)));}};
+}
+export function fitStreetHuman(model,height=1.72){
+ // Fit in model-local space BEFORE parenting to the moving actor. A world-space
+ // minimum includes the actor's negative ground offset and lifts it into the air.
+ if(model.parent)throw new Error('Fit street model before adding it to the actor');
+ model.position.set(0,0,0);model.scale.setScalar(1);model.updateMatrixWorld(true);
+ const bounds=new T.Box3().setFromObject(model,true),size=bounds.getSize(V(0,0,0));
+ if(!Number.isFinite(size.y)||size.y<=0)throw new Error('Invalid human model bounds');
+ model.scale.setScalar(height/size.y);model.updateMatrixWorld(true);
+ const fitted=new T.Box3().setFromObject(model,true),center=fitted.getCenter(V(0,0,0));
+ model.position.set(-center.x,-fitted.min.y,-center.z);model.updateMatrixWorld(true);
+ return model;
 }
 export function cloneRiggedModel(source){
  const copy=source.clone(true),map=new Map();function pair(a,b){map.set(a,b);a.children.forEach((c,i)=>pair(c,b.children[i]));}pair(source,copy);
@@ -86,11 +136,11 @@ export function cloneRiggedModel(source){
 }
 export function streetMotion(t){
  // Walk, settle, reach, inhale, smell, release, and walk back without teleporting.
- const phase=((t%24)+24)%24,smooth=x=>{x=T.MathUtils.clamp(x,0,1);return x*x*(3-2*x);},start=V(-3.1,STREET_GROUND,2.6),end=V(-.32,STREET_GROUND,.55);
+ const phase=((t%24)+24)%24,smooth=x=>{x=T.MathUtils.clamp(x,0,1);return x*x*(3-2*x);},start=V(-3.1,STREET_WALKWAY,STREET_POLE.z+1.05),end=V(STREET_POLE.x-.67,STREET_WALKWAY,STREET_POLE.z-.58);
  let position,walk=0,reach=0,yaw=0,breath=0,capture=-1,stage='A walk along the street';
  const direction=Math.atan2(end.x-start.x,end.z-start.z);
  if(phase<4.5){position=start.clone().lerp(end,smooth(phase/4.5));walk=Math.sin(Math.PI*phase/4.5)*.9;yaw=direction;}
- else if(phase<14.5){position=end.clone();yaw=T.MathUtils.lerp(direction,.35,smooth((phase-4.5)/1.2));reach=smooth((phase-4.7)/1.5)*(1-smooth((phase-12.5)/2));stage=phase<6.2?'Reaching gently for jasmine':phase<9.2?'Breathing in the jasmine':phase<12.5?'From receptors to the brain':'Letting the flower go';if(phase>=6.2&&phase<9.2){capture=(phase-6.2)/3;breath=.5-.5*Math.cos(capture*Math.PI);}else if(phase>=9.2&&phase<12.7)breath=.5+.5*Math.cos((phase-9.2)/3.5*Math.PI);}
+ else if(phase<14.5){position=end.clone();yaw=T.MathUtils.lerp(direction,Math.atan2(STREET_POLE.x-end.x,STREET_POLE.z-end.z),smooth((phase-4.5)/1.2));reach=smooth((phase-4.7)/1.5)*(1-smooth((phase-12.5)/2));stage=phase<6.2?'Reaching gently for jasmine':phase<9.2?'Breathing in the jasmine':phase<12.5?'From receptors to the brain':'Letting the flower go';if(phase>=6.2&&phase<9.2){capture=(phase-6.2)/3;breath=.5-.5*Math.cos(capture*Math.PI);}else if(phase>=9.2&&phase<12.7)breath=.5+.5*Math.cos((phase-9.2)/3.5*Math.PI);}
  else if(phase<20){position=end.clone().lerp(start,smooth((phase-14.5)/5.5));walk=Math.sin(Math.PI*(phase-14.5)/5.5)*.9;yaw=direction+Math.PI;stage='Returning to the street';}
  else{position=start.clone();yaw=direction+Math.PI*(1-smooth((phase-20)/2));stage='A quiet pause';}
  return {phase,position,yaw,walk,reach,breath,capture,stage,neural:phase>=9.1&&phase<12.5?(phase-9.1)/3.4:-1};

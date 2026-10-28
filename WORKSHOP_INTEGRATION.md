@@ -82,3 +82,14 @@ Detect annotation cards open on hover, click or focus and describe the nose loca
 The village scene now uses the existing continuous full-body human model at approximately 1.7 m equivalent height, comparable to the background walkers. The person stands on the same ground plane, reaches toward the lower jasmine flowers, and breathes with subtle spine deformation. The large scanned bust is hidden in the village and appears only as an explicitly magnified anatomy view in Detect. Anatomy hover points follow the full-body model’s head position. The feet correction now accounts for the actor’s current scale and ground placement.
 
 This cumulative ZIP includes the Detect transition, receptor sequence and interactive labels, the surrounding mountain terrain, climbing jasmine, village, and the preceding opacity fixes. Syntax and production build passed; no browser testing was performed.
+
+
+## Ground contact, greenery and sniff sequence — grounded-garden-r3
+
+The full-body model is fitted in local space before it is attached to the moving actor. This fixes an asynchronous-loading error that added the street’s ground offset a second time and left the person floating above the cafés. The person, walkers, paving and contact shadow share the street surface; the approach ends beside the jasmine pole.
+
+Seventeen additional trees, including twelve gently swaying cedars, seven low planted beds, eight terracotta pots and café window boxes fill the environment while keeping the approach and flower-to-nose view clear. Leaves and border flowers use instanced geometry.
+
+The sequence walks to the jasmine, reaches, then inhales particles from the selected flower. Light travels into the nasal sensory area, then indicates receptor, bulb and cortical activity. Beyond the receptors, the light represents neural signals. Activity markers follow the head. The anatomy buttons are in a fixed legend visible during inhalation and neural activity; no separate markers float above the street. The camera moves closer during the sniff. HTML, module and CSS versions change together to avoid mixing cached revisions.
+
+Production build, workshop syntax/import checks and 240 ground-contact poses passed. The ground check reproduces model loading after the actor has already moved, and the largest sole deviation through the full cycle is less than 4.2 mm. No browser visual testing or publishing was performed.

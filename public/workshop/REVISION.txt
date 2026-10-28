@@ -1,2 +1,2 @@
-hillstreet-r2
-Full-body scale normalised to 1.72m; 4.8m pole. Café street and low foothills. Walk/reach/inhale/neural sequence. Skeleton names support mixamorig: prefix. Versioned module imports. Build and 160 headless pose checks passed. No browser visual testing.
+grounded-garden-r3
+Human fitted locally before parenting to moving street actor. Feet remain on the pavement through the full 24-second cycle. Added 17 trees, seven planted borders, eight pots, window boxes and gentle cedar sway. Walk, reach, inhale, then anchored nose and neural highlights. Anatomy legend is fixed in the UI. Versioned modules and stylesheet. Build and 240 ground-contact pose checks passed (maximum sole deviation 4.2mm). No browser visual testing.
