@@ -10,3 +10,5 @@
 - The bundled Michelle mesh is modified to remove the headphones, sunglasses and original braid-hair component, preserving the body, face, eyes, UVs, skeleton and skin weights. Soft skinned hair is original procedural geometry. See tools/clean_workshop_character.py in the repo snapshot for preparation.
 - The enlarged hand is derived from the same modified Michelle mesh; original model attribution still applies. Neural relay/cascade and the imagined garden memory are original procedural workshop geometry.
 - Common jasmine's flower scale and terminal clusters follow RHS, Jasminum officinale: https://www.rhs.org.uk/plants/9454/jasminum-officinale/details.
+
+- Face revision r7 reshapes the source eyebrows, adds explicit eye/brow surface regions, removes facial hair-colour misclassification and replaces the earlier procedural hair pieces with one closed skinned shell. Original Michelle model attribution continues to apply.

@@ -1,4 +1,4 @@
-# Essentia Scent Studio — workshop-r6
+# Essentia Scent Studio — natural-face-r7
 
 ## Integrate into your existing Git repo
 
@@ -42,11 +42,18 @@ The atlas links, autumn activity, reflection card and concentration comparison a
 ## Validation and review status
 
 - Vite production build, workshop JavaScript syntax and local import paths passed.
-- Accessory removal preserves the skeleton, eyes, eyebrows, UVs and skin weights. Modified body geometry has 10,260 vertices; four new skinned hair surfaces follow the head. The optional asset preparation script is `tools/clean_workshop_character.py`; it takes the original bundled Michelle GLB as input and is not part of normal site startup.
+- Accessory removal preserves the skeleton, eyes, eyebrows, UVs and skin weights. Modified body geometry has 10,260 vertices; one continuous skinned hair shell follows the head. The optional asset preparation script is `tools/clean_workshop_character.py`; it takes the original bundled Michelle GLB as input and is not part of normal site startup.
 - A 240-pose check keeps the soles within 4.3 mm of the pavement. The illustrated sniff gap stays below 8.3 cm.
 - A 480-sample check confirms continuous emission from all 102 flowers across two full cycles, without an inhalation.
 - The signal pulses move along their paths; all 55 network nodes fire over the cascade; memory reveal/hide and rig matrices remain valid.
 - The application check confirms no particles before actuation. A seasonal sample produced approximately 19 winter particles and 64–66 summer particles, below the prior cloud density.
 - The magnified hand has 1,422 vertices, five fingers including the thumb, surface-attached samples and a fading proximal forearm. Its geometry was inspected through a local orthographic projection.
 
-No browser testing, GPU shader compilation in a browser, full-scene visual verification or publishing was performed. Module, stylesheet and GLB URLs are versioned together as `workshop-r6`.
+No browser testing, GPU shader compilation in a browser, full-scene visual verification or publishing was performed. Module, stylesheet and GLB URLs are versioned together as `natural-face-r7`.
+
+
+## Face correction
+
+The exposed face now has thin, forehead-fitted eyebrows in place of the source character's large projecting brow bars. The skin shader no longer classifies dark face pixels as hair. Explicit eye and eyebrow surface IDs preserve the eyes' own colour, keep the brows a soft brown and remove the heavy baked eyeliner from the surrounding facial skin. A single closed bob-shaped hair surface replaces the separate cap, open back and tubular side pieces, giving a continuous curved hairline. All previous workshop features are retained.
+
+Front, three-quarter and profile close-ups were inspected through direct local model renders. The 240-pose geometry check still passes: maximum sole deviation 4.3 mm and maximum illustrated sniff gap 8.2 cm. Both eye surfaces (514 vertices) are preserved; the brow height is reduced to about 6.4 mm in model space. No browser or full-scene GPU visual test was performed.
