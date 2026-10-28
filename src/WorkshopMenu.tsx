@@ -30,6 +30,7 @@ export default function WorkshopMenu({ buttonStyle = false }: { buttonStyle?: bo
       </button>
       {open && <div id={id} className="workshop-menu-panel">
         <a href="#workshops" onClick={() => setOpen(false)}>About the workshops</a>
+        <a href="./workshop/" onClick={() => setOpen(false)}>The Scent Studio <span aria-hidden="true">↗</span></a>
         <a href="#/workshop-galleries" onClick={() => setOpen(false)}>Workshop Galleries <span aria-hidden="true">↗</span></a>
       </div>}
     </div>

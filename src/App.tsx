@@ -330,7 +330,7 @@ export default function App() {
         }}>
           {/* Logo in mobile menu */}
           <img src={logoMark} alt="" style={{ width: '52px', filter: 'invert(1) brightness(0.85) sepia(0.3) hue-rotate(220deg) saturate(1.5)', opacity: 0.7, marginBottom: '8px' }} />
-          {[...PRIMARY_NAV_ITEMS, { label: 'Workshop Galleries', href: '#/workshop-galleries' }, { label: 'Enquire', href: '#enquire' }].map(({ label, href }) => (
+          {[...PRIMARY_NAV_ITEMS, { label: 'The Scent Studio', href: './workshop/' }, { label: 'Workshop Galleries', href: '#/workshop-galleries' }, { label: 'Enquire', href: '#enquire' }].map(({ label, href }) => (
             <a key={label} href={href} onClick={() => setMenuOpen(false)} style={{
               fontFamily: "'Aboreto', system-ui, sans-serif",
               fontSize: '1.4rem',
@@ -737,6 +737,7 @@ export default function App() {
             <div className="reveal reveal-delay-4" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
               <a href="#enquire" className="cta-btn"><span>Enquire About a Workshop</span></a>
               <a href="#/workshop-galleries" className="cta-btn"><span>Workshop Galleries</span></a>
+              <a href="./workshop/" className="cta-btn"><span>Enter the Scent Studio</span></a>
               <a href="#" style={{
                 display: 'inline-flex', alignItems: 'center',
                 fontFamily: "'DM Sans'", fontSize: '0.7rem', letterSpacing: '0.22em',
