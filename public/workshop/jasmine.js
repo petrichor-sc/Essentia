@@ -20,7 +20,9 @@ export function jasmineShrub(){
    sources.push(flower.position.clone());
   }
  }
- const pot=add(new T.CylinderGeometry(.52,.39,.62,28,1,true),mat(0x514256),V(0,-.2,0));
- const soil=add(new T.CircleGeometry(.5,28),mat(0x302820),V(0,.115,0));soil.rotation.x=-Math.PI/2;
+ // The wild climber roots in the ground; its upper growth wraps the pole.
+ const vine=new T.CatmullRomCurve3(Array.from({length:50},(_,i)=>{const f=i/49,a=f*Math.PI*6;return V(.5+Math.cos(a)*.16,f*4.4- .7,Math.sin(a)*.16-.25);}));
+ add(new T.TubeGeometry(vine,70,.023,5,false),wood,V(0,0,0));
+ for(let i=0;i<8;i++){const a=i*2.4,point=V(.5+Math.cos(a)*.17,2.2+i*.2,Math.sin(a)*.17-.25);const l=add(new T.SphereGeometry(1,10,6),leafLight,point);l.scale.set(.22,.07,.1);l.rotation.z=a;}
  return {root,sources};
 }

@@ -46,3 +46,13 @@ Production build and local import/asset checks were performed. No browser testin
 ## Jasmine opening scene update
 
 The Breathe step now shows a 3D jasmine shrub, scattered airborne scent particles, and a small fraction approaching the nostril. The solid stream and internal anatomy markers have been removed from this opening view. The later receptor and neural steps remain. The new jasmine.js module is copied by the included merge script. Syntax and production build passed; no browser testing was performed.
+
+## Himachal scene and breathing update
+
+The opening scene is inspired by jasmine growing around an old telephone pole in Himachal Pradesh, with layered Himalayan ridges, snow accents, rocky ground, sagging wires and wild climbing growth. It is an artistic landscape inspired by the supplied memory, not a geographic or botanical identification.
+
+Amber particles disperse along separate, gently varying paths. An eight-second illustrative cycle combines a three-second inhalation, a 3.5-second exhalation and a quiet pause. A three-bone chest/head support rig deforms the scanned bust subtly; a subset of scent particles approaches the nostril during inhalation. Neural regions then glow in sequence. Timing is slowed for teaching, not a measurement of neural processing speed. Airborne amber dots stand for molecules; pulses after the sensory receptors stand for electrical neural activity.
+
+Nose, olfactory sensory neurons, olfactory bulbs and olfactory cortex have projected interaction targets. Hover, keyboard focus or tap opens the description; use Close or Escape to dismiss it. The cortex highlight is a simplified location marker, not full anatomical segmentation.
+
+New code modules are himachal.js and jasmine.js. The included integration script copies these automatically. Production build, local imports, finite geometry and breathing deformation/return-to-rest checks passed. No browser testing was performed.

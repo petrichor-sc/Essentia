@@ -1,6 +1,7 @@
 import * as T from '../atlas/assets/three.module.js';
 import {GLTFLoader} from './assets/GLTFLoader.js';
 import {OrbitControls} from './assets/OrbitControls.js';
+import {himachalLandscape,rigBreathingBust} from './himachal.js';
 import {jasmineShrub} from './jasmine.js';
 import {humanRig} from './human.js';
 import {SVGRenderer} from './assets/SVGRenderer.js';
@@ -9,7 +10,7 @@ const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z);
 const material=(color,opacity=1)=>new T.MeshStandardMaterial({color,roughness:.48,metalness:.15,transparent:opacity<1,opacity,depthWrite:opacity===1});
 export class ScentScene{
  constructor(container,labels){
-  this.container=container;this.labels=labels;this.time=0;this.paused=false;this.state={chapter:0,step:0,movement:false,airflow:0,weather:'temperate',age:0,concentration:20,sites:['neck'],doseMode:'fixed',skinZoom:true};
+  this.container=container;this.container.setAttribute('role','group');this.labels=labels;this.time=0;this.paused=false;this.state={chapter:0,step:0,movement:false,airflow:0,weather:'temperate',age:0,concentration:20,sites:['neck'],doseMode:'fixed',skinZoom:true};
   this.scene=new T.Scene();this.camera=new T.PerspectiveCamera(37,1,.1,100);this.scene.add(new T.HemisphereLight(0xf1e5ff,0x26132d,2));
   [[0xffdf9b,3,[-4,8,8]],[0x9c7ed7,2,[5,5,-4]]].forEach(([c,i,p])=>{const l=new T.DirectionalLight(c,i);l.position.set(...p);this.scene.add(l);});
   const canvas=document.createElement('canvas'),context=canvas.getContext('webgl2',{alpha:true,antialias:true});this.gpu=!!context;
@@ -21,7 +22,7 @@ export class ScentScene{
   this.controls.addEventListener('change',()=>this.dirty=true);
   const hint=document.createElement('span');hint.className='orbit-hint';hint.textContent='Drag to turn · Scroll to zoom';container.append(hint);
   this.groups=Array.from({length:6},()=>{const g=new T.Group();this.scene.add(g);return g;});
-  this.buildNose();this.buildCells();this.buildBrain();this.buildBody();this.buildBottles();this.buildSkin();
+  this.buildNose();this.buildPathwayUI();this.buildCells();this.buildBrain();this.buildBody();this.buildBottles();this.buildSkin();
   this.proxies=[];this.cloud=[];this.distance=0;this.walkBlend=0;this.position=V(-2,0,0);this.mode=-1;this.ready=this.load();this.ready.catch(e=>console.error('3D models could not load',e));
   this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(container);this.resize();this.update(this.state);
   this.last=performance.now();this.drawAt=0;this.loop=this.loop.bind(this);this.frame=requestAnimationFrame(this.loop);
@@ -36,10 +37,31 @@ export class ScentScene{
  buildNose(){
   const g=this.groups[0];this.headRoot=new T.Group();g.add(this.headRoot);this.headRoot.position.set(-2.2,0,0);this.headRoot.scale.setScalar(.72);
   this.nosePoint=V(0,.72,2.4);this.receptorPoint=V(0,1.66,1.45);this.bulbPoint=V(0,1.98,1.3);
-  this.jasmine=jasmineShrub();g.add(this.jasmine.root);this.jasmine.root.position.set(2,-1.95,1.3);
+  this.jasmine=jasmineShrub();g.add(this.jasmine.root);this.jasmine.root.position.set(2,-2.72,0);this.jasmine.root.scale.setScalar(1.1);g.add(himachalLandscape());
   // No visible tube, arrow, or continuous line enters the face.
-  this.aromaSeeds=Array.from({length:125},(_,i)=>({source:this.jasmine.sources[i%this.jasmine.sources.length],phase:(i*.61803398875)%1,speed:.065+(i%7)*.006,angle:i*2.39996,inhaled:i%4===0}));
+  this.aromaSeeds=Array.from({length:180},(_,i)=>({source:this.jasmine.sources[i%this.jasmine.sources.length],phase:(i*.61803398875)%1,speed:.065+(i%7)*.006,angle:i*2.39996,inhaled:i%4===0}));
+  this.olfactoryRegions=[
+   {name:'Nose',position:V(0,.85,2.3),scale:V(.22,.3,.18),center:1.9,text:'An inhaled breath carries some airborne scent molecules into the nasal cavity. Most of the scent released by the jasmine disperses into the surrounding air.'},
+   {name:'Olfactory sensory neurons',position:V(0,1.66,1.45),scale:V(.45,.1,.25),center:3,text:'High inside the nose, molecules interact with receptors on sensory neurons. Receptor activation changes electrical activity. From this point, the moving amber light represents neural signals, not scent molecules travelling through the brain.'},
+   {name:'Olfactory bulbs',position:V(0,2.02,1.3),scale:V(.48,.15,.23),center:3.9,text:'The olfactory bulbs sit just above the nasal cavity and receive signals from olfactory sensory neurons. They process patterns of activity before sending information onward.'},
+   {name:'Olfactory cortex',position:V(-.85,1.8,.2),scale:V(.42,.24,.45),center:4.9,text:'Connected regions, including the piriform cortex, help process odour information. Connections with other brain networks support identification, emotion and memory. The highlighted area is a simplified location marker, not a full anatomical segmentation.'}
+  ];
+  this.olfactoryRegions.forEach(region=>{const m=new T.Mesh(new T.SphereGeometry(1,18,12),new T.MeshBasicMaterial({color:0xffbb58,transparent:true,opacity:.12,depthTest:false,depthWrite:false,blending:T.AdditiveBlending}));m.position.copy(region.position);m.scale.copy(region.scale);m.renderOrder=9;this.headRoot.add(m);region.mesh=m;});
+  this.neuralPath=new T.CatmullRomCurve3([this.receptorPoint,V(0,1.87,1.4),this.bulbPoint,V(-.38,1.96,.9),V(-.85,1.8,.2)]);
+
  }
+ buildPathwayUI(){
+  this.hotspotLayer=document.createElement('div');this.hotspotLayer.className='olfactory-hotspots';this.hotspotLayer.setAttribute('aria-label','Explore the sense of smell');this.container.append(this.hotspotLayer);
+  this.breathBadge=document.createElement('span');this.breathBadge.className='breath-badge';this.container.append(this.breathBadge);
+  this.info=document.createElement('section');this.info.className='olfactory-info';this.info.id='olfactory-info';this.info.hidden=true;this.info.setAttribute('aria-label','About this part of the smell system');
+  const close=document.createElement('button');close.type='button';close.className='olfactory-close';close.textContent='×';close.setAttribute('aria-label','Close anatomy description');close.addEventListener('click',()=>this.closePathwayInfo());
+  this.infoTitle=document.createElement('h3');this.infoText=document.createElement('p');this.info.append(close,this.infoTitle,this.infoText);this.container.append(this.info);
+  this.olfactoryRegions.forEach(region=>{const button=document.createElement('button');button.type='button';button.className='olfactory-hotspot';button.setAttribute('aria-label',region.name+' — open description');button.setAttribute('aria-expanded','false');button.setAttribute('aria-controls',this.info.id);button.addEventListener('pointerenter',()=>this.openPathwayInfo(region));button.addEventListener('focus',()=>this.openPathwayInfo(region));button.addEventListener('click',()=>this.openPathwayInfo(region));button.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();this.closePathwayInfo();}});this.hotspotLayer.append(button);region.button=button;});
+  this.info.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();const region=this.openRegion;this.closePathwayInfo();region?.button.focus();this.closePathwayInfo();}});
+ }
+ openPathwayInfo(region){this.openRegion=region;this.infoTitle.textContent=region.name;this.infoText.textContent=region.text;this.info.hidden=false;this.olfactoryRegions.forEach(r=>r.button.setAttribute('aria-expanded',String(r===region)));this.positionPathwayInfo();this.dirty=true;}
+ closePathwayInfo(){this.openRegion=null;this.info.hidden=true;this.olfactoryRegions.forEach(r=>r.button.setAttribute('aria-expanded','false'));}
+ positionPathwayInfo(){if(!this.openRegion)return;const [x,y]=this.project(this.headRoot.localToWorld(this.openRegion.position.clone()));const w=Math.min(300,Math.max(180,this.width-24));this.info.style.width=w+'px';this.info.style.left=Math.max(12,Math.min(this.width-w-12,x+24))+'px';this.info.style.top=Math.max(46,Math.min(this.height-this.info.offsetHeight-12,y+24))+'px';}
  buildCells(){
   const g=this.groups[1];this.context=new T.Group();g.add(this.context);this.context.position.set(-3,-.4,0);this.context.scale.setScalar(.35);
   this.sphere(this.context,[0,1.66,1.45],.22,GOLD);this.tube(g,[[-3,.2,.5],[-1.8,.6,.5],[-1.2,.8,0]],.017,GOLD,.35);
@@ -88,7 +110,7 @@ export class ScentScene{
  }
  async load(){
   const loader=new GLTFLoader(),[head,human]=await Promise.all([loader.loadAsync('./assets/head.glb'),loader.loadAsync('./assets/human.glb')]);
-  head.scene.traverse(o=>{if(o.isMesh)o.material=material(0x9b7cba,.62);});this.headRoot.add(head.scene);this.context.add(head.scene.clone(true));
+  head.scene.traverse(o=>{if(o.isMesh)o.material=material(0x9b7cba,.62);});this.context.add(head.scene.clone(true));this.headRoot.add(head.scene);this.breathRig=rigBreathingBust(head.scene,!this.gpu);
   this.actor.add(human.scene);human.scene.scale.setScalar(2.6);human.scene.traverse(o=>{if(o.isMesh){o.material.roughness=.85;o.material.metalness=0;}});
   this.rig=humanRig(human.scene,this.actor);this.rig.pose(0,0);this.scene.updateMatrixWorld(true);
   this.proxies=[];
@@ -97,15 +119,16 @@ export class ScentScene{
  }
  update(s){const old=this.mode,oldZoom=this.state.skinZoom;this.state={...this.state,...s};this.mode=s.chapter===0?(s.step===1||s.step===2?1:s.step===3?2:0):s.chapter===1?2:s.step<2?3:s.step===2?5:4;
   this.groups.forEach((g,i)=>g.visible=i===this.mode||(this.mode===5&&i===3));this.groups[5].visible=this.mode===5&&s.skinZoom!==false;this.cells.visible=s.step!==2;this.signalRoot.visible=s.chapter===0&&s.step===2;this.cortex.parent.rotation.y=s.chapter===1?.25:0;
-  if(this.mode!==old){const presets={0:[[7,3.3,13],[0,.1,.5]],1:[[7,3,12],[0,0,0]],2:[[6,3.5,10],[0,.2,0]],3:[[8,5.2,12],[0,1.9,-.8]],4:[[4,4,15],[0,.2,0]],5:[[8,5.2,12],[0,1.9,-.8]]};const [p,t]=presets[this.mode];this.camera.position.set(...p);this.controls.target.set(...t);this.controls.update();if(this.mode===5){this.zoomProgress=0;this.distance=0;this.walkBlend=0;this.position.set(-2,0,0);this.actor.position.copy(this.position);this.actor.rotation.y=0;}}
+  if(this.mode!==old){const presets={0:[[7,3.6,14],[0,.15,0]],1:[[7,3,12],[0,0,0]],2:[[6,3.5,10],[0,.2,0]],3:[[8,5.2,12],[0,1.9,-.8]],4:[[4,4,15],[0,.2,0]],5:[[8,5.2,12],[0,1.9,-.8]]};const [p,t]=presets[this.mode];this.camera.position.set(...p);this.controls.target.set(...t);this.controls.update();if(this.mode===5){this.zoomProgress=0;this.distance=0;this.walkBlend=0;this.position.set(-2,0,0);this.actor.position.copy(this.position);this.actor.rotation.y=0;}}
   if(this.mode===5&&oldZoom!==s.skinZoom){this.zoomProgress=0;this.camera.position.set(8,5.2,12);this.controls.target.set(0,1.9,-.8);this.controls.update();}
   this.bottles.forEach((b,i)=>b.children[1].material.opacity=[5,10,20,30][i]===s.concentration?1:.35);
   this.applyDeposits();
+  this.hotspotLayer.hidden=this.mode!==0;this.breathBadge.hidden=this.mode!==0;if(this.mode!==0)this.closePathwayInfo();
   this.setLabels();this.dirty=true;this.render();
  }
  setLabels(){
   this.labels.replaceChildren();const s=this.state;let list=[];
-  if(this.mode===0)list=[['Jasmine · scent released into the air',this.jasmine.root,V(0,2.2,0),.59,.8]];
+  if(this.mode===0)list=[['Wild jasmine · Himachal-inspired landscape',this.jasmine.root,V(0,2.2,0),.55,.84]];
   if(this.mode===1)list=[['Location in the nose',this.context,V(0,1.66,1.45),.07,.18],['Receptors on cilia',this.cells,V(0,1.4,0),.65,.17],['Sensory neurons',this.cells,V(.4,.2,0),.67,.49],['Olfactory bulb · enlarged',this.cells,V(0,-2.1,0),.48,.82]];
   if(this.mode===1&&s.step===2)list=[['Location in the nose',this.context,V(0,1.66,1.45),.07,.18],['Electrical activity · enlarged relay',this.signalRoot,V(1,.7,.4),.55,.18],['Connected neurons',this.signalRoot,V(-.5,-.7,0),.55,.8]];
   if(this.mode===2)list=s.chapter===1?[['Emotion networks',this.brainRoot,this.emotion.position,.65,.25],['Memory networks',this.brainRoot,this.memory.position,.08,.7]]:[['Olfactory processing networks',this.brainRoot,V(.4,.5,1),.08,.2]];
@@ -143,23 +166,34 @@ export class ScentScene{
   if(this.mode===5&&this.rig){const point=this.rig.point(this.state.sites[0])[0];if(point){const end=this.skinRoot.localToWorld(V(-.5,.5,.5)),mid=point.clone().lerp(end,.5).add(V(0,.6,.2)),a=this.skinLink.geometry.attributes.position;[point,mid,end].forEach((p,i)=>a.setXYZ(i,p.x,p.y,p.z));a.needsUpdate=true;this.skinLink.geometry.computeBoundingSphere();}}
   if(this.mode===5&&this.state.skinZoom!==false){const s=this.state,age=(s.age||0)/100,left=Math.exp(-age*2.5*Math.sqrt(Math.max(1,s.sites.length))*({bright:1.4,balanced:.85,lasting:.45}[s.material]||.85));for(let i=0;i<55;i++){const phase=(i*.618+this.time*.17)%1,base=this.skinSeeds[i*2].clone();base.y+=phase*1.8;base.z+=phase*.7;this.glow(this.skinRoot.localToWorld(base),2,(1-phase)*left*.65);}}
   if(this.mode===0){
+   const phase=this.time%8,inhaling=phase<3,breathe=inhaling?.5-.5*Math.cos(phase/3*Math.PI):phase<6.5?.5+.5*Math.cos((phase-3)/3.5*Math.PI):0;
+   this.breathRig?.update(breathe);this.scene.updateMatrixWorld(true);
+   this.breathBadge.textContent=this.paused?'Breath paused':inhaling?'Breathe in':phase<6.5?'Breathe out':'A quiet pause';
    const nose=this.headRoot.localToWorld(this.nosePoint.clone());
    for(const seed of this.aromaSeeds){
-    const f=(seed.phase+this.time*seed.speed)%1,start=this.jasmine.root.localToWorld(seed.source.clone()),p=start.clone();
+    const start=this.jasmine.root.localToWorld(seed.source.clone()),f=(seed.phase+this.time*seed.speed)%1,p=start.clone();
+    // Independent smooth eddies suggest wind and dispersion, not straight molecular trajectories.
+    p.x-=f*(1.4+seed.phase*2);p.y+=f*(.6+seed.phase*.9)+Math.sin(seed.angle+this.time*.5)*f*.35;p.z+=Math.sin(seed.angle+f*5+this.time*.25)*f*1.3;
+    this.glow(p,1.7+seed.phase,.36*Math.sin(Math.PI*f),'255,184,76');
     if(seed.inhaled){
-     // Broad, individually drifting paths converge only near the nostril, then fade.
-     const ease=f*f*(3-2*f);p.lerp(nose,ease);const spread=Math.sin(Math.PI*f);
-     p.y+=spread*(.25+Math.sin(seed.angle+f*5)*.48);p.z+=spread*Math.cos(seed.angle+f*4)*.65;
-    }else{
-     p.x-=f*(1.1+Math.sin(seed.angle)*.6);p.y+=f*(1.4+Math.cos(seed.angle)*.6);p.z+=Math.sin(seed.angle+f*3)*f*1.2;
+     const capture=(phase-seed.phase*1.2)/2.1;
+     if(capture>=0&&capture<=1){const q=start.clone().lerp(nose,capture*capture*(3-2*capture)),spread=Math.sin(capture*Math.PI);q.y+=spread*(.3+Math.sin(seed.angle+capture*4)*.3);q.z+=spread*Math.sin(seed.angle)*.6;
+      const fade=Math.min(1,capture*5)*Math.min(1,(1-capture)*12);this.glow(q,2.1+seed.phase,.8*fade,'255,189,85');}
     }
-    const fade=Math.sin(Math.PI*f)**1.2*(seed.inhaled?.44:.3);this.glow(p,1.2+(seed.phase*.65),fade,'226,211,165');
    }
+   const hotspotPositions=[];
+   this.olfactoryRegions.forEach(region=>{
+    const strength=Math.exp(-(((phase-region.center)/.65)**2));region.mesh.material.opacity=.05+strength*.48;this.glow(this.headRoot.localToWorld(region.position.clone()),4+strength*5,.18+strength*.7,'255,184,76');
+    region.button.classList.toggle('is-lit',strength>.28);let [x,y,z]=this.project(this.headRoot.localToWorld(region.position.clone()));const originX=x,originY=y;for(let i=0;i<12&&hotspotPositions.some(p=>Math.hypot(p.x-x,p.y-y)<32);i++){x+=22;y-=10;}hotspotPositions.push({x,y});if(x!==originX){c.strokeStyle='rgba(255,190,100,.3)';c.lineWidth=.7;c.beginPath();c.moveTo(originX,originY);c.lineTo(x,y);c.stroke();}region.button.style.left=x+'px';region.button.style.top=y+'px';region.button.hidden=z>1||z< -1;
+   });
+   // This pulse begins at the receptors: it is neural activity, not a molecule entering the brain.
+   if(phase>3&&phase<5.2){const p=this.neuralPath.getPoint((phase-3)/2.2);this.glow(this.headRoot.localToWorld(p),3.6,.95,'255,202,113');}
+   this.positionPathwayInfo();
   }
   if(this.mode===1||this.mode===2){const net=this.mode===1?(this.state.step===2?this.signalNet:this.relay):this.cortex;for(let i=0;i<net.edges.length;i+=2){const [a,b]=net.edges[i],p=a.clone().lerp(b,(this.time*.5+i*.13)%1);this.glow(net.parent.localToWorld(p),2.5,.8,i%3?'185,161,217':'244,217,161');}}
   // Labels occupy separated margin positions; leaders end at real 3D objects.
   this.labelItems?.forEach(({object,p,el})=>{const [x,y]=this.project(object.localToWorld(p.clone())),box=el.getBoundingClientRect(),r=this.container.getBoundingClientRect(),ex=box.left-r.left+box.width/2,ey=box.bottom-r.top+3;c.strokeStyle='rgba(201,164,101,.42)';c.lineWidth=.8;c.beginPath();c.moveTo(ex,ey);c.lineTo(x,y);c.stroke();c.fillStyle='#c9a465';c.beginPath();c.arc(x,y,2,0,7);c.fill();});
  }
  loop(now){this.frame=requestAnimationFrame(this.loop);if(now-this.drawAt<(this.gpu?28:150))return;const dt=Math.min((now-this.last)/1000,.22);this.last=now;this.drawAt=now;if(document.hidden)return;if(!this.paused)this.advance(dt);if(!this.paused||this.dirty){this.render();this.dirty=false;}}
- dispose(){cancelAnimationFrame(this.frame);this.observer.disconnect();this.controls.dispose();this.renderer.dispose?.();}
+ dispose(){cancelAnimationFrame(this.frame);this.observer.disconnect();this.controls.dispose();this.renderer.dispose?.();this.hotspotLayer.remove();this.info.remove();this.breathBadge.remove();}
 }
