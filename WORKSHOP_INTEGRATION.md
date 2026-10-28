@@ -1,4 +1,4 @@
-# Essentia Scent Studio — natural-face-r7
+# Essentia Scent Studio — studio-palette-r11
 
 ## Integrate into your existing Git repo
 
@@ -15,45 +15,84 @@ cd /home/sarthak/Documents/GitHub/Essentia
 git status --short
 git diff --stat
 git add public/workshop src/App.tsx src/WorkshopMenu.tsx public/atlas/index.html WORKSHOP_INTEGRATION.md
-git commit -m "Update scent workshop illustrations and spray interactions"
+git commit -m "Add today’s palette Atlas, white dress and fuller jasmine"
 git push
 ```
 
-The included script copies the complete `public/workshop/` directory, three navigation files, and this guide. Your existing Git history, working photos/fonts and deployment setup are retained. Use the integration script rather than replacing the entire working repository with the archive's snapshot. No Python launcher is needed; the workshop is served by the existing website at `/workshop/`.
+The script copies `public/workshop/`, the existing navigation changes and this guide. It retains your Git history, working photos/fonts and deployment setup. Use the integration script rather than replacing your working repository with the snapshot. No Python launcher is needed; the studio is served by your website at `/workshop/`.
 
-## Current experience
+## Four workshop chapters
 
-**Breathe.** An opaque full-body visitor walks through the café street toward jasmine climbing the pole. The visitor has no headphones or sunglasses and has a simpler dark hairstyle. The continuous rig, breathing and grounded motion are preserved. A terminal flower cluster sits about 8 cm from the illustrated nose during the sniff; the raised hand supports the cluster from below. Jasmine is modelled with approximately 2 cm blossoms, 20 clusters and 102 flowers, plus smaller pinnate leaflets. Continuous depth-tested particles disperse from every flower; a separate subset moves toward the nose during inhalation. The surrounding sky, clouds, trees and foothills remain.
+1. **How we smell.** The café street and walk/reach/sniff sequence lead into the purple anatomy bust, sensory cells, travelling neural signals and an imagined childhood jasmine memory.
+2. **Scent & memory.** The existing emotion and memory exploration, with today’s eleven materials in the note selector.
+3. **A perfume’s character.** Projection, sillage, longevity and concentration. The scene begins without fragrance; choosing an application area triggers the spray gesture before particles begin. Sparse emissions and the stronger winter/summer contrast remain. The longevity close-up uses an intact hand and wrist.
+4. **Today’s palette.** Three manually selected views: **Globe**, **Body & mind**, and **Note triangle**. Direct entry: `/workshop/#palette/globe`, `/workshop/#palette/body`, `/workshop/#palette/triangle`.
 
-Botanical proportion reference: RHS, *Jasminum officinale*: https://www.rhs.org.uk/plants/9454/jasminum-officinale/details. The illustration uses common jasmine proportions and does not identify the species in the remembered real-world location.
+### Today’s palette
 
-**Detect.** The opaque purple anatomy bust replaces the small full-body figure. A camera move reveals the connected magnified sensory-neuron view: odour particles approach, cilia glow, neurons fire in a staggered pattern, then activity reaches the bulb and schematic cortical target. Labels remain interactive.
+`palette-view.js` reuses the website’s `public/atlas/globe.js` renderer and `core.js` topic definitions. The workshop has its own source layer: eleven materials at ten approximate regional reference points. Cardamom and rose geranium share the Munnar reference. The source menu supports locations that lie close together on the globe. Selecting a pin, region or note updates the workshop material card. No wider catalogue items enter the workshop list.
 
-**Signal.** The purple bust stays for anatomical context. Six sensory axons, a bulb and an onward cortical relay replace the isolated spherical lattice. Visible pulses travel along the paths, gather at the bulb and continue onward. The head also carries a travelling highlight. Moving light beyond the receptors represents neural activity.
+The body view uses the same conceptual Atlas figure. Topic buttons filter only the eleven workshop materials against the existing Atlas study profiles. Notes without appraised connections remain available through “Show all 11”. Existing evidence, limitations and source links can be opened in the material card; records do not establish benefits for the workshop’s specific bottles.
 
-**Perceive.** A firing pattern spreads through the brain's connected network. An imagined memory gradually appears beside it: the younger visitor approaches jasmine in a warm garden corner. The scene gently recedes and repeats; the page never advances by itself. A Replay this memory button restarts this view. The caption identifies it as an imagined childhood scene, not a claim about any real person's memory.
+The interactive triangle contains every material once: two in Top, six in Middle/heart and three in Base. The four opening-to-heart materials have an asterisk and an explicit Top → middle label when selected. Positions are qualitative and overlapping. A triangle selection updates the same material card.
 
-**Projection, Sillage and Longevity.** The perfume chapter begins with no selected or applied fragrance. Selecting Neck, Wrists or Forearms queues an application gesture with a bottle and a short mist. Body emissions start at actuation, after the hand has risen; Clear fragrance removes the application. The selected application carries between the three comparisons. Sillage still starts walking automatically. The particle cloud is substantially lighter, and the summer/winter contrast in early release and spread is larger. Airflow remains a separate control. Season settings are exaggerated qualitative animation settings, not measured performance or a prediction in metres/hours.
+The standalone palette list below the studio has moved into chapter 04. Reflection and memory note selectors still use the same canonical data. The broader Atlas catalogue and its native-range records are retained.
 
-**Skin.** The capped cylinder is replaced by a magnified hand extracted from the same character mesh, with thumb, fingers, palm and wrist. Its forearm fades out toward the edge of the example. Deposits and pores follow actual wrist/palm triangles; the full-body figure and connecting leader provide context. This hand is an illustrative skin example for all application areas. The close-up appears after fragrance has been applied.
+### Visitor and dress
 
-The atlas links, autumn activity, reflection card and concentration comparison are retained. No narration is required.
+The adult visitor wears a fitted, sleeveless ivory-white satin dress with a scoop neckline, shaped waist, fitted hips and a knee-length skirt, plus low cream flats. The dress is a continuous skinned mesh bound to the same skeleton. The source trousers are reshaped into slim calves beneath it; the original rig, hands, reach and spray gestures remain.
 
-## Validation and review status
+The lower face is softened, the mouth corners have a slight smile, and the skin shader adds subtle rose lips and cheek colour. Forehead-fitted brows, preserved eyes and one continuous dark bob remain. Headphones and sunglasses remain removed. The dress and face are shared by the street visitor and perfume wearer, and the smaller memory illustration retains the same character continuity.
 
-- Vite production build, workshop JavaScript syntax and local import paths passed.
-- Accessory removal preserves the skeleton, eyes, eyebrows, UVs and skin weights. Modified body geometry has 10,260 vertices; one continuous skinned hair shell follows the head. The optional asset preparation script is `tools/clean_workshop_character.py`; it takes the original bundled Michelle GLB as input and is not part of normal site startup.
-- A 240-pose check keeps the soles within 4.3 mm of the pavement. The illustrated sniff gap stays below 8.3 cm.
-- A 480-sample check confirms continuous emission from all 102 flowers across two full cycles, without an inhalation.
-- The signal pulses move along their paths; all 55 network nodes fire over the cascade; memory reveal/hide and rig matrices remain valid.
-- The application check confirms no particles before actuation. A seasonal sample produced approximately 19 winter particles and 64–66 summer particles, below the prior cloud density.
-- The magnified hand has 1,422 vertices, five fingers including the thumb, surface-attached samples and a fading proximal forearm. Its geometry was inspected through a local orthographic projection.
+### Fuller jasmine
 
-No browser testing, GPU shader compilation in a browser, full-scene visual verification or publishing was performed. Module, stylesheet and GLB URLs are versioned together as `natural-face-r7`.
+Three climbing canes now sit outside the pole. Ninety-six leafy shoots form a fuller wrap, with over a thousand leaflets at varied angles, 65 clusters and 453 small flowers. Blossom width stays approximately 2 cm; the hero cluster and sniff target stay in place. Leaves near the hero flower leave a small clear space for the nose and hand.
 
+Stems are batched into one mesh and leaves/petals/centres are instanced. All flowers continue emitting scent. The per-flower particle budget, glow size and opacity are adjusted so the denser plant does not produce a proportional explosion of bright particles.
 
-## Face correction
+## Verification
 
-The exposed face now has thin, forehead-fitted eyebrows in place of the source character's large projecting brow bars. The skin shader no longer classifies dark face pixels as hair. Explicit eye and eyebrow surface IDs preserve the eyes' own colour, keep the brows a soft brown and remove the heavy baked eyeliner from the surrounding facial skin. A single closed bob-shaped hair surface replaces the separate cap, open back and tubular side pieces, giving a continuous curved hairline. All previous workshop features are retained.
+- Production build, all workshop JavaScript syntax and relative module paths passed.
+- Four-chapter navigation data, eleven-material filtering, source selection, body-topic filtering and triangle selection passed targeted checks.
+- The triangle includes all eleven materials exactly once, in bands of 2 / 6 / 3.
+- A 240-pose check keeps the soles within 4.5 mm of the pavement and the illustrated sniff gap below 8.2 cm.
+- A 480-frame sample confirms continuous emission from all 453 flowers, including when no inhalation is active.
+- Spray tests confirm no cloud before actuation and approximately 18–19 winter particles versus 63 summer particles in the comparison sample.
+- Travelling signal pulses, all 55 firing network nodes, finite memory transforms and the intact hand close-up still pass.
 
-Front, three-quarter and profile close-ups were inspected through direct local model renders. The 240-pose geometry check still passes: maximum sole deviation 4.3 mm and maximum illustrated sniff gap 8.2 cm. Both eye surfaces (514 vertices) are preserved; the brow height is reduced to about 6.4 mm in model space. No browser or full-scene GPU visual test was performed.
+Front, three-quarter and profile character projections were inspected through direct CPU model renders. No browser testing, full-scene GPU verification or publishing was performed. The studio and runtime URLs use `studio-palette-r11` to refresh the changed modules and character asset.
+
+## This workshop's material palette
+
+The workshop now has one canonical list in `public/workshop/palette.js`. It appears in chapter 04, in the scent-and-memory dropdown and in the autumn reflection card. The list is grouped from the opening toward the base:
+
+| Position | Material | Stated source |
+| --- | --- | --- |
+| Top | Grapefruit | Sicily, Italy — Sunday Natural |
+| Top | Bergamot FCF | Calabria, Italy — Sunday Natural |
+| Top/heart | Elemi Heart | Philippines — Sunday Natural |
+| Top/heart | Lavender | France |
+| Top/heart | Rosewood | Brazil |
+| Top/heart | Cardamom | Munnar Hills, Kerala, India |
+| Heart | Rose geranium | Munnar, Kerala, India |
+| Heart | Jasmine sambac | Kannauj, India |
+| Base | Himalayan cedarwood | Himalayas |
+| Base | Sandalwood | Mysore, India |
+| Base | Vanilla | Madagascar |
+
+This is a qualitative workshop arrangement with overlapping roles, not a measured sequence of evaporation constants. The within-group order is flexible. Cardamom has a fresh opening and a tenacious heart. Elemi Heart's position is provisional for the actual fraction. Jasmine and vanilla preparations and dilutions have not been specified. Rosewood's country is confirmed by the facilitator; botanical identity/plant part still need a bottle label before making species-specific claims.
+
+Spelling assumptions: “Manar Hill / Manar, Kerala” is interpreted as Munnar, Kerala. The spoken bergamot “BCP/BCS free” is matched provisionally to Sunday Natural's bergapten-free/FCF product. These assumptions are recorded in the data's `originBasis` fields so they can be corrected without changing other catalogue records. The botanical atlas retains its own native-range and supplier-catalogue information; the workshop's stated material sources are presented separately. All eleven atlas links resolve the appropriate material in the complete collection.
+
+Verified Sunday Natural listings:
+- Elemi Heart: https://www.sunday.de/elemioel-heart-canarium-luzonicum-philippinen.html
+- Bergamot FCF: https://www.sunday.de/bergamotteoel-citrus-bergamia-bergaptenfrei-bio-italien.html
+- Grapefruit: https://www.sunday.de/grapefruitol-bio.html
+
+Position references, describing example preparations rather than confirming the facilitator's bottles:
+- Cardamom: https://www.edenbotanicals.com/cardamom-organic.html
+- Lavender EO: https://www.edenbotanicals.com/lavender-high-elevation.html
+- Jasmine sambac absolute: https://www.edenbotanicals.com/jasmine-sambac-absolute.html
+- Himalayan cedarwood: https://www.edenbotanicals.com/cedarwood-himalayan.html
+- Vanilla absolute: https://www.edenbotanicals.com/vanilla-absolute.html
+

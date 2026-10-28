@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#100b19">
-  <meta name="description" content="An interactive Essentia Resonance workshop companion. Follow scent from the nose to memory, then explore the character of a perfume at your own pace.">
+  <meta name="description" content="An interactive Essentia Resonance workshop companion. Follow scent from the nose to memory, explore perfume character, and meet today’s eleven materials through the Atlas and a perfume triangle.">
   <title>The Scent Studio · Essentia Resonance</title>
   <link rel="icon" type="image/svg+xml" href="./assets/mark.svg">
-  <link rel="stylesheet" href="./styles.css?v=natural-face-r7">
-  <script type="module" src="./app.js?v=natural-face-r7"></script>
+  <link rel="stylesheet" href="./styles.css?v=studio-palette-r11">
+  <script type="module" src="./app.js?v=studio-palette-r11"></script>
 </head>
 <body>
   <a class="skip-link" href="#studio">Skip to the scent studio</a>
@@ -28,6 +28,7 @@
           <button type="button" data-chapter="0" aria-current="step"><span>01</span> How we smell</button>
           <button type="button" data-chapter="1"><span>02</span> Scent & memory</button>
           <button type="button" data-chapter="2"><span>03</span> A perfume’s character</button>
+          <button type="button" data-chapter="3"><span>04</span> Today’s palette</button>
         </nav>
         <button type="button" class="text-button view-button" id="presentation" aria-label="Workshop view" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg><span>Workshop view</span></button>
       </div>
@@ -37,7 +38,8 @@
           <div id="scene" role="img" aria-label="A cutaway head showing scent molecules entering the nose and sensory neurons connecting to the olfactory bulb."></div>
           <div class="diagram-fallback" id="fallback" hidden></div>
           <div class="labels" id="labels" aria-hidden="true"></div>
-          <div class="scene-bottom"><span class="legend"><i class="gold-dot"></i><span id="legend-gold">Scent molecules</span><i class="violet-dot"></i><span id="legend-purple">Olfactory system</span></span><span class="conceptual">Illustrative · not to scale</span></div>
+          <div class="today-view" id="palette-view" hidden></div>
+          <div class="scene-bottom"><span class="legend"><i class="gold-dot"></i><span id="legend-gold">Scent molecules</span><i class="violet-dot"></i><span id="legend-purple">Olfactory system</span></span><span class="conceptual" id="scene-concept">Illustrative · not to scale</span></div>
         </div>
         <aside class="explanation" aria-label="Current workshop step">
           <div class="step-heading"><p class="eyebrow" id="chapter-title">THE SENSE OF SMELL</p><span id="step-counter">01 / 04</span></div>
@@ -58,7 +60,7 @@
 <section class="autumn-workshop" aria-labelledby="autumn-title">
  <div class="autumn-heading"><p class="eyebrow">FROM UNDERSTANDING TO SELF-EXPRESSION</p><h2 id="autumn-title">If autumn had a scent,<br><em>what would yours smell like?</em></h2><p>Smell the materials in front of you. Let a word, colour, texture or feeling lead you. A note has no single correct meaning.</p></div>
  <div class="workshop-prompts"><article><span>01 · DISCOVER</span><h3>Meet a note.</h3><p>Choose one of the workshop materials. Smell gently from a blotter. Notice it before trying to name it.</p><a href="../atlas/">Find its story in the atlas ↗</a></article><article><span>02 · INTERPRET</span><h3>Follow a feeling.</h3><p>Does it feel crisp, soft, warm, distant—or something else? A memory is welcome; no memory is equally welcome.</p></article><article><span>03 · CREATE</span><h3>Make it yours.</h3><p>Use your impressions to guide your scent with the workshop facilitator. Give your creation a name, a colour, or a few words.</p></article><article><span>04 · CONNECT</span><h3>Share, if you wish.</h3><p>Compare interpretations without ranking them. You can share a word, tell a story, or keep your experience private.</p></article></div>
- <form id="reflection-form" class="reflection" autocomplete="off"><div><p class="eyebrow">YOUR PERSONAL SCENT CARD</p><h3>A few things you noticed.</h3><p>Optional. Notes stay in this browser on this device. On a shared workshop device, download them and clear the form before leaving.</p></div><div class="reflection-fields"><label for="autumn-note">The note I explored</label><select id="autumn-note"><option value="">Choose a workshop note…</option><option>Vanilla</option><option>Lavender</option><option>Balsam fir</option><option>Sandalwood</option><option>Cedarwood</option><option>Bergamot</option><option>Cardamom</option><option>Pink pepper</option><option>Jasmine</option><option>Rosewood</option><option>Geranium</option></select><label for="autumn-words">A colour, texture or feeling</label><input id="autumn-words" maxlength="240" placeholder="In your own words"><label for="autumn-memory">An association, if one comes to mind</label><textarea id="autumn-memory" rows="3" maxlength="1600" placeholder="A place, a moment—or simply what you notice"></textarea><label for="autumn-name">A name for my autumn scent</label><input id="autumn-name" maxlength="160"><div class="reflection-actions"><button type="button" class="outline-link" id="download-reflection">Download my scent card ↓</button><button type="button" class="text-button" id="clear-reflection">Clear my notes</button></div><p id="reflection-status" role="status"></p></div></form>
+ <form id="reflection-form" class="reflection" autocomplete="off"><div><p class="eyebrow">YOUR PERSONAL SCENT CARD</p><h3>A few things you noticed.</h3><p>Optional. Notes stay in this browser on this device. On a shared workshop device, download them and clear the form before leaving.</p></div><div class="reflection-fields"><label for="autumn-note">The note I explored</label><select id="autumn-note"><option value="">Choose a workshop note…</option><option>Grapefruit</option><option>Bergamot FCF</option><option>Elemi Heart</option><option>Lavender</option><option>Rosewood</option><option>Cardamom</option><option>Rose geranium</option><option>Jasmine sambac</option><option>Himalayan cedarwood</option><option>Sandalwood</option><option>Vanilla</option></select><label for="autumn-words">A colour, texture or feeling</label><input id="autumn-words" maxlength="240" placeholder="In your own words"><label for="autumn-memory">An association, if one comes to mind</label><textarea id="autumn-memory" rows="3" maxlength="1600" placeholder="A place, a moment—or simply what you notice"></textarea><label for="autumn-name">A name for my autumn scent</label><input id="autumn-name" maxlength="160"><div class="reflection-actions"><button type="button" class="outline-link" id="download-reflection">Download my scent card ↓</button><button type="button" class="text-button" id="clear-reflection">Clear my notes</button></div><p id="reflection-status" role="status"></p></div></form>
 </section>
     <section class="atlas-invitation" aria-labelledby="atlas-title"><div class="atlas-orbit" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="29"/><ellipse cx="50" cy="50" rx="13" ry="29"/><path d="M21 50h58M25 36h50M25 64h50"/><ellipse cx="50" cy="50" rx="46" ry="14" transform="rotate(-28 50 50)"/><circle cx="87" cy="27" r="2"/></svg></div><div><p class="eyebrow">CONTINUE THE EXPLORATION</p><h2>Every note has <em>a story.</em></h2><p>Meet the materials, places and traditions behind the scents in your workshop.</p></div><a class="outline-link" href="../atlas/">Explore the atlas <span aria-hidden="true">↗</span></a></section>
     <footer class="page-footer"><span>ESSENTIA <b>RESONANCE</b></span><p>Pause. Smell. Discover.</p><button type="button" class="text-button" id="sources-open">Sources & illustration notes <span aria-hidden="true">↗</span></button></footer>

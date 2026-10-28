@@ -1,2 +1,1 @@
-natural-face-r7
-Face correction: thin forehead-fitted brows, separate eye/brow/skin regions, no face-to-hair colour remapping, and one continuous curved hair shell. Front/three-quarter/profile direct model close-ups inspected. Build, syntax/import and 240-pose checks passed. All previous workshop-r6 functionality retained. No browser testing or publishing.
+studio-palette-r11

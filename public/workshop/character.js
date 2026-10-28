@@ -1,4 +1,5 @@
 import * as T from '../atlas/assets/three.module.js';
+import {addWhiteDress} from './outfit.js?v=studio-palette-r11';
 
 export function addSoftHair(model){
  if(model.userData.workshopHairStyle==='soft-side-part-r7')return;
@@ -32,17 +33,20 @@ export function addSoftHair(model){
 // detail and continuous mesh; change the skin, hair and clothing palette.
 export function styleWorkshopVisitor(model){
  addSoftHair(model);
+ addWhiteDress(model);
  model.traverse(mesh=>{
-  if(!mesh.isMesh||mesh.userData.workshopHair)return;
-  const region=mesh.geometry.getAttribute('_visitor_region');if(region)mesh.geometry.setAttribute('visitorRegion',region);else if(!mesh.geometry.getAttribute('visitorRegion'))mesh.geometry.setAttribute('visitorRegion',new T.Float32BufferAttribute(new Float32Array(mesh.geometry.attributes.position.count),1));
+  if(!mesh.isMesh||mesh.userData.workshopHair||mesh.userData.workshopDress)return;
+  const region=mesh.geometry.getAttribute('_visitor_region'),count=mesh.geometry.attributes.position.count,neckline=new Float32Array(count),categories=new Float32Array(count);
+  for(let i=0;i<count;i++){const value=region?region.getX(i):0;categories[i]=value>4.5?0:value;neckline[i]=value>4.5?1:0;}
+  mesh.geometry.setAttribute('visitorRegion',new T.Float32BufferAttribute(categories,1));mesh.geometry.setAttribute('visitorSkin',new T.Float32BufferAttribute(neckline,1));
   const source=Array.isArray(mesh.material)?mesh.material:[mesh.material];
   const styled=source.map(original=>{
    const mat=original.clone();mat.roughness=.86;mat.metalness=0;
    if(mat.specularIntensity!==undefined)mat.specularIntensity=.18;
    mat.onBeforeCompile=shader=>{
-    shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nattribute float visitorRegion;\nvarying float vVisitorRegion;\nvarying vec3 vVisitorBindPosition;');
-    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvVisitorBindPosition = position;\nvVisitorRegion = visitorRegion;');
-    shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying float vVisitorRegion;\nvarying vec3 vVisitorBindPosition;');
+    shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nattribute float visitorRegion;\nattribute float visitorSkin;\nvarying float vVisitorRegion;\nvarying float vVisitorSkin;\nvarying vec3 vVisitorBindPosition;');
+    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvVisitorBindPosition = position;\nvVisitorRegion = visitorRegion;\nvVisitorSkin = visitorSkin;');
+    shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying float vVisitorRegion;\nvarying float vVisitorSkin;\nvarying vec3 vVisitorBindPosition;');
     shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
      // Values are linear RGB after the original colour texture is sampled.
      vec3 originalPalette = diffuseColor.rgb;
@@ -56,28 +60,42 @@ export function styleWorkshopVisitor(model){
      diffuseColor.rgb = mix(diffuseColor.rgb, oliveSkin, skin);
      float yellowFabric = step(.44, originalPalette.r) * step(.40, originalPalette.g)
        * (1.0-step(.24, originalPalette.b));
-     diffuseColor.rgb = mix(diffuseColor.rgb, vec3(.19,.265,.22)
-       * clamp(originalPalette.g * 1.25,.55,1.15),yellowFabric);
+     diffuseColor.rgb = mix(diffuseColor.rgb, vec3(.91,.89,.84)
+       * clamp(originalPalette.g * .8+.38,.72,1.0),yellowFabric);
      float darkCloth = (1.0-step(.043,max(originalPalette.r,max(originalPalette.g,originalPalette.b))))
        * smoothstep(.65,.92,y) * (1.0-smoothstep(1.34,1.43,y)) * (1.0-skin);
-     diffuseColor.rgb = mix(diffuseColor.rgb,vec3(.27,.24,.21)
-       * clamp(dot(originalPalette,vec3(.3,.6,.1))*22.0+.5,.5,1.0),darkCloth);
+     diffuseColor.rgb = mix(diffuseColor.rgb,vec3(.91,.89,.84)
+       * clamp(dot(originalPalette,vec3(.3,.6,.1))*8.0+.78,.78,1.0),darkCloth);
+     float necklineFabric=(1.0-skin)*smoothstep(.98,1.01,y)
+       *(1.0-smoothstep(1.27,1.30,y))
+       *(1.0-smoothstep(.12,.145,abs(vVisitorBindPosition.x)));
+     diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.91,.89,.84),necklineFabric);
      // The skin, eyeballs and brows have separate semantic regions. Never
      // treat a dark eye, eyeliner pixel or facial shadow as a patch of hair.
      float upperFace = smoothstep(1.395,1.425,y)
        * smoothstep(.015,.045,vVisitorBindPosition.z);
      float naturalFaceShade = clamp(dot(originalPalette,vec3(.28,.57,.15))*1.4+.70,.72,.94);
      diffuseColor.rgb = mix(diffuseColor.rgb,vec3(.61,.385,.235)*naturalFaceShade,upperFace);
+     float cheek = exp(-pow((abs(vVisitorBindPosition.x)-.050)/.021,2.0)
+       -pow((y-1.424)/.019,2.0))*smoothstep(.045,.073,vVisitorBindPosition.z);
+     diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.63,.325,.245),cheek*.10);
+     float lip = (1.0-smoothstep(.025,.033,abs(vVisitorBindPosition.x)))
+       *(1.0-smoothstep(.0035,.0075,abs(y-1.403)))
+       *smoothstep(.077,.090,vVisitorBindPosition.z);
+     diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.38,.115,.105),lip*.83);
      if(vVisitorRegion>.5 && vVisitorRegion<1.5){
       float whitePart = smoothstep(.26,.65,dot(originalPalette,vec3(.28,.57,.15)));
       diffuseColor.rgb = mix(originalPalette,vec3(.78,.76,.70),whitePart*.28);
      }
-     if(vVisitorRegion>1.5){diffuseColor.rgb=vec3(.065,.034,.020);}
+     if(vVisitorRegion>1.5 && vVisitorRegion<2.5){diffuseColor.rgb=vec3(.065,.034,.020);}
+     if(vVisitorRegion>2.5 && vVisitorRegion<3.5){diffuseColor.rgb=vec3(.61,.385,.235)*.85;}
+     if(vVisitorRegion>3.5 && vVisitorRegion<4.5){diffuseColor.rgb=vec3(.88,.85,.79);}
+     diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.61,.385,.235)*.85,vVisitorSkin);
 
     `);
    };
-   mat.customProgramCacheKey=()=> 'essentia-natural-face-r7';
-   mat.userData.workshopPalette='warm olive skin, dark brown hair, stone knit and sage clothing';
+   mat.customProgramCacheKey=()=> 'essentia-white-dress-r11';
+   mat.userData.workshopPalette='warm olive skin, rose lips, dark brown bob, fitted ivory dress and cream flats';
    return mat;
   });
   mesh.material=Array.isArray(mesh.material)?styled:styled[0];

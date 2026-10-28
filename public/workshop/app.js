@@ -1,4 +1,6 @@
-import { fallbackIllustration } from './illustration.js?v=natural-face-r7';
+import {WORKSHOP_MATERIALS,PALETTE_NOTE,materialAtlasURL} from './palette.js?v=studio-palette-r11';
+import {TodayPalette} from './palette-view.js?v=studio-palette-r11';
+import { fallbackIllustration } from './illustration.js?v=studio-palette-r11';
 const $=id=>document.getElementById(id);
 const chapters=[
   {slug:'smell',name:'THE SENSE OF SMELL',scene:'THE OLFACTORY PATHWAY',type:'A breath in the Himalayas',legend:['Scent molecules','Olfactory system'],steps:[
@@ -17,11 +19,17 @@ const chapters=[
     {slug:'sillage',label:'Sillage',title:'What lingers<br>as you pass?',description:'Sillage is the scent trail left in the air as someone moves. The cloud already around your body stays in the room as you walk. The wearer begins walking here, turning that same cloud into a trailing wake. Try changing the application areas below.',takeaway:'Projection surrounds you. Sillage follows your passage.',detail:'<p>Walking disturbs the air around the body, creating a wake that can carry fragrance. Room ventilation and the material’s detectability also affect the trail.</p><p>A perfume can be long-lasting without a large trail. Sillage and longevity describe different aspects of a fragrance.</p>'},
     {slug:'longevity',label:'Longevity',title:'How long does<br>the scent remain?',description:'Longevity is how long a fragrance remains detectable. Apply fragrance to begin, then explore the hand and wrist as a magnified skin example. Move through time to see the deposit fade and compare material persistence.',takeaway:'Longevity is duration. It is not the same as loudness.',detail:'<p>Detectability depends on evaporation, the formula, absorption and retention on the surface, dose and the observer’s sensitivity. Materials also change in relative prominence as a fragrance develops.</p><p>The time slider is qualitative. It does not assign guaranteed hours to citrus, florals, woods or musks, and it does not predict your own perfume’s wear.</p>'},
     {slug:'concentration',label:'Concentration',title:'What is inside<br>the bottle?',description:'Concentration is the proportion of fragrance concentrate in the finished product. Labels offer a useful starting point, but the formula matters as much as the percentage.',takeaway:'A higher percentage does not, by itself, promise greater projection or a fixed wear time.',detail:'<p>IFRA describes typical, overlapping ranges for ethanol-based products: cologne 3–8%, eau de toilette 5–15%, eau de parfum 10–20%, and extrait 15–40%. These are industry conventions, not internationally fixed definitions.</p><p>The bottles show illustrative examples within those ranges. Concentrate is a blend of aromatic materials, not necessarily a carrier oil. Products with the same name can also differ in formulation across concentrations.</p>'}
+  ]},
+  {slug:'palette',name:'TODAY’S PALETTE',scene:'ELEVEN NOTES · A WORLD OF SCENT',type:'The Atlas · workshop sources',legend:['Workshop sources','Selected source'],steps:[
+    {slug:'globe',label:'Globe',title:'Today’s notes.<br>A world of origins.',description:'Explore the same Atlas globe with only the eleven materials in this workshop. Choose a point, a source from the menu, or a note to discover where this material comes from.',takeaway:'Every material brings a place, a character and a possibility.',detail:'<p>The pins show approximate reference points for the stated sources of this workshop’s materials. They do not identify individual farms or botanical native ranges.</p><p>“Manar” is interpreted as Munnar, Kerala. The Elemi Heart, bergamot FCF and grapefruit sources follow their Sunday Natural listings. Himalayan cedarwood is kept at regional level.</p>'},
+    {slug:'body',label:'Body & mind',title:'A scent.<br>A human connection.',description:'Explore the Atlas body-and-mind figure with today’s materials. Choose a topic to see which of these notes have linked Atlas research, then open a material’s context.',takeaway:'A research connection is a starting point for curiosity, not a promise of a particular effect.',detail:'<p>The topic links and evidence text come from the existing Atlas. Only records associated with today’s eleven materials are available here. Materials without an appraised topic connection remain in the palette.</p><p>Studies concern specific preparations and routes of use. They do not test these workshop bottles, and a link to a topic does not establish a therapeutic benefit.</p>'},
+    {slug:'triangle',label:'Note triangle',title:'An opening.<br>A heart. A foundation.',description:'See all eleven notes in a perfume triangle. Top notes introduce the scent, middle notes shape its character, and base notes support the dry-down. Select any note to explore its role.',takeaway:'A perfume unfolds through overlapping notes; its character comes from how they meet.',detail:'<p>'+PALETTE_NOTE+'</p><p>Elemi Heart, lavender, rosewood and cardamom are placed in the middle band and marked with an asterisk because they also bridge the opening. Jasmine and vanilla preparations can change their development; smell the actual materials on blotters.</p>'}
   ]}
 ];
 
 const defaults={chapter:0,step:0,weather:'temperate',airflow:0,movement:false,age:0,material:'balanced',concentration:20,sites:[],doseMode:'fixed',skinZoom:true};
-let state={...defaults};let scene=null,failed=false,paused=matchMedia('(prefers-reduced-motion: reduce)').matches,presenting=false,materials=[];
+let state={...defaults};let scene=null,failed=false,paused=matchMedia('(prefers-reduced-motion: reduce)').matches,presenting=false,materials=WORKSHOP_MATERIALS;
+const today=new TodayPalette($('palette-view'),()=>{if(state.chapter===3)renderControls();});
 function escapeHTML(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function readHash(){const parts=location.hash.slice(1).split('/'),chapter=chapters.findIndex(c=>c.slug===parts[0]);if(chapter>=0){state.chapter=chapter;const step=chapters[chapter].steps.findIndex(s=>s.slug===parts[1]);state.step=Math.max(0,step);if(state.chapter===2&&state.step===1)state.movement=true;}}
 function setAddress(){const c=chapters[state.chapter];const hash='#'+c.slug+'/'+c.steps[state.step].slug;history.replaceState(null,'',location.pathname+location.search+hash);}
@@ -30,39 +38,53 @@ function next(){const c=chapters[state.chapter];if(state.step<c.steps.length-1)s
 function previous(){if(state.step>0)setStep(state.chapter,state.step-1);else if(state.chapter>0)setStep(state.chapter-1,chapters[state.chapter-1].steps.length-1);}
 function segmented(group,items,current){return '<div class="segmented" role="group" aria-label="'+escapeHTML(group)+'">'+items.map(([key,label])=>'<button type="button" data-setting="'+group+'" data-value="'+key+'" aria-pressed="'+(String(current)===String(key))+'">'+label+'</button>').join('')+'</div>';}
 function weatherControl(){return '<div class="control-row"><p class="control-label"><span>Explore the seasons</span><span id="weather-name">'+({winter:'Cooler',temperate:'Mild',summer:'Warmer'}[state.weather])+'</span></p>'+segmented('weather',[['winter','Winter'],['temperate','Mild'],['summer','Summer']],state.weather)+'</div>';}
+function renderWorkshopPalette(){
+ const select=$('autumn-note');if(select){const selected=select.value;select.innerHTML='<option value="">Choose a workshop note…</option>'+materials.map(m=>'<option>'+escapeHTML(m.name)+'</option>').join('');if(materials.some(m=>m.name===selected))select.value=selected;}
+}
 function renderControls(){
+  const focused=document.activeElement,focusNote=$('controls').contains(focused)?focused.dataset.paletteNote:null,focusAll=$('controls').contains(focused)&&focused.hasAttribute('data-palette-all');
   let html='';
   if(state.chapter===1&&state.step===2){
-    html='<div class="control-row"><label class="control-label" for="material-select">A note from the atlas</label><select class="note-selection" id="material-select"><option value="">Choose a material…</option>'+materials.map(m=>'<option value="'+escapeHTML(m.id)+'"'+(state.noteId===m.id?' selected':'')+'>'+escapeHTML(m.name)+'</option>').join('')+'</select><a class="note-link" id="material-link" href="../atlas/">Meet this material in the atlas ↗</a></div>';
+    html='<div class="control-row"><label class="control-label" for="material-select">A note from this workshop</label><select class="note-selection" id="material-select"><option value="">Choose a material…</option>'+materials.map(m=>'<option value="'+escapeHTML(m.id)+'"'+(state.noteId===m.id?' selected':'')+'>'+escapeHTML(m.name)+' · '+escapeHTML(m.origin)+'</option>').join('')+'</select><a class="note-link" id="material-link" href="../atlas/">Meet this material in the atlas ↗</a></div>';
   }
   if(state.chapter===2&&state.step===0){html=weatherControl()+'<div class="control-row"><label class="control-label" for="airflow"><span>Air movement</span><span id="airflow-value">'+(state.airflow<20?'Still':state.airflow<65?'Gentle':'Breezy')+'</span></label><input class="slider" id="airflow" type="range" min="0" max="100" step="1" value="'+state.airflow+'" aria-label="Air movement"><div class="range-labels"><span>Still</span><span>Breezy</span></div></div><p class="small-note">The summer/winter contrast is exaggerated for teaching. Airflow remains a separate influence.</p>';}
   if(state.chapter===2&&state.step===1){html='<div class="control-row"><p class="control-label">The wearer</p>'+segmented('movement',[['false','Standing'],['true','Walking']],state.movement)+'</div>'+weatherControl();}
   if(state.chapter===2&&state.step===2){html='<div class="control-row"><label class="control-label" for="elapsed"><span>Move through time</span><span id="time-value">'+timeLabel()+'</span></label><input class="slider" id="elapsed" type="range" min="0" max="100" step="1" value="'+state.age+'" aria-label="Elapsed time, earlier to later"><div class="range-labels"><span>Earlier</span><span>Later</span></div></div><div class="control-row"><p class="control-label">Compare material behaviour</p>'+segmented('material',[['bright','Faster fading'],['balanced','Balanced'],['lasting','More persistent']],state.material)+'</div><p class="small-note">A teaching comparison, without a fixed number of hours.</p>';}
   if(state.chapter===2&&state.step===3){html='<div class="control-row"><p class="control-label"><span>Select an example</span><span id="concentration-value">'+state.concentration+'% concentrate</span></p>'+segmented('concentration',[[5,'Cologne'],[10,'EDT'],[20,'EDP'],[30,'Extrait']],state.concentration)+'</div><p class="small-note">Equal finished volumes. Gold shows 5%, 10%, 20% or 30% concentrate; lavender shows the rest. Components are separated for comparison only—they are mixed in perfume.</p>';}
   if(state.chapter===2&&state.step<=2)html+=sprayControls();
+  if(state.chapter===3)html=today.controlsHTML();
   $('controls').innerHTML=html;updateMaterialLink();
+  if(focusNote)$('controls').querySelector('[data-palette-note="'+focusNote+'"]')?.focus({preventScroll:true});
+  else if(focusAll)$('controls').querySelector('[data-palette-all]')?.focus({preventScroll:true});
 }
 function sprayControls(){
  const n=state.sites.length,more=state.doseMode==='per-area';
  return '<div class="spray-controls"><p class="control-label">Choose an area to spray</p><div class="site-options" role="group" aria-label="Application areas">'+[['neck','Neck'],['wrists','Wrists'],['forearms','Forearms']].map(([v,l])=>'<button type="button" data-site="'+v+'" aria-pressed="'+state.sites.includes(v)+'">'+l+'</button>').join('')+'</div><p class="small-note">'+(n?'Click another area to apply there.':'No fragrance applied. Click an area to watch her spray.')+'</p><button type="button" class="clear-fragrance" data-clear-fragrance>Clear fragrance</button><p class="control-label">Compare fairly</p>'+segmented('doseMode',[['fixed','Same total amount'],['per-area','More at each area']],state.doseMode)+(state.step===2?'<div class="skin-view-control">'+segmented('skinZoom',[['true','Skin close-up'],['false','Body view']],state.skinZoom)+'</div>':'')+'<div class="spray-comparison" aria-live="polite"><p><b>Projection</b><span>'+(!n?'Apply fragrance to begin.':n>1?'Release from several places; more exposed surface can change the early cloud.':'A cloud from one application zone.')+'</span></p><p><b>Sillage</b><span>'+(!n?'No scent trail until fragrance is applied.':n>1?'Several moving sources feed the wake as you pass.':'The wake is fed from the selected zone.')+'</span></p><p><b>Longevity</b><span>'+(!n?'Choose an area to start the skin comparison.':more&&n>1?'More total fragrance is deposited; duration still depends on the formula and skin.':n>1?'The same amount is spread more thinly; longer wear is not guaranteed.':'Watch the deposit change through time.')+'</span></p></div><p class="small-note">Conceptual comparison, not a spray-count recommendation. Body site changes movement and air exposure; no site guarantees longer wear. '+(more&&n>1?'This mode increases total dose.':'The total dose stays fixed in this mode.')+'</p></div>';
 }
 function timeLabel(){return state.age<15?'Freshly applied':state.age<55?'Developing':'Later drydown';}
-function updateMaterialLink(){const m=materials.find(m=>m.id===state.noteId);const link=$('material-link');if(link){link.href=m?'../atlas/#plant='+encodeURIComponent(m.id)+'&view=world':'../atlas/';link.textContent=m?'Explore '+m.name+' in the atlas ↗':'Browse the materials in the atlas ↗';}}
+function updateMaterialLink(){const m=materials.find(m=>m.id===state.noteId);const link=$('material-link');if(link){link.href=m?materialAtlasURL(m):'../atlas/';link.textContent=m?'Explore '+m.name+' in the atlas ↗':'Browse the materials in the atlas ↗';}}
 function render(){
   const c=chapters[state.chapter],s=c.steps[state.step];
   document.querySelectorAll('[data-chapter]').forEach(b=>{if(Number(b.dataset.chapter)===state.chapter)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');});
-  $('chapter-title').textContent=c.name;$('scene-title').textContent=c.scene;$('scene-type').textContent=failed?'Illustrated view':state.chapter===0?['A breath in the Himalayas','Anatomy → magnified sensory tissue','A travelling electrical signal','Neural activity → an imagined memory'][state.step]:c.type;
-  $('legend-gold').textContent=c.legend[0];$('legend-purple').textContent=c.legend[1];
+  $('chapter-title').textContent=c.name;$('scene-title').textContent=c.scene;$('scene-type').textContent=state.chapter===3?['The Atlas · workshop sources','The Atlas · research connections','Top · middle · base'][state.step]:failed?'Illustrated view':state.chapter===0?['A breath in the Himalayas','Anatomy → magnified sensory tissue','A travelling electrical signal','Neural activity → an imagined memory'][state.step]:c.type;
+  const legend=state.chapter===3&&state.step===1?['Atlas research topics','Body & mind']:state.chapter===3&&state.step===2?['Note positions','Overlapping roles']:c.legend;
+  $('legend-gold').textContent=legend[0];$('legend-purple').textContent=legend[1];$('scene-concept').textContent=state.chapter===3?(state.step===0?'Regional reference points':state.step===1?'Connections, in context':'Qualitative · overlapping roles'):'Illustrative · not to scale';
   $('step-counter').textContent=String(state.step+1).padStart(2,'0')+' / '+String(c.steps.length).padStart(2,'0');
   $('step-title').innerHTML=s.title.replace('<br>','<br> ');$('step-description').textContent=s.description;$('takeaway').textContent=s.takeaway;$('detail-content').innerHTML=s.detail;$('learn-more').open=false;
   $('step-pills').innerHTML=c.steps.map((step,i)=>'<button type="button" data-step="'+i+'" aria-pressed="'+(i===state.step)+'">'+step.label+'</button>').join('');
   $('previous').disabled=state.chapter===0&&state.step===0;
-  const lastInChapter=state.step===c.steps.length-1,final=state.chapter===2&&lastInChapter;
+  const lastInChapter=state.step===c.steps.length-1,final=state.chapter===chapters.length-1&&lastInChapter;
   $('next').firstElementChild.textContent=final?'Begin again':lastInChapter?'Next chapter':state.chapter===0&&state.step===0?'Follow the scent':'Next idea';
   $('scene').setAttribute('aria-label',s.description+' '+s.takeaway);
-  renderControls();scene?.update(state);if(failed)renderFallback();
+  syncVisual();renderControls();if(failed)renderFallback();
   $('announcement').textContent='Chapter '+(state.chapter+1)+', '+s.label+'. '+s.description;
   document.title=c.steps[state.step].label+' · The Scent Studio · Essentia Resonance';
+}
+function syncVisual(){
+ const palette=state.chapter===3;$('studio').classList.toggle('palette-chapter',palette);$('visual').classList.toggle('today-visual',palette);
+ $('scene').hidden=palette||failed;$('labels').hidden=palette||failed;$('fallback').hidden=palette||!failed;
+ today.setVisible(palette);if(palette)today.setView(state.step);today.setPaused(paused);
+ scene?.setPaused(paused||palette);if(!palette)scene?.update(state);
 }
 function updateSetting(name,value){
   if(name==='movement')state.movement=value==='true';else if(name==='concentration')state.concentration=Number(value);else if(name==='skinZoom')state.skinZoom=value==='true';else if(['weather','material','doseMode'].includes(name))state[name]=value;else return;
@@ -72,9 +94,10 @@ function updateSetting(name,value){
   if(name==='doseMode'||name==='skinZoom')renderControls();
   scene?.update(state);if(failed)renderFallback();
 }
-function setPaused(value){paused=value;scene?.setPaused(paused);const svg=$('fallback').querySelector('svg');if(svg){if(paused)svg.pauseAnimations();else svg.unpauseAnimations();}$('motion').setAttribute('aria-pressed',String(paused));$('motion').querySelector('span').textContent=paused?'Resume motion':'Pause motion';$('motion-icon').innerHTML=paused?'<path d="m8 5 11 7-11 7z"/>':'<path d="M9 5v14M15 5v14"/>';}
+function setPaused(value){paused=value;scene?.setPaused(paused||state.chapter===3);today.setPaused(paused);const svg=$('fallback').querySelector('svg');if(svg){if(paused)svg.pauseAnimations();else svg.unpauseAnimations();}$('motion').setAttribute('aria-pressed',String(paused));$('motion').querySelector('span').textContent=paused?'Resume motion':'Pause motion';$('motion-icon').innerHTML=paused?'<path d="m8 5 11 7-11 7z"/>':'<path d="M9 5v14M15 5v14"/>';}
 function setPresenting(value){presenting=value;$('studio').classList.toggle('presenting',value);document.body.classList.toggle('presenting',value);$('presentation').setAttribute('aria-pressed',String(value));$('presentation').setAttribute('aria-label',value?'Exit workshop view':'Workshop view');$('presentation').querySelector('span').textContent=value?'Exit workshop view':'Workshop view';$('announcement').textContent=value?'Workshop view opened. Press Escape to leave.':'Workshop view closed.';}
 function renderFallback(){
+  if(state.chapter===3)return;
   $('fallback').innerHTML=fallbackIllustration(state);
   $('fallback').setAttribute('role','img');
   $('fallback').setAttribute('aria-label',chapters[state.chapter].steps[state.step].description);
@@ -82,11 +105,12 @@ function renderFallback(){
   svg.setCurrentTime(2.5);
   if(paused)svg.pauseAnimations();
 }
-function useFallback(){failed=true;$('scene').hidden=true;$('labels').hidden=true;$('fallback').hidden=false;$('scene-type').textContent='Illustrated view';renderFallback();}
+function useFallback(){failed=true;$('scene').hidden=true;$('labels').hidden=true;$('fallback').hidden=state.chapter===3;if(state.chapter!==3)$('scene-type').textContent='Illustrated view';renderFallback();}
 
 document.querySelectorAll('[data-chapter]').forEach(b=>b.addEventListener('click',()=>setStep(Number(b.dataset.chapter),0)));
 $('step-pills').addEventListener('click',e=>{const b=e.target.closest('[data-step]');if(b)setStep(state.chapter,Number(b.dataset.step));});
 $('controls').addEventListener('click',e=>{
+ if(state.chapter===3){const note=e.target.closest('[data-palette-note]');if(note)today.selectNote(note.dataset.paletteNote);else if(e.target.closest('[data-palette-all]'))today.clearFilter();return;}
  if(e.target.closest('[data-clear-fragrance]')){state.sites=[];renderControls();scene?.update(state);if(failed)renderFallback();return;}
  const site=e.target.closest('[data-site]');if(site){const key=site.dataset.site,adding=!state.sites.includes(key);state.sites=adding?[...state.sites,key]:state.sites.filter(x=>x!==key);renderControls();scene?.update(state);if(adding)scene?.spraySite(key);if(failed)renderFallback();return;}
  const b=e.target.closest('[data-setting]');if(b)updateSetting(b.dataset.setting,b.dataset.value);
@@ -94,16 +118,15 @@ $('controls').addEventListener('click',e=>{
 $('controls').addEventListener('input',e=>{if(e.target.id==='airflow'){state.airflow=Number(e.target.value);$('airflow-value').textContent=state.airflow<20?'Still':state.airflow<65?'Gentle':'Breezy';}else if(e.target.id==='elapsed'){state.age=Number(e.target.value);$('time-value').textContent=timeLabel();}else return;scene?.update(state);if(failed)renderFallback();});
 $('controls').addEventListener('change',e=>{if(e.target.id==='material-select'){state.noteId=e.target.value;updateMaterialLink();}});
 $('next').addEventListener('click',next);$('previous').addEventListener('click',previous);$('motion').addEventListener('click',()=>setPaused(!paused));
-$('reset').addEventListener('click',()=>{state={...defaults};scene?.resetTime();setAddress();setPaused(matchMedia('(prefers-reduced-motion: reduce)').matches);render();});
+$('reset').addEventListener('click',()=>{state={...defaults};today.reset();scene?.resetTime();setAddress();setPaused(matchMedia('(prefers-reduced-motion: reduce)').matches);render();});
 $('presentation').addEventListener('click',()=>setPresenting(!presenting));
 $('sources-open').addEventListener('click',()=>$('sources').showModal());$('sources-close').addEventListener('click',()=>$('sources').close());$('sources').addEventListener('click',e=>{if(e.target===$('sources')){const r=$('sources').getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)$('sources').close();}});
-document.addEventListener('keydown',e=>{if($('sources').open)return;if(e.key==='Escape'&&presenting){setPresenting(false);$('presentation').focus();return;}if(e.altKey||e.ctrlKey||e.metaKey||e.target.closest('input,select,textarea,summary,a,[contenteditable]'))return;if(e.key==='ArrowRight'){e.preventDefault();next();}if(e.key==='ArrowLeft'){e.preventDefault();previous();}if(e.code==='Space'&&!e.target.closest('button')){e.preventDefault();setPaused(!paused);}});
+document.addEventListener('keydown',e=>{if(e.defaultPrevented||$('sources').open)return;if(e.key==='Escape'&&presenting){setPresenting(false);$('presentation').focus();return;}if(e.altKey||e.ctrlKey||e.metaKey||e.target.closest('input,select,textarea,summary,a,[role=button],[contenteditable]'))return;if(e.key==='ArrowRight'){e.preventDefault();next();}if(e.key==='ArrowLeft'){e.preventDefault();previous();}if(e.code==='Space'&&!e.target.closest('button')){e.preventDefault();setPaused(!paused);}});
 window.addEventListener('hashchange',()=>{readHash();render();});
 matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',e=>setPaused(e.matches));
-readHash();render();setPaused(paused);
-try{const module=await import('./scene.js?v=natural-face-r7');scene=new module.ScentScene($('scene'),$('labels'),useFallback);scene.setPaused(paused);scene.update(state);await scene.ready;}catch(error){console.error('3D scene unavailable.',error);useFallback();$('scene-type').textContent='Static backup · 3D could not load';}
-try{const response=await fetch('../atlas/data/palette.json');if(!response.ok)throw new Error('Atlas response unavailable');const data=await response.json();const preferred=['vanilla','lavender','balsam-fir','sandalwood','cedar','bergamot','cardamom','pink-pepper','jasmine','rosewood','geranium'];materials=data.PALETTE.filter(m=>preferred.some(id=>m.id===id||m.id.startsWith(id+'-')));if(materials.length<3)materials=data.PALETTE.filter(m=>!m.id.startsWith('sunday-')).slice(0,20);if(state.chapter===1&&state.step===2)renderControls();}catch{materials=[];}
-window.addEventListener('pagehide',()=>scene?.dispose(),{once:true});
+renderWorkshopPalette();readHash();render();setPaused(paused);
+try{const module=await import('./scene.js?v=studio-palette-r11');scene=new module.ScentScene($('scene'),$('labels'),useFallback);syncVisual();await scene.ready;}catch(error){console.error('3D scene unavailable.',error);useFallback();if(state.chapter!==3)$('scene-type').textContent='Static backup · 3D could not load';}
+window.addEventListener('pagehide',()=>{scene?.dispose();today.dispose();},{once:true});
 
 // Personal workshop reflection stays in this browser; sharing is optional.
 const reflection=$('reflection-form');
