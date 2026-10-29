@@ -1,6 +1,6 @@
 import {AtlasScene} from '../atlas/globe.js';
 import {TOPICS,escapeHTML as esc,botanicalArt} from '../atlas/core.js';
-import {WORKSHOP_MATERIALS as materials,WORKSHOP_LOCATIONS as locations,TRIANGLE_BANDS,materialLocation,materialPosition,materialAtlasURL} from './palette.js?v=long-hair-r12';
+import {WORKSHOP_MATERIALS as materials,WORKSHOP_LOCATIONS as locations,TRIANGLE_BANDS,materialLocation,materialPosition,materialAtlasURL} from './palette.js?v=reference-look-r13';
 
 const topicPlacement={calm:[23,22],rest:[77,18],attention:[78,33],breathing:[79,44],skin:[21,44],muscles:[22,66],digestion:[78,61]};
 export const paletteTopicMaterials=(profiles,topic)=>materials.filter(m=>!topic||(profiles[m.atlasId]?.topics||[]).includes(topic));

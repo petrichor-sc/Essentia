@@ -3,14 +3,14 @@ import * as T from '../atlas/assets/three.module.js';
 // Long layered waves, with an exposed forehead and a swept, off-centre part.
 // Cap and fall are closed surfaces in a single skinned mesh, not hair tubes.
 export function addLongHair(model){
- if(model.userData.workshopHairStyle==='long-side-part-r12')return;
+ if(model.userData.workshopHairStyle==='layered-waves-r13')return;
  const previous=[];model.traverse(o=>{if(o.userData.workshopHair)previous.push(o);});previous.forEach(o=>o.removeFromParent());
  let body;model.traverse(o=>{if(o.isSkinnedMesh&&!o.userData.workshopHair&&!o.userData.workshopDress&&!body)body=o;});if(!body)return;
  const find=name=>body.skeleton.bones.findIndex(b=>b.name.replace(/^mixamorig:?/,'')===name),head=find('Head'),neck=find('Neck'),spine=find('Spine2');if(head<0||neck<0||spine<0)return;
  const positions=[],colours=[],indices=[],jointIndices=[],jointWeights=[];
  const rim=phi=>{
-  const front=T.MathUtils.smoothstep(Math.sin(phi),.05,.94);
-  return 1.448+.110*front+.008*Math.cos(phi)*front;
+  const front=Math.max(0,Math.sin(phi));
+  return 1.435+.100*front**3+.004*Math.cos(phi)*front;
  };
  function capPoint(phi,t,inside){
   const theta=t*Math.acos(T.MathUtils.clamp((rim(phi)-1.434)/.156,-1,1)),thin=inside*.003;
@@ -20,8 +20,8 @@ export function addLongHair(model){
  function vertex(p,phi,t,isCap){
   const [x,y,z]=p;positions.push(x,y,z);
   const flow=isCap?t:1+t,strand=.84+.11*Math.cos(phi*30+flow*4)+.025*Math.cos(phi*63+flow*7);
-  const part=isCap?Math.exp(-(((x+.027-z*.10)/.0018)**2))*T.MathUtils.smoothstep(y,1.52,1.585):0;
-  colours.push(strand+part*.35,strand+part*.23,strand+part*.13);
+  const part=isCap?Math.exp(-(((x+.009-z*.07)/.0015)**2))*T.MathUtils.smoothstep(y,1.515,1.58):0;
+  colours.push(strand+part*.22,strand+part*.15,strand+part*.08);
   let h,n,s;
   if(isCap||y>1.435){h=1;n=0;s=0;}
   else if(y>1.31){const f=T.MathUtils.smoothstep(y,1.31,1.435);h=.32+.68*f;n=.68*(1-f);s=0;}
@@ -46,12 +46,30 @@ export function addLongHair(model){
  const start=Math.PI/2+.88,end=Math.PI/2+Math.PI*2-.88;
  surface(84,44,(phi,t,inside)=>{
   const top=capPoint(phi,1,inside),front=Math.max(0,Math.sin(phi)),tip=1.025+.10*front+.018*Math.sin(phi*4.0+.6),y=T.MathUtils.lerp(top[1],tip,t),spread=T.MathUtils.smoothstep(t,0,.55);
-  const baseRadius=(.106-inside*.003)*Math.sin(Math.acos(T.MathUtils.clamp((rim(phi)-1.434)/.156,-1,1))),radius=T.MathUtils.lerp(baseRadius,.169,spread)*(1-.08*T.MathUtils.smoothstep(t,.7,1));
-  const wave=Math.sin(t*10.5+phi*3.5)*.006*Math.sin(t*Math.PI*.85),x=Math.cos(phi)*radius+wave;
+  const baseRadius=(.106-inside*.003)*Math.sin(Math.acos(T.MathUtils.clamp((rim(phi)-1.434)/.156,-1,1))),radius=T.MathUtils.lerp(baseRadius,.150,spread)*(1-.18*T.MathUtils.smoothstep(t,.67,1));
+  const wave=Math.sin(t*11.5+phi*3.5)*.012*Math.sin(t*Math.PI*.85),x=Math.cos(phi)*radius+wave;
   const depth=T.MathUtils.lerp(.132,.145,spread)-inside*.003,z=-.021+Math.sin(phi)*depth+(front? .016*spread:0)+wave*.45;
   // Start exactly at the cap rim, then let the length spread over the shoulders.
   return [T.MathUtils.lerp(top[0],x,T.MathUtils.smoothstep(t,0,.14)),y,T.MathUtils.lerp(top[2],z,T.MathUtils.smoothstep(t,0,.18))];
  },false,start,end);
+ // Flattened, tapered face-framing locks break up the continuous back layer.
+ // Broad waves and narrow tips give volume without a blunt fringe or hem.
+ for(const sign of [-1,1])for(let lock=0;lock<3;lock++){
+  const offset=lock*.012,rootPhi=sign>0?.68+lock*.045:Math.PI-.68-lock*.045,rootY=1.520-lock*.010,rootTheta=Math.acos(T.MathUtils.clamp((rootY-1.434)/.156,-1,1)),rimTheta=Math.acos(T.MathUtils.clamp((rim(rootPhi)-1.434)/.156,-1,1)),rootPoint=capPoint(rootPhi,rootTheta/rimTheta,0),curve=new T.CatmullRomCurve3([
+   new T.Vector3(rootPoint[0],rootPoint[1],rootPoint[2]+.0007),
+   new T.Vector3(sign*(.098+offset),1.455,.104-lock*.010),
+   new T.Vector3(sign*(.126+offset*.7),1.365,.108-lock*.012),
+   new T.Vector3(sign*(.101+offset),1.270,.148-lock*.015),
+   new T.Vector3(sign*(.129+offset*.7),1.175-lock*.018,.119-lock*.012),
+   new T.Vector3(sign*(.112+offset),1.085-lock*.018,.133-lock*.015)
+  ]),columns=16,rows=56,stride=columns+1,base=positions.length/3;
+  for(let j=0;j<=rows;j++){
+   const t=j/rows,center=curve.getPoint(t),tangent=curve.getTangent(t).normalize(),across=new T.Vector3(sign,0,0).addScaledVector(tangent,-sign*tangent.x).normalize(),normal=new T.Vector3().crossVectors(across,tangent).normalize();
+   const taper=1-T.MathUtils.smoothstep(t,.73,1),width=(.014+lock*.0015)*(.50+.50*Math.sin(Math.PI*Math.min(t*1.2,1)))*taper+.0006,depth=.0048*taper+.0004;
+   for(let i=0;i<=columns;i++){const a=i/columns*Math.PI*2,p=center.clone().addScaledVector(across,Math.cos(a)*width).addScaledVector(normal,Math.sin(a)*depth);vertex(p.toArray(),(sign>0?.7:2.44)+Math.cos(a)*.11,t,false);}
+  }
+  for(let j=0;j<rows;j++)for(let i=0;i<columns;i++){const a=base+j*stride+i,b=a+stride;indices.push(a,b,a+1,a+1,b,b+1);}
+ }
  const geometry=new T.BufferGeometry();geometry.setAttribute('position',new T.Float32BufferAttribute(positions,3));geometry.setAttribute('color',new T.Float32BufferAttribute(colours,3));geometry.setAttribute('skinIndex',new T.Uint16BufferAttribute(jointIndices,4));geometry.setAttribute('skinWeight',new T.Float32BufferAttribute(jointWeights,4));geometry.setIndex(indices);geometry.computeVertexNormals();
  // Blend the surface normals where the crown becomes the long fall, keeping
  // a continuous highlight rather than a visible cap-shaped seam.
@@ -64,7 +82,7 @@ export function addLongHair(model){
   const index=capCount+layer*85*45+j*85+i,phi=T.MathUtils.lerp(start,end,i/84),p=capPoint(phi,1,layer),join=new T.Vector3(p[0]/(.106*.106),(p[1]-1.434)/(.156*.156),(p[2]+.021)/(.132*.132)).normalize().multiplyScalar(layer?-1:1);
   v.fromBufferAttribute(normal,index).lerp(join,1-T.MathUtils.smoothstep(j,0,5)).normalize();normal.setXYZ(index,v.x,v.y,v.z);
  }
- const material=new T.MeshPhysicalMaterial({color:0x38251d,roughness:.69,metalness:0,sheen:.55,sheenColor:new T.Color(0x8b6045),sheenRoughness:.8,vertexColors:true});
- const hair=new T.SkinnedMesh(geometry,material);hair.userData.workshopHair=true;hair.name='Long side-parted waves with an open forehead';hair.position.copy(body.position);hair.quaternion.copy(body.quaternion);hair.scale.copy(body.scale);body.parent.add(hair);hair.bind(body.skeleton,body.bindMatrix);
- model.userData.workshopSoftHair=true;model.userData.workshopHairStyle='long-side-part-r12';
+ const material=new T.MeshPhysicalMaterial({color:0x2d1d16,roughness:.65,metalness:0,sheen:.6,sheenColor:new T.Color(0x805840),sheenRoughness:.8,vertexColors:true,side:T.DoubleSide});
+ const hair=new T.SkinnedMesh(geometry,material);hair.userData.workshopHair=true;hair.name='Layered chestnut waves with a lower hairline and loose face-framing locks';hair.position.copy(body.position);hair.quaternion.copy(body.quaternion);hair.scale.copy(body.scale);body.parent.add(hair);hair.bind(body.skeleton,body.bindMatrix);
+ model.userData.workshopSoftHair=true;model.userData.workshopHairStyle='layered-waves-r13';
 }

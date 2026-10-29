@@ -1,8 +1,8 @@
 import * as T from '../atlas/assets/three.module.js';
-import {jasmineShrub} from './jasmine.js?v=long-hair-r12';
-import {cloneRiggedModel,fitStreetHuman} from './street.js?v=long-hair-r12';
-import {humanRig} from './human.js?v=long-hair-r12';
-import {styleWorkshopVisitor} from './character.js?v=long-hair-r12';
+import {jasmineShrub} from './jasmine.js?v=reference-look-r13';
+import {cloneRiggedModel,fitStreetHuman} from './street.js?v=reference-look-r13';
+import {humanRig} from './human.js?v=reference-look-r13';
+import {styleWorkshopVisitor} from './character.js?v=reference-look-r13';
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z);
 const smooth=(a,b,t)=>T.MathUtils.smoothstep(t,a,b);
 

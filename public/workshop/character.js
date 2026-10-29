@@ -1,6 +1,6 @@
 import * as T from '../atlas/assets/three.module.js';
-import {addLongHair} from './hair.js?v=long-hair-r12';
-import {addWhiteDress} from './outfit.js?v=long-hair-r12';
+import {addLongHair} from './hair.js?v=reference-look-r13';
+import {addWhiteDress} from './outfit.js?v=reference-look-r13';
 
 export {addLongHair as addSoftHair};
 
@@ -16,7 +16,7 @@ export function styleWorkshopVisitor(model,options={}){
   mesh.geometry.setAttribute('visitorRegion',new T.Float32BufferAttribute(categories,1));mesh.geometry.setAttribute('visitorSkin',new T.Float32BufferAttribute(neckline,1));
   const source=Array.isArray(mesh.material)?mesh.material:[mesh.material];
   const styled=source.map(original=>{
-   const mat=original.clone();mat.roughness=.80;mat.metalness=0;if(mat.normalScale)mat.normalScale.set(.30,.30);
+   const mat=original.clone();mat.roughness=.80;mat.metalness=0;if(mat.normalScale)mat.normalScale.set(.15,.15);
    if(mat.specularIntensity!==undefined)mat.specularIntensity=.18;
    mat.onBeforeCompile=shader=>{
     shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nattribute float visitorRegion;\nattribute float visitorSkin;\nvarying float vVisitorRegion;\nvarying float vVisitorSkin;\nvarying vec3 vVisitorBindPosition;');
@@ -47,7 +47,7 @@ export function styleWorkshopVisitor(model,options={}){
      diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.91,.89,.84),necklineFabric);
      // The skin, eyeballs and brows have separate semantic regions. Never
      // treat a dark eye, eyeliner pixel or facial shadow as a patch of hair.
-     float upperFace = smoothstep(1.395,1.425,y)
+     float upperFace = smoothstep(1.365,1.385,y)
        * smoothstep(.015,.045,vVisitorBindPosition.z);
      float naturalFaceShade = clamp(dot(originalPalette,vec3(.28,.57,.15))*1.4+.70,.72,.94);
      diffuseColor.rgb = mix(diffuseColor.rgb,vec3(.61,.385,.235)*naturalFaceShade,upperFace);
@@ -65,18 +65,18 @@ export function styleWorkshopVisitor(model,options={}){
      float smileLine=exp(-pow((y-mouthY)/.00065,2.0))*lipWidth*smoothstep(.080,.093,vVisitorBindPosition.z);
      diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.16,.058,.047),smileLine*.30);
      if(vVisitorRegion>.5 && vVisitorRegion<1.5){
-      vec2 eye=vec2((abs(vVisitorBindPosition.x)-.0415)/.0095,(y-1.4517)/.0113);
+      vec2 eye=vec2((abs(vVisitorBindPosition.x)-.0355)/.0068,(y-1.4517)/.0077);
       float irisRadius=length(eye),iris=1.0-smoothstep(.91,1.03,irisRadius);
       float fibre=.90+.10*sin(atan(eye.y,eye.x)*22.0+irisRadius*7.0);
       vec3 irisColour=mix(vec3(.070,.030,.012),vec3(.20,.095,.033),smoothstep(.32,.85,irisRadius))*fibre;
-      diffuseColor.rgb=mix(vec3(.74,.71,.65),irisColour,iris);
+      diffuseColor.rgb=mix(vec3(.66,.63,.58),irisColour,iris);
       diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.007,.005,.004),1.0-smoothstep(.33,.43,irisRadius));
       float catchlight=exp(-dot(eye-vec2(-.28,.34),eye-vec2(-.28,.34))/.024)*iris;
-      diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.96,.94,.88),catchlight*.87);
+      diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.96,.94,.88),catchlight*.60);
      }
      if(vVisitorRegion>1.5 && vVisitorRegion<2.5){diffuseColor.rgb=vec3(.075,.040,.024);}
-     if(vVisitorRegion>2.5 && vVisitorRegion<3.5){diffuseColor.rgb=vec3(.61,.385,.235)*.85;}
-     if(vVisitorRegion>3.5 && vVisitorRegion<4.5){diffuseColor.rgb=vec3(.88,.85,.79);}
+     if(vVisitorRegion>2.5 && vVisitorRegion<3.5){diffuseColor.rgb=vec3(.070,.045,.038);}
+     if(vVisitorRegion>3.5 && vVisitorRegion<4.5){diffuseColor.rgb=vec3(.045,.019,.010);}
      diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.61,.385,.235)*.85,vVisitorSkin);
      float chestContour=exp(-pow(vVisitorBindPosition.x/.013,2.0)-pow((y-1.181)/.036,2.0))
        *smoothstep(.055,.090,vVisitorBindPosition.z)*vVisitorSkin;
@@ -84,8 +84,8 @@ export function styleWorkshopVisitor(model,options={}){
 
     `);
    };
-   mat.customProgramCacheKey=()=> 'essentia-long-hair-r12';
-   mat.userData.workshopPalette='warm olive skin, brown eyes, soft rose lips, long side-parted waves, ivory V-neck dress';
+   mat.customProgramCacheKey=()=> 'essentia-reference-look-r13';
+   mat.userData.workshopPalette='warm olive skin, brown eyes, cream knit, brown skirt, dark tights and tall brown boots';
    return mat;
   });
   mesh.material=Array.isArray(mesh.material)?styled:styled[0];

@@ -1,4 +1,4 @@
-# Essentia Scent Studio — long-hair-r12
+# Essentia Scent Studio — reference-look-r13
 
 ## Integrate into your existing Git repo
 
@@ -15,7 +15,7 @@ cd /home/sarthak/Documents/GitHub/Essentia
 git status --short
 git diff --stat
 git add public/workshop src/App.tsx src/WorkshopMenu.tsx public/atlas/index.html WORKSHOP_INTEGRATION.md
-git commit -m "Refine the visitor face, long hair and white V-neck dress"
+git commit -m "Match the workshop visitor to the cream knit and brown skirt reference"
 git push
 ```
 
@@ -38,13 +38,13 @@ The interactive triangle contains every material once: two in Top, six in Middle
 
 The standalone palette list below the studio has moved into chapter 04. Reflection and memory note selectors still use the same canonical data. The broader Atlas catalogue and its native-range records are retained.
 
-### Visitor and dress
+### Reference-inspired visitor
 
-The adult visitor wears a fitted, sleeveless ivory-white satin dress with a lower V neckline, shaped waist, fitted hips and a knee-length skirt, plus low cream flats. The dress is a continuous skinned mesh bound to the same skeleton. The restored upper chest sits inside its surface to give the lower V edge a clean finish. The source trousers are reshaped into slim calves beneath it; the original rig, hands, reach and spray gestures remain.
+The adult visitor now wears a cream rib-knit top with long sleeves, gently flared cuffs and a curved sweetheart neckline; a high-waisted chocolate-brown skirt with a small side slit; dark tights; and tall brown boots with low block heels. The ribbed fabric uses a small procedural data texture. `wardrobe.js` constructs the garments as skinned meshes on the existing skeleton. The original hands, reach and spray gestures are retained.
 
-The visitor now has long, side-parted chestnut waves that fall past the shoulders, with an exposed forehead and no straight fringe. The crown is less bulky, and the fall blends head, neck and upper-spine weights so it follows the animation. A single closed skinned hair mesh contains the crown and long layers.
+A continuous upper-chest mesh and the knit share the same rounded body surface, with a shaped bust and a small central neckline dip. Their aligned surfaces give the neckline a clean edge. The sleeves blend shoulder, upper-arm, forearm and hand weights. The boots blend thigh, lower-leg and foot weights; the feet have a tapered brown toe shape. The younger memory visitor retains a higher round-neck dress and does not receive the adult wardrobe meshes.
 
-The face has gently opened eyes with brown irises and small catchlights, softly arched brows fitted to the forehead, a refined nose bridge, fuller cheeks, a smoothed jaw contour and subtle rose lips with a defined cupid’s bow. The adult visitor’s white dress has a lower V neckline and a softly shaped bodice. The younger memory visitor wears a higher round-neck version with a looser waist and skirt. Headphones and sunglasses remain removed. These changes retain the existing rig, hands, walking, sniff and spray gestures.
+The face has smaller, closer-spaced eyes, lower fitted brows, a softened nose, a smoothed jaw and softly closed lips. The brown irises and eye highlights are scaled to the revised eye positions. The lower hairline and longer face-framing layers reduce the exposed forehead. Six flattened, tapered wavy locks join the crown and frame the face over the continuous back layer; the crown, waves and locks remain one skinned hair mesh. Headphones and sunglasses remain removed.
 
 ### Fuller jasmine
 
@@ -57,13 +57,13 @@ Stems are batched into one mesh and leaves/petals/centres are instanced. All flo
 - Production build, all workshop JavaScript syntax and relative module paths passed.
 - Four-chapter navigation data, eleven-material filtering, source selection, body-topic filtering and triangle selection passed targeted checks.
 - The triangle includes all eleven materials exactly once, in bands of 2 / 6 / 3.
-- A 240-pose check keeps the soles within 4.6 mm of the pavement and the illustrated sniff gap below 8.2 cm.
+- A 240-pose check keeps the soles within 5.8 mm of the pavement and the illustrated sniff gap below 8.2 cm.
 - A 480-frame sample confirms continuous emission from all 453 flowers, including when no inhalation is active.
 - Spray tests confirm no cloud before actuation and approximately 18–20 winter particles versus 62–64 summer particles in the comparison sample.
 - Travelling signal pulses, all 55 firing network nodes, finite memory transforms and the intact hand close-up still pass.
-- The long hair has 12,888 vertices in one skinned mesh, with finite positions and normalized joint weights. The adult V neckline and higher round neckline for the younger memory figure were checked separately.
+- The layered hair has 18,702 vertices in one skinned mesh. The complete adult visitor has 52,548 vertices across eleven skinned meshes, with finite positions and normalized joint weights. The separate higher-neckline memory outfit was checked.
 
-Front, three-quarter and profile character projections were inspected through direct CPU model renders. No browser testing, full-scene GPU verification or publishing was performed. The studio and runtime URLs use `long-hair-r12` to refresh the changed modules and character asset.
+Front, three-quarter and profile character projections were inspected through direct CPU model renders. No browser testing, full-scene GPU verification or publishing was performed. The studio and runtime URLs use `reference-look-r13` to refresh the changed modules and character asset.
 
 ## This workshop's material palette
 

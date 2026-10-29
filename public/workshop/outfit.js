@@ -1,8 +1,10 @@
 import * as T from '../atlas/assets/three.module.js';
+import {addReferenceOutfit} from './wardrobe.js?v=reference-look-r13';
 
-// A fitted, sleeveless ivory dress bound to the visitor's existing skeleton.
-// The neckline, waist and hip contours form one continuous surface.
+// The adult reference wardrobe and a separate, higher-neckline memory dress.
+// Both use the visitor's existing skeleton.
 export function addWhiteDress(model,{young=false}={}){
+ if(!young)return addReferenceOutfit(model);
  const style=young?'ivory-round-neck-young-r12':'ivory-v-neck-r12';
  if(model.userData.workshopDressStyle===style)return;
  const old=[];model.traverse(o=>{if(o.userData.workshopDress)old.push(o);});old.forEach(o=>o.removeFromParent());
