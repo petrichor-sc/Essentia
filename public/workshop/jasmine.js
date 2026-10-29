@@ -2,20 +2,18 @@ import * as T from '../atlas/assets/three.module.js';
 // Metre-scale common jasmine: ~2 cm star flowers in terminal clusters.
 // Botanical reference: https://www.rhs.org.uk/plants/9454/jasminum-officinale/details
 export function jasmineShrub(){
- const root=new T.Group(),sources=[],clusters=[],leafTransforms=[],petalTransforms=[],centreTransforms=[],stemGeometry=[],V=(x,y,z)=>new T.Vector3(x,y,z);
- const material=c=>new T.MeshStandardMaterial({color:c,roughness:.88});const stem=material(0x668052),green=material(0xffffff),petal=material(0xfffbed),gold=material(0xe3c582);
- const tube=(points,r,segments=10)=>stemGeometry.push(new T.TubeGeometry(new T.CatmullRomCurve3(points),segments,r,5,false));
- // Three canes stay outside the wooden pole instead of disappearing inside it.
- const centre=(f,offset=0)=>{const a=f*Math.PI*7+offset;return V(.5+Math.cos(a)*(.215+.020*Math.sin(f*11)),f*4.6,Math.sin(a)*.215-.25);};
- for(let cane=0;cane<3;cane++)tube(Array.from({length:80},(_,i)=>centre(i/79,cane*Math.PI*2/3)),cane?.007:.012,64);
+ const root=new T.Group(),sources=[],clusters=[],leafTransforms=[],petalTransforms=[],centreTransforms=[],V=(x,y,z)=>new T.Vector3(x,y,z);
+ const material=c=>new T.MeshStandardMaterial({color:c,roughness:.88});const stem=material(0x76674a),green=material(0x63835b),petal=material(0xfff8e7),gold=material(0xe3c582);
+ const tube=(points,r)=>{const m=new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(points),20,r,5,false),stem);root.add(m);};
+ const centre=f=>{const a=f*Math.PI*7;return V(.5+Math.cos(a)*(.135+.035*Math.sin(f*11)),f*4.6,Math.sin(a)*.14-.25);};
+ tube(Array.from({length:80},(_,i)=>centre(i/79)),.012);
  const dummy=new T.Object3D();
- const hero=V(.34,1.60,-.53);
- function leaf(position,angle,tilt){if(position.distanceTo(hero)<.085)return;dummy.position.copy(position);dummy.rotation.set(tilt,angle,Math.sin(angle)*.32);const size=.93+leafTransforms.length%5*.045;dummy.scale.set(.033*size,.0034,.014*size);dummy.updateMatrix();leafTransforms.push(dummy.matrix.clone());}
+ function leaf(position,angle,tilt){dummy.position.copy(position);dummy.rotation.set(tilt,angle,Math.sin(angle)*.25);dummy.scale.set(.027,.0028,.009);dummy.updateMatrix();leafTransforms.push(dummy.matrix.clone());}
  function flowerCluster(end,angle,count=6){
   const tips=[];
   for(let i=0;i<count;i++){
    const a=i*2.39996,r=i===0?0:.016+(i%3)*.006,tip=end.clone().add(V(Math.cos(a)*r,.012+Math.sin(i*1.4)*.015,Math.sin(a)*r));tips.push(tip.clone());
-   tube([end,end.clone().lerp(tip,.5).add(V(0,.008,0)),tip],.0008,3);
+   tube([end,end.clone().lerp(tip,.5).add(V(0,.008,0)),tip],.0008);
    const flower=new T.Object3D();flower.position.copy(tip);flower.rotation.set(-.35+(i%3)*.28,angle*.35,a*.2);flower.updateMatrix();
    for(let k=0;k<5;k++){
     const a=k*Math.PI*2/5,p=new T.Object3D();p.position.set(Math.cos(a)*.0055,Math.sin(a)*.0055,0);p.rotation.z=a;p.scale.set(.005,.0022,.0012);p.updateMatrix();petalTransforms.push(flower.matrix.clone().multiply(p.matrix));
@@ -24,26 +22,21 @@ export function jasmineShrub(){
   }
   clusters.push({center:end.clone(),flowers:tips});
  }
- for(let i=0;i<96;i++){
-  const f=.035+i/96*.95,offset=(i%3)*Math.PI*2/3,base=centre(f,offset),a=f*Math.PI*7+offset,length=.20+(i%5)*.028,end=base.clone().add(V(Math.cos(a)*length,.07+Math.sin(i)*.04,Math.sin(a)*length));
+ for(let i=0;i<38;i++){
+  const f=.055+i/40*.94,base=centre(f),a=i*2.39996,length=.20+(i%5)*.045,end=base.clone().add(V(Math.cos(a)*length,.07+Math.sin(i)*.04,Math.sin(a)*length));
   tube([base,base.clone().lerp(end,.55).add(V(0,.05,0)),end],.0023);
-  for(let j=0;j<5;j++){
-   const p=base.clone().lerp(end,.24+j*.145);
-   for(const side of [-1,1]){const direction=a+side*.85;leaf(p.clone().add(V(Math.cos(direction)*.028,.006,Math.sin(direction)*.028)),direction,.55+(i%4)*.16+side*.12);}
+  for(let j=0;j<3;j++){
+   const p=base.clone().lerp(end,.28+j*.19);
+   for(const side of [-1,1]){const direction=a+side*.85;leaf(p.clone().add(V(Math.cos(direction)*.025,.002,Math.sin(direction)*.025)),direction,.1+side*.15);}
   }
-  leaf(end.clone().add(V(Math.cos(a)*.028,0,Math.sin(a)*.028)),a,.75);
-  if(i%3!==1&&end.distanceTo(hero)>.10)flowerCluster(end,a,5+i%5);
+  leaf(end.clone().add(V(Math.cos(a)*.028,0,Math.sin(a)*.028)),a,.12);
+  if(i%2===0)flowerCluster(end,a,4+i%4);
  }
- const base=centre(1.51/4.6);tube([base,base.clone().lerp(hero,.5).add(V(0,.06,0)),hero],.0025);flowerCluster(hero,-.5,8);
- for(let j=0;j<3;j++)for(const side of [-1,1])leaf(base.clone().lerp(hero,.2+j*.18).add(V(side*.028,0,.01)),side*.8,.65);
+ const hero=V(.34,1.60,-.53),base=centre(1.51/4.6);tube([base,base.clone().lerp(hero,.5).add(V(0,.06,0)),hero],.0025);flowerCluster(hero,-.5,8);
+ for(const side of [-1,1])leaf(base.clone().lerp(hero,.5).add(V(side*.025,0,.01)),side*.8,.1);
  function instances(transforms,geometry,mat,name){const m=new T.InstancedMesh(geometry,mat,transforms.length);transforms.forEach((matrix,i)=>m.setMatrixAt(i,matrix));m.instanceMatrix.needsUpdate=true;m.name=name;root.add(m);return m;}
  const sphere=new T.SphereGeometry(1,10,6);
- const leaves=instances(leafTransforms,sphere,green,'Dense layered jasmine leaflets');leafTransforms.forEach((_,i)=>leaves.setColorAt(i,new T.Color([0x52774a,0x648854,0x78935f,0x5f824f][i%4])));leaves.instanceColor.needsUpdate=true;
- instances(petalTransforms,sphere,petal,'Small clustered jasmine petals');instances(centreTransforms,new T.SphereGeometry(1,7,5),gold,'Jasmine flower centres');
- // Batch the many fine stems into one draw call, like the leaves and petals.
- const positions=[],normals=[],indices=[];let vertex=0;
- for(const geo of stemGeometry){positions.push(...geo.attributes.position.array);normals.push(...geo.attributes.normal.array);for(const index of geo.index.array)indices.push(index+vertex);vertex+=geo.attributes.position.count;geo.dispose();}
- const stems=new T.BufferGeometry();stems.setAttribute('position',new T.Float32BufferAttribute(positions,3));stems.setAttribute('normal',new T.Float32BufferAttribute(normals,3));stems.setIndex(indices);const canes=new T.Mesh(stems,stem);canes.name='Three climbing canes and clustered flower stems';root.add(canes);
- root.userData.flowerWidthMetres=.021;root.userData.clusterCount=clusters.length;root.userData.leafletCount=leafTransforms.length;root.userData.revision='lush-jasmine-r11';
+ instances(leafTransforms,sphere,green,'Jasmine leaflets');instances(petalTransforms,sphere,petal,'Small clustered jasmine petals');instances(centreTransforms,new T.SphereGeometry(1,7,5),gold,'Jasmine flower centres');
+ root.userData.flowerWidthMetres=.021;root.userData.clusterCount=clusters.length;
  return {root,sources,clusters,hero};
 }
