@@ -3,7 +3,7 @@ import * as T from '../atlas/assets/three.module.js';
 // Long layered waves, with an exposed forehead and a swept, off-centre part.
 // Cap and fall are closed surfaces in a single skinned mesh, not hair tubes.
 export function addLongHair(model){
- if(model.userData.workshopHairStyle==='layered-waves-r13')return;
+ if(model.userData.workshopHairStyle==='realistic-visitor-r16')return;
  const previous=[];model.traverse(o=>{if(o.userData.workshopHair)previous.push(o);});previous.forEach(o=>o.removeFromParent());
  let body;model.traverse(o=>{if(o.isSkinnedMesh&&!o.userData.workshopHair&&!o.userData.workshopDress&&!body)body=o;});if(!body)return;
  const find=name=>body.skeleton.bones.findIndex(b=>b.name.replace(/^mixamorig:?/,'')===name),head=find('Head'),neck=find('Neck'),spine=find('Spine2');if(head<0||neck<0||spine<0)return;
@@ -46,22 +46,22 @@ export function addLongHair(model){
  const start=Math.PI/2+.88,end=Math.PI/2+Math.PI*2-.88;
  surface(84,44,(phi,t,inside)=>{
   const top=capPoint(phi,1,inside),front=Math.max(0,Math.sin(phi)),tip=1.025+.10*front+.018*Math.sin(phi*4.0+.6),y=T.MathUtils.lerp(top[1],tip,t),spread=T.MathUtils.smoothstep(t,0,.55);
-  const baseRadius=(.106-inside*.003)*Math.sin(Math.acos(T.MathUtils.clamp((rim(phi)-1.434)/.156,-1,1))),radius=T.MathUtils.lerp(baseRadius,.150,spread)*(1-.18*T.MathUtils.smoothstep(t,.67,1));
-  const wave=Math.sin(t*11.5+phi*3.5)*.012*Math.sin(t*Math.PI*.85),x=Math.cos(phi)*radius+wave;
+  const baseRadius=(.106-inside*.003)*Math.sin(Math.acos(T.MathUtils.clamp((rim(phi)-1.434)/.156,-1,1))),radius=T.MathUtils.lerp(baseRadius,.126,spread)*(1-.18*T.MathUtils.smoothstep(t,.67,1));
+  const wave=Math.sin(t*11.5+phi*3.5)*.003*Math.sin(t*Math.PI*.85),x=Math.cos(phi)*radius+wave;
   const depth=T.MathUtils.lerp(.132,.145,spread)-inside*.003,z=-.021+Math.sin(phi)*depth+(front? .016*spread:0)+wave*.45;
   // Start exactly at the cap rim, then let the length spread over the shoulders.
   return [T.MathUtils.lerp(top[0],x,T.MathUtils.smoothstep(t,0,.14)),y,T.MathUtils.lerp(top[2],z,T.MathUtils.smoothstep(t,0,.18))];
  },false,start,end);
  // Flattened, tapered face-framing locks break up the continuous back layer.
  // Broad waves and narrow tips give volume without a blunt fringe or hem.
- for(const sign of [-1,1])for(let lock=0;lock<3;lock++){
+ for(const sign of [-1,1])for(let lock=0;lock<1;lock++){
   const offset=lock*.012,rootPhi=sign>0?.68+lock*.045:Math.PI-.68-lock*.045,rootY=1.520-lock*.010,rootTheta=Math.acos(T.MathUtils.clamp((rootY-1.434)/.156,-1,1)),rimTheta=Math.acos(T.MathUtils.clamp((rim(rootPhi)-1.434)/.156,-1,1)),rootPoint=capPoint(rootPhi,rootTheta/rimTheta,0),curve=new T.CatmullRomCurve3([
    new T.Vector3(rootPoint[0],rootPoint[1],rootPoint[2]+.0007),
    new T.Vector3(sign*(.098+offset),1.455,.104-lock*.010),
-   new T.Vector3(sign*(.126+offset*.7),1.365,.108-lock*.012),
-   new T.Vector3(sign*(.101+offset),1.270,.148-lock*.015),
-   new T.Vector3(sign*(.129+offset*.7),1.175-lock*.018,.119-lock*.012),
-   new T.Vector3(sign*(.112+offset),1.085-lock*.018,.133-lock*.015)
+   new T.Vector3(sign*(.105+offset*.7),1.365,.090-lock*.012),
+   new T.Vector3(sign*(.107+offset),1.270,.124-lock*.015),
+   new T.Vector3(sign*(.110+offset*.7),1.175-lock*.018,.120-lock*.012),
+   new T.Vector3(sign*(.107+offset),1.085-lock*.018,.113-lock*.015)
   ]),columns=16,rows=56,stride=columns+1,base=positions.length/3;
   for(let j=0;j<=rows;j++){
    const t=j/rows,center=curve.getPoint(t),tangent=curve.getTangent(t).normalize(),across=new T.Vector3(sign,0,0).addScaledVector(tangent,-sign*tangent.x).normalize(),normal=new T.Vector3().crossVectors(across,tangent).normalize();
@@ -84,5 +84,5 @@ export function addLongHair(model){
  }
  const material=new T.MeshPhysicalMaterial({color:0x2d1d16,roughness:.65,metalness:0,sheen:.6,sheenColor:new T.Color(0x805840),sheenRoughness:.8,vertexColors:true,side:T.DoubleSide});
  const hair=new T.SkinnedMesh(geometry,material);hair.userData.workshopHair=true;hair.name='Layered chestnut waves with a lower hairline and loose face-framing locks';hair.position.copy(body.position);hair.quaternion.copy(body.quaternion);hair.scale.copy(body.scale);body.parent.add(hair);hair.bind(body.skeleton,body.bindMatrix);
- model.userData.workshopSoftHair=true;model.userData.workshopHairStyle='layered-waves-r13';
+ model.userData.workshopSoftHair=true;model.userData.workshopHairStyle='realistic-visitor-r16';
 }

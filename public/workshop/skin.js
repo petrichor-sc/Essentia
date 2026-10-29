@@ -2,7 +2,7 @@ import * as T from '../atlas/assets/three.module.js';
 const V=()=>new T.Vector3();
 
 export function magnifiedHand(model){
- let source;model.traverse(o=>{if(o.isSkinnedMesh&&!o.userData.workshopHair&&!source)source=o;});
+ let source,best=-1;model.traverse(o=>{if(!o.isSkinnedMesh||o.userData.workshopHair||o.userData.workshopDress)return;const g=o.geometry;let score=0;for(let i=0;i<g.attributes.position.count;i++)for(let k=0;k<4;k++){const id=g.attributes.skinIndex.array[i*4+k],w=g.attributes.skinWeight.array[i*4+k];if(/RightHand/.test(o.skeleton.bones[id]?.name||''))score+=w;}if(score>best){best=score;source=o;}});
  if(!source)throw new Error('Hand source is missing');
  model.updateWorldMatrix(true,true);source.skeleton.update();
  const bones=source.skeleton.bones,point=name=>{const b=bones.find(b=>b.name.replace(/^mixamorig:?/,'')===name);if(!b)throw new Error('Missing hand joint '+name);return b.getWorldPosition(V());};

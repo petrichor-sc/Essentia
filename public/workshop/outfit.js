@@ -1,5 +1,5 @@
 import * as T from '../atlas/assets/three.module.js';
-import {addReferenceOutfit} from './wardrobe.js?v=modest-neckline-r14';
+import {addReferenceOutfit} from './wardrobe.js?v=realistic-visitor-r16';
 
 // The adult reference wardrobe and a separate, higher-neckline memory dress.
 // Both use the visitor's existing skeleton.
