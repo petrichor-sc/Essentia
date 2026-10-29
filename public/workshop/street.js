@@ -9,7 +9,7 @@ export function hillStreet(){
  const root=new T.Group(),lanterns=[],foliage=[];
  const box=(parent,w,h,d,p,mat)=>{const m=new T.Mesh(new T.BoxGeometry(w,h,d),mat);m.position.copy(p);parent.add(m);return m;};
  const cylinder=(parent,r1,r2,h,p,mat,n=14)=>{const m=new T.Mesh(new T.CylinderGeometry(r1,r2,h,n),mat);m.position.copy(p);parent.add(m);return m;};
- const wood=surface(0x58443a),cream=surface(0xe4d4b5),iron=surface(0x383c3d),stone=surface(0x8e877c),glass=surface(0x584c42,{emissive:0xffce7e,emissiveIntensity:.18}),roofMat=surface(0x4d6263);
+ const wood=surface(0x58443a),cream=surface(0xe4d4b5),iron=surface(0x383c3d),stone=surface(0x8e877c),glass=surface(0x584c42,{emissive:0xffce7e,emissiveIntensity:.32}),roofMat=surface(0x4d6263);
  function sign(parent,text,w,h,p,bg='#294d45',fg='#f4dfb3'){
   const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=256;const c=canvas.getContext('2d');c.fillStyle=bg;c.fillRect(0,0,1024,256);c.strokeStyle=fg;c.lineWidth=5;c.strokeRect(15,15,994,226);c.fillStyle=fg;c.textAlign='center';c.textBaseline='middle';c.font='54px Georgia';c.fillText(text,512,134,950);
   const texture=new T.CanvasTexture(canvas);texture.colorSpace=T.SRGBColorSpace;

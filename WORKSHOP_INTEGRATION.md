@@ -1,4 +1,4 @@
-# Essentia Scent Studio — visitor-fit-r17
+# Essentia Scent Studio — enchanted-street-r18
 
 ## Integrate into your existing Git repo
 
@@ -14,8 +14,8 @@ Then review and commit from your existing repo:
 cd /home/sarthak/Documents/GitHub/Essentia
 git status --short
 git diff --stat
-git add public/workshop src/App.tsx src/WorkshopMenu.tsx public/atlas/index.html WORKSHOP_INTEGRATION.md tools/retarget-workshop-motion.mjs
-git commit -m "Fit the realistic visitor wardrobe and integrate walking animations"
+git add public/workshop src/App.tsx src/WorkshopMenu.tsx public/atlas/index.html WORKSHOP_INTEGRATION.md tools/retarget-workshop-motion.mjs tools/check-workshop-arms.mjs
+git commit -m "Correct forearm bends and add dense magical jasmine"
 git push
 ```
 
@@ -50,22 +50,27 @@ The hair cards now use alpha cutout and depth writing instead of overlapping tra
 
 The original 195 MB character upload is reduced to about 66 MB with 1K embedded textures. The younger memory visitor keeps its separate original asset and modest outfit. Speaker notes remain at the bottom of this guide.
 
-### Fuller jasmine
+### Dense jasmine and magical street
 
-Three climbing canes now sit outside the pole. Ninety-six leafy shoots form a fuller wrap, with over a thousand leaflets at varied angles, 65 clusters and 453 small flowers. Blossom width stays approximately 2 cm; the hero cluster and sniff target stay in place. Leaves near the hero flower leave a small clear space for the nose and hand.
+The pole now carries exactly 10,620 leaves and 4,530 jasmine flowers: ten times the previous totals. The blossoms remain approximately 2 cm wide and grow in 646 clusters. Nine climbing canes and denser shoots wrap the pole; a small clear space remains at the sniffing flower. The younger memory garden keeps its original plant density.
 
-Stems are batched into one mesh and leaves/petals/centres are instanced. All flowers continue emitting scent. The per-flower particle budget, glow size and opacity are adjusted so the denser plant does not produce a proportional explosion of bright particles.
+Curved leaf and petal surfaces are instanced, with stems batched into one mesh. The vine uses four draw calls and about 600,000 triangles despite the increased density. Every flower has a scent particle source; opacity is reduced to keep the cloud readable. The street has a peach and lavender sky, warmer café windows and gently drifting light motes.
+
+### Forearms and sillage
+
+The previous hand-clearance solver used a fixed forward elbow pole. This could reverse the natural elbow bend in the source animation. The solver now preserves the animated elbow bend plane and uses a backward anatomical fallback near a straight arm. This changes the arm from the elbow through the hand, rather than twisting only the wrist.
+
+Sillage cadence now accounts for the character's enlarged scale. Movement speed is derived from the animation's stride, and the loop has gentler corners and smooth heading changes. The same corrected forearm solver is used for the street, sillage and spray gestures.
 
 ## Verification
 
 - Production build, workshop JavaScript syntax and relative imports passed.
-- The supplied walk and idle drive 53 retargeted joints, with normalized rotations and matching loop endpoints.
-- A 120-pose street check kept the shoe soles within 1 mm of the pavement and the illustrated sniff gap below 10 cm. Relaxed hands remained outside the hips.
-- Neck, wrist and forearm spray gestures retain finite joint transforms; the intact hand close-up contains 1,753 vertices.
-- The new garment meshes have normalized skin weights. Front, three-quarter and back model projections were checked for the outfit and hair. The younger memory outfit remains separate.
-- The central foreground conifer is absent; eleven perimeter conifers remain.
+- `node tools/check-workshop-arms.mjs` checks 720 idle and walking forearm samples for an elbow reversal. The fixed solver retained the original bend direction; the largest sampled forearm adjustment was below 16 degrees. The old fixed-pole solver fails this test.
+- A further 600-frame check exercises the actual sillage scene update, including scale-aware stride timing, smooth turns and both elbow bend directions.
+- The 120-pose street grounding and sniff-gap checks passed. Neck, wrist and forearm spray gestures remain functional, with no fragrance before application.
+- Plant counts, clustered flowers, finite particle positions, all-flower scent coverage and reduced memory-garden density were checked. The vine and corrected arm poses were inspected using CPU model projections.
 
-No browser or GPU appearance testing, publishing or Git push was performed. Runtime URLs use `visitor-fit-r17` to refresh the changed modules.
+These are geometry and motion checks; no browser or GPU appearance testing, publishing or Git push was performed. Runtime URLs use `enchanted-street-r18`.
 
 ## This workshop's material palette
 

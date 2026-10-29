@@ -1,28 +1,28 @@
-import {receptorCloseup} from './receptors.js?v=visitor-fit-r17';
-import {hillStreet,cloneRiggedModel,fitStreetHuman,streetMotion,STREET_BUILD,STREET_POLE,STREET_GROUND,STREET_WALKWAY} from './street.js?v=visitor-fit-r17';
+import {receptorCloseup} from './receptors.js?v=enchanted-street-r18';
+import {hillStreet,cloneRiggedModel,fitStreetHuman,streetMotion,STREET_BUILD,STREET_POLE,STREET_GROUND,STREET_WALKWAY} from './street.js?v=enchanted-street-r18';
 import * as T from '../atlas/assets/three.module.js';
-import {GLTFLoader} from './assets/GLTFLoader.js?v=visitor-fit-r17';
-import {OrbitControls} from './assets/OrbitControls.js?v=visitor-fit-r17';
+import {GLTFLoader} from './assets/GLTFLoader.js?v=enchanted-street-r18';
+import {OrbitControls} from './assets/OrbitControls.js?v=enchanted-street-r18';
 
-import {cerebralSculpture} from './sculptures.js?v=visitor-fit-r17';
-import {jasmineShrub} from './jasmine.js?v=visitor-fit-r17';
-import {humanRig,settleForSniff} from './human.js?v=visitor-fit-r17';
-import {SVGRenderer} from './assets/SVGRenderer.js?v=visitor-fit-r17';
-import {hillAtmosphere} from './atmosphere.js?v=visitor-fit-r17';
-import {styleWorkshopVisitor} from './character.js?v=visitor-fit-r17';
-import {jasmineScent} from './scent.js?v=visitor-fit-r17';
-import {olfactoryRelay,neuralCascade,perceptionTiming} from './neural.js?v=visitor-fit-r17';
-import {jasmineMemory} from './memory.js?v=visitor-fit-r17';
-import {weatherProfiles,sprayPhase} from './perfume.js?v=visitor-fit-r17';
-import {magnifiedHand} from './skin.js?v=visitor-fit-r17';
-import {loadLocomotion} from './locomotion.js?v=visitor-fit-r17';
+import {cerebralSculpture} from './sculptures.js?v=enchanted-street-r18';
+import {jasmineShrub} from './jasmine.js?v=enchanted-street-r18';
+import {humanRig,settleForSniff} from './human.js?v=enchanted-street-r18';
+import {SVGRenderer} from './assets/SVGRenderer.js?v=enchanted-street-r18';
+import {hillAtmosphere} from './atmosphere.js?v=enchanted-street-r18';
+import {styleWorkshopVisitor} from './character.js?v=enchanted-street-r18';
+import {jasmineScent} from './scent.js?v=enchanted-street-r18';
+import {olfactoryRelay,neuralCascade,perceptionTiming} from './neural.js?v=enchanted-street-r18';
+import {jasmineMemory} from './memory.js?v=enchanted-street-r18';
+import {weatherProfiles,sprayPhase} from './perfume.js?v=enchanted-street-r18';
+import {magnifiedHand} from './skin.js?v=enchanted-street-r18';
+import {loadLocomotion} from './locomotion.js?v=enchanted-street-r18';
 const GOLD=0xc9a465,VIOLET=0xb9a1d9;
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z);
 const material=(color,opacity=1)=>new T.MeshStandardMaterial({color,roughness:.48,metalness:.15,transparent:opacity<1,opacity,depthWrite:opacity===1});
 export class ScentScene{
  constructor(container,labels){
   this.container=container;this.container.setAttribute('role','group');this.labels=labels;this.time=0;this.paused=false;this.appliedSites=new Set();this.sprayQueue=[];this.sprayAction=null;this.sprayMist=[];this.emissionBudget=0;this.state={chapter:0,step:0,movement:false,airflow:0,weather:'temperate',age:0,concentration:20,sites:[],doseMode:'fixed',skinZoom:true};
-  this.scene=new T.Scene();this.camera=new T.PerspectiveCamera(37,1,.1,220);this.hemi=new T.HemisphereLight(0xf1e5ff,0x26132d,2);this.scene.add(this.hemi);this.daySky=new T.Color(0xc1cbd0);this.dayFog=new T.FogExp2(0xc4ccbf,.009);
+  this.scene=new T.Scene();this.camera=new T.PerspectiveCamera(37,1,.1,220);this.hemi=new T.HemisphereLight(0xf1e5ff,0x26132d,2);this.scene.add(this.hemi);this.daySky=new T.Color(0xdccbd9);this.dayFog=new T.FogExp2(0xe3cbd4,.011);
   this.keyLights=[];[[0xffdf9b,3,[-4,8,8]],[0x9c7ed7,2,[5,5,-4]]].forEach(([c,i,p])=>{const l=new T.DirectionalLight(c,i);l.position.set(...p);this.scene.add(l);this.keyLights.push(l);});
   const canvas=document.createElement('canvas'),context=canvas.getContext('webgl2',{alpha:true,antialias:true});this.gpu=!!context;
   if(context){this.renderer=new T.WebGLRenderer({canvas,context,alpha:true,antialias:true});this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));this.renderer.setClearColor(0x100b19,0);this.renderer.toneMapping=T.ACESFilmicToneMapping;}
@@ -98,7 +98,7 @@ export class ScentScene{
   const g=this.groups[3];this.actor=new T.Group();g.add(this.actor);
   const floor=this.mesh(g,new T.CircleGeometry(6.4,64),material(0x271b34,.6),[0,-.04,-.8]);floor.rotation.x=-Math.PI/2;
   const grid=new T.GridHelper(12,12,0x806542,0x37263f);grid.position.y=-.02;grid.material.transparent=true;grid.material.opacity=.25;g.add(grid);
-  this.path=new T.CatmullRomCurve3([V(-2,0,0),V(2,0,0),V(3,0,-1.6),V(1.4,0,-3),V(-2.2,0,-3),V(-3,0,-1.5)],true,'centripetal');
+  this.path=new T.CatmullRomCurve3([V(-2,0,0),V(0,0,.45),V(2,0,0),V(3.2,0,-1.5),V(2,0,-3),V(0,0,-3.45),V(-2,0,-3),V(-3.2,0,-1.5)],true,'centripetal');
   this.pathLength=this.path.getLength();this.actor.position.copy(this.position||V(-2,0,0));
   this.sprayBottle=new T.Group();g.add(this.sprayBottle);this.sprayBottle.visible=false;
   this.mesh(this.sprayBottle,new T.BoxGeometry(.13,.18,.075),new T.MeshStandardMaterial({color:0xd9c296,roughness:.28,metalness:.1}),[0,-.045,0]);
@@ -124,7 +124,7 @@ export class ScentScene{
   this.applyDeposits();
  }
  async load(){
-  const loader=new GLTFLoader(),[head,human,memoryHuman]=await Promise.all([loader.loadAsync('./assets/head.glb?v=visitor-fit-r17'),loader.loadAsync('./assets/visitor-realistic.glb?v=visitor-fit-r17'),loader.loadAsync('./assets/human.glb?v=visitor-fit-r17'),loadLocomotion().catch(error=>console.warn('Visitor motion unavailable; using the basic pose.',error))]);
+  const loader=new GLTFLoader(),[head,human,memoryHuman]=await Promise.all([loader.loadAsync('./assets/head.glb?v=enchanted-street-r18'),loader.loadAsync('./assets/visitor-realistic.glb?v=enchanted-street-r18'),loader.loadAsync('./assets/human.glb?v=enchanted-street-r18'),loadLocomotion().catch(error=>console.warn('Visitor motion unavailable; using the basic pose.',error))]);
   // Opaque purple busts belong to the anatomy and memory diagrams. The street
   // keeps its own full-body visitor and cannot show these enlarged heads.
   head.scene.traverse(o=>{if(o.isMesh){o.material=material(0x9b7cba,1);o.material.roughness=.56;o.material.metalness=.04;}});this.memoryContext.add(head.scene);this.anatomyBust.add(head.scene.clone(true));
@@ -169,7 +169,7 @@ export class ScentScene{
   this.bottles.forEach((b,i)=>b.children[1].material.opacity=[5,10,20,30][i]===s.concentration?1:.35);
   this.applyDeposits();
   this.actor.visible=this.mode===3||this.mode===5;this.anatomyBust.visible=this.mode===1;this.streetActor.visible=this.mode===0;
-  if(this.mode===0){this.streetCameraFollow=true;this.controls.minDistance=1.5;this.controls.maxDistance=18;this.controls.maxPolarAngle=Math.PI/2-.03;this.scene.background=this.daySky;this.scene.fog=this.dayFog;this.hemi.color.setHex(0xdde7e5);this.hemi.groundColor.setHex(0x7a7060);this.hemi.intensity=1.65;this.keyLights[0].color.setHex(0xffe6bc);this.keyLights[0].intensity=1.8;this.keyLights[1].color.setHex(0xb3ced6);this.keyLights[1].intensity=.8;}else{this.controls.minDistance=8;this.controls.maxDistance=27;this.controls.maxPolarAngle=2.1;this.scene.background=null;this.scene.fog=null;this.hemi.color.setHex(0xf1e5ff);this.hemi.groundColor.setHex(0x26132d);this.hemi.intensity=2;this.keyLights[0].color.setHex(0xffdf9b);this.keyLights[0].intensity=3;this.keyLights[1].color.setHex(0x9c7ed7);this.keyLights[1].intensity=2;}
+  if(this.mode===0){this.streetCameraFollow=true;this.controls.minDistance=1.5;this.controls.maxDistance=18;this.controls.maxPolarAngle=Math.PI/2-.03;this.scene.background=this.daySky;this.scene.fog=this.dayFog;this.hemi.color.setHex(0xf4e1e8);this.hemi.groundColor.setHex(0x7a7060);this.hemi.intensity=1.65;this.keyLights[0].color.setHex(0xffd6a1);this.keyLights[0].intensity=1.8;this.keyLights[1].color.setHex(0xb9a9e1);this.keyLights[1].intensity=.8;}else{this.controls.minDistance=8;this.controls.maxDistance=27;this.controls.maxPolarAngle=2.1;this.scene.background=null;this.scene.fog=null;this.hemi.color.setHex(0xf1e5ff);this.hemi.groundColor.setHex(0x26132d);this.hemi.intensity=2;this.keyLights[0].color.setHex(0xffdf9b);this.keyLights[0].intensity=3;this.keyLights[1].color.setHex(0x9c7ed7);this.keyLights[1].intensity=2;}
   this.hotspotLayer.hidden=this.mode!==0;this.breathBadge.hidden=!(this.mode===0||this.mode===1||this.mode===3||this.mode===5||perception);if(this.mode!==0)this.closePathwayInfo();
   this.setLabels();this.dirty=true;this.render();
  }
@@ -195,8 +195,8 @@ export class ScentScene{
  advance(dt){
   const s=this.state;this.time+=dt;
   if(this.mode===3||this.mode===5){
-   const moving=this.mode===3&&s.step===1&&s.movement;this.walkBlend+=(Number(moving)-this.walkBlend)*(1-Math.exp(-dt*3));this.distance+=dt*1.35*this.walkBlend;
-   if(this.distance>0){const u=(this.distance/this.pathLength)%1;this.position.copy(this.path.getPointAt(u));const tangent=this.path.getTangentAt(u);this.actor.rotation.y=Math.atan2(tangent.x,tangent.z);}
+   const moving=this.mode===3&&s.step===1&&s.movement;this.walkBlend+=(Number(moving)-this.walkBlend)*(1-Math.exp(-dt*3));this.distance+=dt*(this.rig?.walkSpeed||1.8)*.75*this.walkBlend;
+   if(this.distance>0){const u=(this.distance/this.pathLength)%1;this.position.copy(this.path.getPointAt(u));const tangent=this.path.getTangentAt(u),yaw=Math.atan2(tangent.x,tangent.z),delta=Math.atan2(Math.sin(yaw-this.actor.rotation.y),Math.cos(yaw-this.actor.rotation.y));this.actor.rotation.y+=delta*(1-Math.exp(-dt*7));}
    this.actor.position.copy(this.position);this.sprayBottle.visible=false;
    if(this.rig){
     if(!this.sprayAction&&this.sprayQueue.length)this.sprayAction={site:this.sprayQueue.shift(),elapsed:0,emitted:false};
@@ -238,6 +238,7 @@ export class ScentScene{
   if(this.mode===5&&this.state.skinZoom!==false&&this.appliedSites.size){const s=this.state,age=(s.age||0)/100,left=Math.exp(-age*2.5*Math.sqrt(Math.max(1,s.sites.length))*({bright:1.4,balanced:.85,lasting:.45}[s.material]||.85));for(let i=0;i<55;i++){const phase=(i*.618+this.time*.17)%1,base=this.skinSeeds[i*2].clone();base.y+=phase*1.8;base.z+=phase*.7;this.glow(this.skinRoot.localToWorld(base),2,(1-phase)*left*.65);}}
   if(this.mode===0){
    const motion=this.streetState,phase=motion.phase,neural=motion.neural;this.breathBadge.textContent=this.paused?'Scene paused':motion.stage;
+   for(const mote of this.atmosphere.motes)this.glow(mote.position,1.8,mote.alpha,'255,234,191');
    for(const source of this.village.sources())for(let i=0;i<9;i++){const f=(i*.618+this.time*.2)%1;this.glow(source.clone().add(V(-f*.5,f*.8,Math.sin(i+f)*f*.3)),1,.16*(1-f),'202,167,123');}
    const nose=this.headRoot.localToWorld(this.nosePoint.clone());
    for(const seed of (this.gpu?[]:this.aromaSeeds)){

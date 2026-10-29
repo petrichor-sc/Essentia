@@ -1,8 +1,8 @@
 import * as T from '../atlas/assets/three.module.js';
-import {jasmineShrub} from './jasmine.js?v=visitor-fit-r17';
-import {cloneRiggedModel,fitStreetHuman} from './street.js?v=visitor-fit-r17';
-import {humanRig} from './human.js?v=visitor-fit-r17';
-import {styleWorkshopVisitor} from './character.js?v=visitor-fit-r17';
+import {jasmineShrub} from './jasmine.js?v=enchanted-street-r18';
+import {cloneRiggedModel,fitStreetHuman} from './street.js?v=enchanted-street-r18';
+import {humanRig} from './human.js?v=enchanted-street-r18';
+import {styleWorkshopVisitor} from './character.js?v=enchanted-street-r18';
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z);
 const smooth=(a,b,t)=>T.MathUtils.smoothstep(t,a,b);
 
@@ -20,7 +20,7 @@ export function jasmineMemory(){
  // A familiar garden corner is separate from the present-day café street.
  for(let i=0;i<8;i++)mesh(new T.BoxGeometry(.09,.65,.09),mat(0x8e7758),V(-1.8+i*.5,.31,.96));
  for(const y of [.24,.51])mesh(new T.BoxGeometry(3.65,.055,.06),mat(0x8e7758),V(-.05,y,1.0));
- const jasmine=jasmineShrub();root.add(jasmine.root);jasmine.root.scale.setScalar(.28);jasmine.root.position.set(.72,.1,-.28);
+ const jasmine=jasmineShrub({density:1});root.add(jasmine.root);jasmine.root.scale.setScalar(.28);jasmine.root.position.set(.72,.1,-.28);
  mesh(new T.CylinderGeometry(.25,.18,.28,24),mat(0x9e7156),V(.84,.14,-.34));
  mesh(new T.CylinderGeometry(.025,.035,1.5,12),mat(0x7a614a),V(.86,.75,-.35));
  for(let i=0;i<20;i++){const a=i*2.4,r=1.6+(i%3)*.12,m=mesh(new T.SphereGeometry(1,10,7),mat(i%2?0x728362:0x8c946c),V(Math.cos(a)*r,.18,Math.sin(a)*r*.5-.28));m.scale.set(.23,.2,.18);}

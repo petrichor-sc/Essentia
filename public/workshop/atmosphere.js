@@ -2,7 +2,7 @@ import * as T from '../atlas/assets/three.module.js';
 
 export function hillAtmosphere(ground){
  const root=new T.Group(),skyGeometry=new T.SphereGeometry(128,48,24),colours=[];
- const horizon=new T.Color(0xe9dcc3),upper=new T.Color(0x8faebc),blue=new T.Color(0x698da7);
+ const horizon=new T.Color(0xf4d9c2),upper=new T.Color(0xbcb8d5),blue=new T.Color(0x7883ac);
  for(let i=0;i<skyGeometry.attributes.position.count;i++){
   const y=skyGeometry.attributes.position.getY(i)/128;
   const color=y<.3?horizon.clone().lerp(upper,T.MathUtils.smoothstep(y,-.03,.3)):upper.clone().lerp(blue,T.MathUtils.smoothstep(y,.3,.95));
@@ -37,5 +37,6 @@ export function hillAtmosphere(ground){
   dummy.position.set(Math.cos(a)*r,ground+h*.5,Math.sin(a)*r);dummy.scale.set(h*.2,h,h*.2);dummy.rotation.y=a;dummy.updateMatrix();forest.setMatrixAt(i,dummy.matrix);forest.setColorAt(i,new T.Color().setHSL(.30+(i%3)*.013,.14,.27+(i%5)*.02));
  }
  forest.instanceMatrix.needsUpdate=true;root.add(forest);
- return {root,update(t){clouds.forEach(({cloud,angle},i)=>{cloud.position.x=Math.cos(angle)*51+Math.sin(t*.008+i)*2;});}};
+ const motes=Array.from({length:64},(_,i)=>({position:new T.Vector3(),phase:i*2.39996,alpha:0}));
+ return {root,motes,update(t){clouds.forEach(({cloud,angle},i)=>{cloud.position.x=Math.cos(angle)*51+Math.sin(t*.008+i)*2;});motes.forEach((m,i)=>{const f=(i*.61803398875+t*.025)%1;m.position.set(Math.sin(m.phase)*6.5+Math.sin(t*.14+i)*.3,ground+.35+f*3.6,Math.cos(m.phase)*3.0+.7+Math.sin(t*.12+i)*.25);m.alpha=Math.sin(Math.PI*f)**2*(.12+.10*Math.sin(t*.7+m.phase)**2);});}};
 }

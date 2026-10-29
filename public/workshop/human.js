@@ -1,5 +1,5 @@
 import * as T from '../atlas/assets/three.module.js';
-import {createLocomotion} from './locomotion.js?v=visitor-fit-r17';
+import {createLocomotion} from './locomotion.js?v=enchanted-street-r18';
 export function settleForSniff(rig,root,flower,amount,noseOffset=new T.Vector3(0,.1214,.156),gap=.08){
  if(amount<=0)return;
  if(rig.realistic)noseOffset=new T.Vector3(0,.027,.118);
@@ -19,6 +19,7 @@ export function humanRig(model,root){
  // Rotating the A-pose all the way to vertical buried FC1's hands in her hips.
  const armClearance=model.userData.workshopRealistic ? .18 : 0;
  const locomotion=model.userData.workshopRealistic?createLocomotion(bones):null;
+ const modelScale=model.getWorldScale(new T.Vector3()).x/root.getWorldScale(new T.Vector3()).x;
  const sole=model.userData.workshopRealistic?model.getObjectByName('ludovisions_FC1_mesh_05_2'):null;
  const floorRows=sole?new Float64Array(sole.skeleton.bones.length*4):null,floorMatrix=new T.Matrix4();
  const floorJoints=sole?[...new Set(Array.from(sole.geometry.attributes.skinIndex.array))]:[];
@@ -41,7 +42,12 @@ export function humanRig(model,root){
   root.updateWorldMatrix(true,true);const shoulder=upper.getWorldPosition(new T.Vector3()),elbow=lower.getWorldPosition(new T.Vector3()),wrist=hand.getWorldPosition(new T.Vector3()),u=shoulder.distanceTo(elbow),l=elbow.distanceTo(wrist),goal=wrist.clone().lerp(target,amount);
   if(model.userData.workshopRealistic&&arc)goal.add(new T.Vector3(side==='Left'?.09:-.09,0,.06).applyQuaternion(root.getWorldQuaternion(new T.Quaternion())).multiplyScalar(Math.sin(Math.PI*amount)));
   const direction=goal.clone().sub(shoulder),distance=T.MathUtils.clamp(direction.length(),Math.abs(u-l)+.005,(u+l)*.97);direction.normalize();goal.copy(shoulder).addScaledVector(direction,distance);
-  const reference=new T.Vector3(.3,-1,.35).applyQuaternion(root.getWorldQuaternion(new T.Quaternion())),bend=reference.addScaledVector(direction,-reference.dot(direction)).normalize(),cos=T.MathUtils.clamp((u*u+distance*distance-l*l)/(2*u*distance),-1,1),joint=shoulder.clone().addScaledVector(direction,u*cos).addScaledVector(bend,u*Math.sqrt(1-cos*cos));align(upper,lower,joint);align(lower,hand,goal);
+  // Preserve the animation's elbow bend plane. A fixed forward pole flipped
+  // the elbows when moving the wrists away from the hips, reversing forearms.
+  const reference=model.userData.workshopRealistic?elbow.clone().sub(shoulder):new T.Vector3(.3,-1,.35).applyQuaternion(root.getWorldQuaternion(new T.Quaternion()));
+  reference.addScaledVector(direction,-reference.dot(direction));
+  if(reference.lengthSq()<1e-8)reference.set(side==='Left'?.3:-.3,-.3,-.6).applyQuaternion(root.getWorldQuaternion(new T.Quaternion())).addScaledVector(direction,-reference.dot(direction));
+  const bend=reference.normalize(),cos=T.MathUtils.clamp((u*u+distance*distance-l*l)/(2*u*distance),-1,1),joint=shoulder.clone().addScaledVector(direction,u*cos).addScaledVector(bend,u*Math.sqrt(1-cos*cos));align(upper,lower,joint);align(lower,hand,goal);
  }
  function clearHands(){
   if(!model.userData.workshopRealistic)return;
@@ -51,9 +57,9 @@ export function humanRig(model,root){
    if(wrist.y-center.y>-.28*scale&&wrist.y-center.y<.24*scale&&Math.abs(wrist.z-center.z)<.17*scale&&sign*(wrist.x-center.x)<.245*scale){wrist.x=center.x+sign*.245*scale;reach(root.localToWorld(wrist),1,side,false);}
   }
  }
- return {bones,realistic:!!model.userData.workshopRealistic,locomotion,pose(time,blend,options={}){
+ return {bones,realistic:!!model.userData.workshopRealistic,locomotion,walkSpeed:locomotion?locomotion.speed*modelScale:1.8,pose(time,blend,options={}){
   Object.values(bones).forEach(({bone,q,p,scale})=>{bone.quaternion.copy(q);bone.position.copy(p);bone.scale.copy(scale);});root.updateWorldMatrix(true,true);
-  if(locomotion){locomotion.apply(time,blend,options.distance);root.updateWorldMatrix(true,true);}
+  if(locomotion){locomotion.apply(time,blend,Number.isFinite(options.distance)?options.distance/modelScale:undefined);root.updateWorldMatrix(true,true);}
   else{
   const phase=time*2*Math.PI/1.08,s=Math.sin(phase),c=Math.cos(phase),left=.27*s*blend,right=-.27*s*blend,bob=.018*(1-Math.cos(phase*2))*blend;
   hips.bone.position.copy(hips.bone.parent.worldToLocal(root.localToWorld(hipBase.clone().add(new T.Vector3(0,bob,0)))));root.updateWorldMatrix(true,true);
