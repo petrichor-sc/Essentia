@@ -73,7 +73,7 @@ function character(s){
     svg+=person(112,185,.97,.2)+person(355,139,1.25,.75,s.step===1&&s.movement);
     if(s.step===0)svg+=`<ellipse cx="355" cy="366" rx="125" ry="27" fill="none" stroke="${GOLD}" stroke-opacity=".35"/>`;
     const walking=s.step===1&&s.movement;
-    for(let i=0;i<(s.sites?.length?55:0);i++){
+    for(let i=0;i<115;i++){
       let a=i*2.399,r=(10+(i%15)*3.1)*warm,x=355+Math.sin(a)*r,y=191-i%40*3.2;
       const col=i%9===0?PURPLE:GOLD;
       if(walking){x=355-(i/115)*285*Math.min(1.08,warm);y=203+Math.sin(a)*(.12*i+4);svg+=movingDot(`M355 203Q${x+20} ${y-7} ${x} ${y}`,i,{color:col,duration:(4.5+(i%8)*.6)/warm,size:1.1+(i%3)*.4,opacity:Math.max(.13,.7-i/220)});}

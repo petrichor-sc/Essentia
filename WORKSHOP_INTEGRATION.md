@@ -1,52 +1,44 @@
-# Essentia Scent Studio — workshop-r6
+# Essentia workshop integration — 28 October 2026
 
-## Integrate into your existing Git repo
+This is your latest uploaded repository with the workshop connected to the main site.
+The latest upload already contained the human model, skin view, application-area controls and autumn activity. This update preserves those files and adds the missing navigation links.
 
-Extract this ZIP separately from your existing repo. Open a terminal inside the extracted `Essentia-main` folder and run:
+## Recommended: update your existing local Git repository
 
-```bash
-bash INTEGRATE_WORKSHOP.sh /home/sarthak/Documents/GitHub/Essentia
-```
+Keep this extracted folder separate from your existing Git repo. In a terminal inside this extracted folder, run:
 
-Then review and commit from your existing repo:
+    bash INTEGRATE_WORKSHOP.sh /absolute/path/to/your/existing/Essentia-repo
 
-```bash
-cd /home/sarthak/Documents/GitHub/Essentia
-git status --short
-git diff --stat
-git add public/workshop src/App.tsx src/WorkshopMenu.tsx public/atlas/index.html WORKSHOP_INTEGRATION.md
-git commit -m "Update scent workshop illustrations and spray interactions"
-git push
-```
+Replace the path with the location of your actual repo. The script copies only public/workshop/, src/App.tsx, src/WorkshopMenu.tsx, public/atlas/index.html and this guide. It leaves your existing .git, images, fonts, package files and deployment workflow alone. It does not commit, push or start a server. Commit any unrelated local edits first; these three source/navigation files are replaced with the versions based on the uploaded snapshot.
 
-The included script copies the complete `public/workshop/` directory, three navigation files, and this guide. Your existing Git history, working photos/fonts and deployment setup are retained. Use the integration script rather than replacing the entire working repository with the archive's snapshot. No Python launcher is needed; the workshop is served by the existing website at `/workshop/`.
+Then open a terminal in your existing repo:
 
-## Current experience
+    git diff --stat
+    git diff -- src/App.tsx src/WorkshopMenu.tsx public/atlas/index.html
+    git add public/workshop src/App.tsx src/WorkshopMenu.tsx public/atlas/index.html WORKSHOP_INTEGRATION.md
+    git commit -m "Integrate interactive scent workshop into website"
+    git push
 
-**Breathe.** An opaque full-body visitor walks through the café street toward jasmine climbing the pole. The visitor has no headphones or sunglasses and has a simpler dark hairstyle. The continuous rig, breathing and grounded motion are preserved. A terminal flower cluster sits about 8 cm from the illustrated nose during the sniff; the raised hand supports the cluster from below. Jasmine is modelled with approximately 2 cm blossoms, 20 clusters and 102 flowers, plus smaller pinnate leaflets. Continuous depth-tested particles disperse from every flower; a separate subset moves toward the nose during inhalation. The surrounding sky, clouds, trees and foothills remain.
+Use your usual main-branch workflow; the supplied GitHub Pages workflow deploys pushes to main. No Python launcher or new dependency is required.
 
-Botanical proportion reference: RHS, *Jasminum officinale*: https://www.rhs.org.uk/plants/9454/jasminum-officinale/details. The illustration uses common jasmine proportions and does not identify the species in the remembered real-world location.
+## Manual alternative
 
-**Detect.** The opaque purple anatomy bust replaces the small full-body figure. A camera move reveals the connected magnified sensory-neuron view: odour particles approach, cilia glow, neurons fire in a staggered pattern, then activity reaches the bulb and schematic cortical target. Labels remain interactive.
+Copy public/workshop/ and the three navigation files listed above into the matching locations in your existing repo. Do not copy the entire snapshot over your working photo/font assets: the uploaded GitHub archive contains Git LFS pointers for many of those originals. Keep your real local assets. Your existing deployment already pulls Git LFS.
 
-**Signal.** The purple bust stays for anatomical context. Six sensory axons, a bulb and an onward cortical relay replace the isolated spherical lattice. Visible pulses travel along the paths, gather at the bulb and continue onward. The head also carries a travelling highlight. Moving light beyond the receptors represents neural activity.
+## Where to open it
 
-**Perceive.** A firing pattern spreads through the brain's connected network. An imagined memory gradually appears beside it: the younger visitor approaches jasmine in a warm garden corner. The scene gently recedes and repeats; the page never advances by itself. A Replay this memory button restarts this view. The caption identifies it as an imagined childhood scene, not a claim about any real person's memory.
+- Direct address: https://www.essentiaresonance.com/workshop/
+- Main site's Workshops dropdown → The Scent Studio.
+- Mobile menu → The Scent Studio.
+- Workshop section → Enter the Scent Studio.
+- Atlas navigation → Scent Studio.
 
-**Projection, Sillage and Longevity.** The perfume chapter begins with no selected or applied fragrance. Selecting Neck, Wrists or Forearms queues an application gesture with a bottle and a short mist. Body emissions start at actuation, after the hand has risen; Clear fragrance removes the application. The selected application carries between the three comparisons. Sillage still starts walking automatically. The particle cloud is substantially lighter, and the summer/winter contrast in early release and spread is larger. Airflow remains a separate control. Season settings are exaggerated qualitative animation settings, not measured performance or a prediction in metres/hours.
+## During the workshop
 
-**Skin.** The capped cylinder is replaced by a magnified hand extracted from the same character mesh, with thumb, fingers, palm and wrist. Its forearm fades out toward the edge of the example. Deposits and pores follow actual wrist/palm triangles; the full-body figure and connecting leader provide context. This hand is an illustrative skin example for all application areas. The close-up appears after fragrance has been applied.
+Use Workshop view. Arrow keys move between ideas; Space pauses motion. Sillage starts walking when selected, respecting reduced-motion settings. Choose neck, wrists or forearms to compare application zones. Compare the same total dose spread across zones versus adding at each zone. Longevity includes body/skin views and a qualitative time slider. Concentration examples show different gold fractions in equal-volume bottles.
 
-The atlas links, autumn activity, reflection card and concentration comparison are retained. No narration is required.
+The autumn activity and optional personal scent card are below the interactive studio. Sharing is optional; scent-card notes are stored locally on the participant's device.
 
-## Validation and review status
+## Checks and limits
 
-- Vite production build, workshop JavaScript syntax and local import paths passed.
-- Accessory removal preserves the skeleton, eyes, eyebrows, UVs and skin weights. Modified body geometry has 10,260 vertices; four new skinned hair surfaces follow the head. The optional asset preparation script is `tools/clean_workshop_character.py`; it takes the original bundled Michelle GLB as input and is not part of normal site startup.
-- A 240-pose check keeps the soles within 4.3 mm of the pavement. The illustrated sniff gap stays below 8.3 cm.
-- A 480-sample check confirms continuous emission from all 102 flowers across two full cycles, without an inhalation.
-- The signal pulses move along their paths; all 55 network nodes fire over the cascade; memory reveal/hide and rig matrices remain valid.
-- The application check confirms no particles before actuation. A seasonal sample produced approximately 19 winter particles and 64–66 summer particles, below the prior cloud density.
-- The magnified hand has 1,422 vertices, five fingers including the thumb, surface-attached samples and a fading proximal forearm. Its geometry was inspected through a local orthographic projection.
-
-No browser testing, GPU shader compilation in a browser, full-scene visual verification or publishing was performed. Module, stylesheet and GLB URLs are versioned together as `workshop-r6`.
+Production build and local import/asset checks were performed. No browser testing or live publication was performed, as requested. Please review the live page after GitHub finishes deploying. The scent, dose and skin illustrations are teaching comparisons, not calibrated wear-time predictions or safe-use limits for a perfume formula.
