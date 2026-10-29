@@ -3,7 +3,7 @@ import * as T from '../atlas/assets/three.module.js';
 // An adult fashion look inspired by the supplied outfit reference. Every
 // garment uses the original character skeleton, including sleeves and boots.
 export function addReferenceOutfit(model){
- const style='cream-knit-brown-skirt-r13';if(model.userData.workshopDressStyle===style)return;
+ const style='modest-cream-knit-brown-skirt-r14';if(model.userData.workshopDressStyle===style)return;
  const old=[];model.traverse(o=>{if(o.userData.workshopDress)old.push(o);});old.forEach(o=>o.removeFromParent());
  let body;model.traverse(o=>{if(o.isSkinnedMesh&&!o.userData.workshopHair&&!o.userData.workshopDress&&!body)body=o;});if(!body)return;
  const bones=body.skeleton.bones,find=name=>bones.findIndex(b=>b.name.replace(/^mixamorig:?/,'')===name);
@@ -41,17 +41,17 @@ export function addReferenceOutfit(model){
  ];
  function bodyPoint(phi,y,offset=0){
   const [rx,rz,cz]=interpolate(bodice,y),x=Math.cos(phi)*rx,front=Math.max(0,Math.sin(phi));
-  const bust=.035*Math.exp(-Math.pow((Math.abs(x)-.052)/.034,2)-Math.pow((y-1.188)/.048,2))*front**3;
-  const center=.006*Math.exp(-Math.pow(x/.015,2)-Math.pow((y-1.19)/.038,2))*front**3;
+  const bust=.014*Math.exp(-Math.pow((Math.abs(x)-.052)/.034,2)-Math.pow((y-1.188)/.048,2))*front**3;
+  const center=.0015*Math.exp(-Math.pow(x/.015,2)-Math.pow((y-1.19)/.038,2))*front**3;
   return [Math.cos(phi)*(rx+offset),y,cz+Math.sin(phi)*(rz+offset)+bust-center];
  }
  // The skin and knit share the same rounded surface, so the neckline follows
  // the form cleanly and the exposed upper chest has continuous geometry.
  surface(80,42,(phi,t)=>bodyPoint(phi,T.MathUtils.lerp(1.105,1.315,t)),q=>torsoWeights(q[1]),skin,'skin','Continuous rounded upper chest and shoulders');
  surface(96,52,(phi,t)=>{
-  const front=Math.max(0,Math.sin(phi)),back=Math.max(0,-Math.sin(phi)),sweetheart=.012*Math.exp(-Math.pow(Math.cos(phi)/.22,2))*front;
-  const neckline=1.283-.103*front**.75-.047*back**2-sweetheart,y=T.MathUtils.lerp(.968,neckline,t);return bodyPoint(phi,y,.0025);
- },q=>torsoWeights(q[1]),knit,'knit','Cream rib-knit top with a sweetheart neckline');
+  const front=Math.max(0,Math.sin(phi)),back=Math.max(0,-Math.sin(phi));
+  const neckline=1.283-.045*front**1.25-.047*back**2,y=T.MathUtils.lerp(.968,neckline,t);return bodyPoint(phi,y,.0025);
+ },q=>torsoWeights(q[1]),knit,'knit','Cream rib-knit top with a modest rounded neckline');
  // A high waist and a small side slit follow the reference's skirt shape.
  const skirt=[ [.72,.148,.105,.004],[.82,.157,.116,.002],[.90,.143,.111,0],[1.013,.096,.082,.005] ];
  surface(96,40,(phi,t)=>{

@@ -1,6 +1,6 @@
 import * as T from '../atlas/assets/three.module.js';
-import {addLongHair} from './hair.js?v=reference-look-r13';
-import {addWhiteDress} from './outfit.js?v=reference-look-r13';
+import {addLongHair} from './hair.js?v=modest-neckline-r14';
+import {addWhiteDress} from './outfit.js?v=modest-neckline-r14';
 
 export {addLongHair as addSoftHair};
 
@@ -84,7 +84,7 @@ export function styleWorkshopVisitor(model,options={}){
 
     `);
    };
-   mat.customProgramCacheKey=()=> 'essentia-reference-look-r13';
+   mat.customProgramCacheKey=()=> 'essentia-modest-neckline-r14';
    mat.userData.workshopPalette='warm olive skin, brown eyes, cream knit, brown skirt, dark tights and tall brown boots';
    return mat;
   });

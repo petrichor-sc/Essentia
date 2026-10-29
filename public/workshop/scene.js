@@ -1,20 +1,20 @@
-import {receptorCloseup} from './receptors.js?v=reference-look-r13';
-import {hillStreet,cloneRiggedModel,fitStreetHuman,streetMotion,STREET_BUILD,STREET_POLE,STREET_GROUND,STREET_WALKWAY} from './street.js?v=reference-look-r13';
+import {receptorCloseup} from './receptors.js?v=modest-neckline-r14';
+import {hillStreet,cloneRiggedModel,fitStreetHuman,streetMotion,STREET_BUILD,STREET_POLE,STREET_GROUND,STREET_WALKWAY} from './street.js?v=modest-neckline-r14';
 import * as T from '../atlas/assets/three.module.js';
-import {GLTFLoader} from './assets/GLTFLoader.js?v=reference-look-r13';
-import {OrbitControls} from './assets/OrbitControls.js?v=reference-look-r13';
+import {GLTFLoader} from './assets/GLTFLoader.js?v=modest-neckline-r14';
+import {OrbitControls} from './assets/OrbitControls.js?v=modest-neckline-r14';
 
-import {cerebralSculpture} from './sculptures.js?v=reference-look-r13';
-import {jasmineShrub} from './jasmine.js?v=reference-look-r13';
-import {humanRig,settleForSniff} from './human.js?v=reference-look-r13';
-import {SVGRenderer} from './assets/SVGRenderer.js?v=reference-look-r13';
-import {hillAtmosphere} from './atmosphere.js?v=reference-look-r13';
-import {styleWorkshopVisitor} from './character.js?v=reference-look-r13';
-import {jasmineScent} from './scent.js?v=reference-look-r13';
-import {olfactoryRelay,neuralCascade,perceptionTiming} from './neural.js?v=reference-look-r13';
-import {jasmineMemory} from './memory.js?v=reference-look-r13';
-import {weatherProfiles,sprayPhase} from './perfume.js?v=reference-look-r13';
-import {magnifiedHand} from './skin.js?v=reference-look-r13';
+import {cerebralSculpture} from './sculptures.js?v=modest-neckline-r14';
+import {jasmineShrub} from './jasmine.js?v=modest-neckline-r14';
+import {humanRig,settleForSniff} from './human.js?v=modest-neckline-r14';
+import {SVGRenderer} from './assets/SVGRenderer.js?v=modest-neckline-r14';
+import {hillAtmosphere} from './atmosphere.js?v=modest-neckline-r14';
+import {styleWorkshopVisitor} from './character.js?v=modest-neckline-r14';
+import {jasmineScent} from './scent.js?v=modest-neckline-r14';
+import {olfactoryRelay,neuralCascade,perceptionTiming} from './neural.js?v=modest-neckline-r14';
+import {jasmineMemory} from './memory.js?v=modest-neckline-r14';
+import {weatherProfiles,sprayPhase} from './perfume.js?v=modest-neckline-r14';
+import {magnifiedHand} from './skin.js?v=modest-neckline-r14';
 const GOLD=0xc9a465,VIOLET=0xb9a1d9;
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z);
 const material=(color,opacity=1)=>new T.MeshStandardMaterial({color,roughness:.48,metalness:.15,transparent:opacity<1,opacity,depthWrite:opacity===1});
@@ -123,7 +123,7 @@ export class ScentScene{
   this.applyDeposits();
  }
  async load(){
-  const loader=new GLTFLoader(),[head,human]=await Promise.all([loader.loadAsync('./assets/head.glb?v=reference-look-r13'),loader.loadAsync('./assets/human.glb?v=reference-look-r13')]);
+  const loader=new GLTFLoader(),[head,human]=await Promise.all([loader.loadAsync('./assets/head.glb?v=modest-neckline-r14'),loader.loadAsync('./assets/human.glb?v=modest-neckline-r14')]);
   // Opaque purple busts belong to the anatomy and memory diagrams. The street
   // keeps its own full-body visitor and cannot show these enlarged heads.
   head.scene.traverse(o=>{if(o.isMesh){o.material=material(0x9b7cba,1);o.material.roughness=.56;o.material.metalness=.04;}});this.memoryContext.add(head.scene);this.anatomyBust.add(head.scene.clone(true));

@@ -1,4 +1,4 @@
-# Essentia Scent Studio — reference-look-r13
+# Essentia Scent Studio — modest-neckline-r14
 
 ## Integrate into your existing Git repo
 
@@ -15,7 +15,7 @@ cd /home/sarthak/Documents/GitHub/Essentia
 git status --short
 git diff --stat
 git add public/workshop src/App.tsx src/WorkshopMenu.tsx public/atlas/index.html WORKSHOP_INTEGRATION.md
-git commit -m "Match the workshop visitor to the cream knit and brown skirt reference"
+git commit -m "Raise the workshop visitor neckline for a modest everyday fit"
 git push
 ```
 
@@ -40,9 +40,9 @@ The standalone palette list below the studio has moved into chapter 04. Reflecti
 
 ### Reference-inspired visitor
 
-The adult visitor now wears a cream rib-knit top with long sleeves, gently flared cuffs and a curved sweetheart neckline; a high-waisted chocolate-brown skirt with a small side slit; dark tights; and tall brown boots with low block heels. The ribbed fabric uses a small procedural data texture. `wardrobe.js` constructs the garments as skinned meshes on the existing skeleton. The original hands, reach and spray gestures are retained.
+The adult visitor wears a cream rib-knit top with long sleeves, gently flared cuffs and a modest rounded neckline; a high-waisted chocolate-brown skirt with a small side slit; dark tights; and tall brown boots with low block heels. The neckline is raised by 7 cm at the front centre, removing the low central dip. The bust contour is softened for a natural everyday fit. The ribbed fabric uses a small procedural data texture. `wardrobe.js` constructs the garments as skinned meshes on the existing skeleton. The original hands, reach and spray gestures are retained.
 
-A continuous upper-chest mesh and the knit share the same rounded body surface, with a shaped bust and a small central neckline dip. Their aligned surfaces give the neckline a clean edge. The sleeves blend shoulder, upper-arm, forearm and hand weights. The boots blend thigh, lower-leg and foot weights; the feet have a tapered brown toe shape. The younger memory visitor retains a higher round-neck dress and does not receive the adult wardrobe meshes.
+A continuous upper-chest mesh and the knit share the same softly rounded body surface. Their aligned surfaces give the higher neckline a clean edge with consistent coverage. The sleeves blend shoulder, upper-arm, forearm and hand weights. The boots blend thigh, lower-leg and foot weights; the feet have a tapered brown toe shape. The younger memory visitor retains a higher round-neck dress and does not receive the adult wardrobe meshes.
 
 The face has smaller, closer-spaced eyes, lower fitted brows, a softened nose, a smoothed jaw and softly closed lips. The brown irises and eye highlights are scaled to the revised eye positions. The lower hairline and longer face-framing layers reduce the exposed forehead. Six flattened, tapered wavy locks join the crown and frame the face over the continuous back layer; the crown, waves and locks remain one skinned hair mesh. Headphones and sunglasses remain removed.
 
@@ -62,8 +62,9 @@ Stems are batched into one mesh and leaves/petals/centres are instanced. All flo
 - Spray tests confirm no cloud before actuation and approximately 18–20 winter particles versus 62–64 summer particles in the comparison sample.
 - Travelling signal pulses, all 55 firing network nodes, finite memory transforms and the intact hand close-up still pass.
 - The layered hair has 18,702 vertices in one skinned mesh. The complete adult visitor has 52,548 vertices across eleven skinned meshes, with finite positions and normalized joint weights. The separate higher-neckline memory outfit was checked.
+- The raised neckline was checked in front, three-quarter and side model projections; its front centre is 7 cm higher than the previous version.
 
-Front, three-quarter and profile character projections were inspected through direct CPU model renders. No browser testing, full-scene GPU verification or publishing was performed. The studio and runtime URLs use `reference-look-r13` to refresh the changed modules and character asset.
+Front, three-quarter and profile character projections were inspected through direct CPU model renders. No browser testing, full-scene GPU verification or publishing was performed. The studio and runtime URLs use `modest-neckline-r14` to refresh the changed modules and character asset.
 
 ## This workshop's material palette
 
