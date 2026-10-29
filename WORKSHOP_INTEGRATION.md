@@ -1,4 +1,4 @@
-# Essentia Scent Studio — realistic-visitor-r16
+# Essentia Scent Studio — visitor-fit-r17
 
 ## Integrate into your existing Git repo
 
@@ -14,8 +14,8 @@ Then review and commit from your existing repo:
 cd /home/sarthak/Documents/GitHub/Essentia
 git status --short
 git diff --stat
-git add public/workshop src/App.tsx src/WorkshopMenu.tsx public/atlas/index.html WORKSHOP_INTEGRATION.md
-git commit -m "Raise the workshop visitor neckline for a modest everyday fit"
+git add public/workshop src/App.tsx src/WorkshopMenu.tsx public/atlas/index.html WORKSHOP_INTEGRATION.md tools/retarget-workshop-motion.mjs
+git commit -m "Fit the realistic visitor wardrobe and integrate walking animations"
 git push
 ```
 
@@ -38,11 +38,17 @@ The interactive triangle contains every material once: two in Top, six in Middle
 
 The standalone palette list below the studio has moved into chapter 04. Reflection and memory note selectors still use the same canonical data. The broader Atlas catalogue and its native-range records are retained.
 
-### Realistic visitor
+### Realistic visitor, clothes and motion
 
-The main visitor is now the supplied LudoVisions FC1 character, with its original face, hair, clothing and PBR materials. The old procedural hair, clothing and face shader are bypassed for this asset. Its rig is mapped to the workshop joints, and the arm rest angles are derived from its own pose. Walking, reach, sniff and spray interactions use the replacement rig. The scent entry point is adjusted for its nose. The longevity view extracts the replacement's intact hand.
+The adult visitor retains the supplied LudoVisions FC1 face and hair geometry. Her outfit is now a modest cream knit top with fitted long sleeves, an A-line chocolate-brown skirt, dark tights and knee-high brown boots. The garments use FC1's bind mesh and skeleton. Covered skin is omitted to prevent skin showing through the clothes. The old black dress and accessories are removed.
 
-The original 195 MB upload is reduced to about 66 MB using 1K embedded textures. The model remains detailed and will load more slowly than the old cartoon character. The younger memory figure retains its separate original asset and modest outfit. The model is supplied by the user; retain its original LudoVisions/CGTrader license and attribution requirements.
+The supplied Motifect `walk_forward` and `idle_neutral` clips now drive 53 retargeted joints. Walking cadence follows distance travelled along the street, with interpolation into the idle pose. The two loops are closed to avoid an end-to-start snap. A hand-clearance adjustment keeps the relaxed wrists outside the hips, and the reaching hand follows an outward arc. Shoe-sole grounding preserves contact with the pavement. The sniffing gesture reaches below the flower so the hand does not cover the face.
+
+The hair cards now use alpha cutout and depth writing instead of overlapping transparent layers. The character keeps her own hair, with fuller coverage in model checks. The large central foreground conifer at (0, 13) has been removed; the other perimeter trees and café plants remain.
+
+`locomotion.js` loads the retargeted tracks in `assets/visitor-motion.json`. To rebuild those tracks from the supplied pack, extract its BVH folder and run `node tools/retarget-workshop-motion.mjs /path/to/BVH`. The original Motifect credit and license text is included in `assets/MOTION_CREDITS.txt`; raw animation files are not bundled as a standalone pack.
+
+The original 195 MB character upload is reduced to about 66 MB with 1K embedded textures. The younger memory visitor keeps its separate original asset and modest outfit. Speaker notes remain at the bottom of this guide.
 
 ### Fuller jasmine
 
@@ -52,7 +58,14 @@ Stems are batched into one mesh and leaves/petals/centres are instanced. All flo
 
 ## Verification
 
-The production build and changed JavaScript syntax passed. The replacement loads with 102 rig joints and 30 mesh primitives. Five motion poses checked finite skinned samples across all 30 meshes. The intact hand close-up contains 1,753 vertices. The original younger memory figure remains separate. No browser or GPU appearance testing, publishing or Git push was performed.
+- Production build, workshop JavaScript syntax and relative imports passed.
+- The supplied walk and idle drive 53 retargeted joints, with normalized rotations and matching loop endpoints.
+- A 120-pose street check kept the shoe soles within 1 mm of the pavement and the illustrated sniff gap below 10 cm. Relaxed hands remained outside the hips.
+- Neck, wrist and forearm spray gestures retain finite joint transforms; the intact hand close-up contains 1,753 vertices.
+- The new garment meshes have normalized skin weights. Front, three-quarter and back model projections were checked for the outfit and hair. The younger memory outfit remains separate.
+- The central foreground conifer is absent; eleven perimeter conifers remain.
+
+No browser or GPU appearance testing, publishing or Git push was performed. Runtime URLs use `visitor-fit-r17` to refresh the changed modules.
 
 ## This workshop's material palette
 

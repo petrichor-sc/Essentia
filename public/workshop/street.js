@@ -76,7 +76,7 @@ export function hillStreet(){
  // Smaller street trees alternate with taller cedars around the perimeter.
  for(const [x,z,h] of [[-6,6.7,3.1],[-3,7.8,3.3],[3.8,7.6,3.5],[11.8,7,3.7],[-12,7.5,3.6]])tree(x,z,h);
  function cedar(x,z,h){
-  const g=new T.Group();g.position.set(x,STREET_GROUND,z);root.add(g);cylinder(g,.06,.14,h,V(0,h/2,0),wood,10);
+  const g=new T.Group();g.name='Peripheral cedar '+x+', '+z;g.position.set(x,STREET_GROUND,z);root.add(g);cylinder(g,.06,.14,h,V(0,h/2,0),wood,10);
   for(let tier=0;tier<7;tier++){
    const y=h*(.25+tier*.095),r=h*(.23-tier*.025);
    const crown=new T.Mesh(new T.ConeGeometry(r,h*.28,13,1),surface(tier%2?0x486a58:0x5f7e61));
@@ -84,7 +84,8 @@ export function hillStreet(){
   }
   foliage.push({g,phase:x*.6+z});
  }
- for(const [x,z,h] of [[-14,-8,6.2],[-10,-10,6.8],[-5,-10,6.1],[0,-11,7.1],[6,-10,6.5],[11,-9,6.9],[15,-4,5.5],[-16,4,5.4],[15,9,5.7],[-11,11,6],[0,13,5.8],[10,13,6.1]])cedar(x,z,h);
+ // Leave the middle foreground open when the visitor orbits the street.
+ for(const [x,z,h] of [[-14,-8,6.2],[-10,-10,6.8],[-5,-10,6.1],[0,-11,7.1],[6,-10,6.5],[11,-9,6.9],[15,-4,5.5],[-16,4,5.4],[15,9,5.7],[-11,11,6],[10,13,6.1]])cedar(x,z,h);
  // Low planted beds, with instanced leaves and flowers to limit draw calls.
  const beds=[[-7,5.4,2.3],[-3.8,5.4,2.2],[3.6,5.4,2.1],[9.6,3.3,1.7],[-9.5,2.8,1.6],[8.8,-2.5,1.7],[-6.8,-2.55,1.7]];
  const leafGeo=new T.SphereGeometry(1,9,6),leafMat=surface(0x78916a),leaves=new T.InstancedMesh(leafGeo,leafMat,beds.length*65),flowers=new T.InstancedMesh(new T.SphereGeometry(1,7,5),surface(0xf1dabe),beds.length*12),plantDummy=new T.Object3D();
@@ -138,5 +139,6 @@ export function streetMotion(t){
  else if(phase<14.5){position=end.clone();yaw=T.MathUtils.lerp(direction,Math.atan2(STREET_POLE.x-end.x,STREET_POLE.z-end.z),smooth((phase-4.5)/1.2));reach=smooth((phase-4.7)/1.5)*(1-smooth((phase-12.5)/2));stage=phase<6.2?'Reaching gently for jasmine':phase<9.2?'Breathing in the jasmine':phase<12.5?'From receptors to the brain':'Letting the flower go';if(phase>=6.2&&phase<9.2){capture=(phase-6.2)/3;breath=.5-.5*Math.cos(capture*Math.PI);}else if(phase>=9.2&&phase<12.7)breath=.5+.5*Math.cos((phase-9.2)/3.5*Math.PI);}
  else if(phase<20){position=end.clone().lerp(start,smooth((phase-14.5)/5.5));walk=Math.sin(Math.PI*(phase-14.5)/5.5)*.9;yaw=direction+Math.PI;stage='Returning to the street';}
  else{position=start.clone();yaw=direction+Math.PI*(1-smooth((phase-20)/2));stage='A quiet pause';}
- return {phase,position,yaw,walk,reach,breath,capture,stage,neural:phase>=9.1&&phase<12.5?(phase-9.1)/3.4:-1};
+ const length=start.distanceTo(end),distance=Math.floor(t/24)*length*2+(phase<4.5?length*smooth(phase/4.5):phase<14.5?length:phase<20?length*(1+smooth((phase-14.5)/5.5)):length*2);
+ return {phase,position,yaw,walk,reach,breath,capture,stage,distance,neural:phase>=9.1&&phase<12.5?(phase-9.1)/3.4:-1};
 }

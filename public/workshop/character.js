@@ -1,13 +1,14 @@
 import * as T from '../atlas/assets/three.module.js';
-import {addLongHair} from './hair.js?v=realistic-visitor-r16';
-import {addWhiteDress} from './outfit.js?v=realistic-visitor-r16';
+import {addLongHair} from './hair.js?v=visitor-fit-r17';
+import {addWhiteDress} from './outfit.js?v=visitor-fit-r17';
+import {dressRealisticVisitor,finishRealisticHair} from './realistic-outfit.js?v=visitor-fit-r17';
 
 export {addLongHair as addSoftHair};
 
 // Art direction for the fictional workshop visitor. Preserve the rig, texture
 // detail and continuous mesh; change the skin, hair and clothing palette.
 export function styleWorkshopVisitor(model,options={}){
- if(model.userData.workshopRealistic)return;
+ if(model.userData.workshopRealistic){dressRealisticVisitor(model);finishRealisticHair(model);return;}
  addLongHair(model);
  addWhiteDress(model,options);
  model.traverse(mesh=>{
@@ -85,7 +86,7 @@ export function styleWorkshopVisitor(model,options={}){
 
     `);
    };
-   mat.customProgramCacheKey=()=> 'essentia-realistic-visitor-r16';
+   mat.customProgramCacheKey=()=> 'essentia-visitor-fit-r17';
    mat.userData.workshopPalette='warm olive skin, brown eyes, cream knit, brown skirt, dark tights and tall brown boots';
    return mat;
   });

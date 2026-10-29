@@ -1,20 +1,21 @@
-import {receptorCloseup} from './receptors.js?v=realistic-visitor-r16';
-import {hillStreet,cloneRiggedModel,fitStreetHuman,streetMotion,STREET_BUILD,STREET_POLE,STREET_GROUND,STREET_WALKWAY} from './street.js?v=realistic-visitor-r16';
+import {receptorCloseup} from './receptors.js?v=visitor-fit-r17';
+import {hillStreet,cloneRiggedModel,fitStreetHuman,streetMotion,STREET_BUILD,STREET_POLE,STREET_GROUND,STREET_WALKWAY} from './street.js?v=visitor-fit-r17';
 import * as T from '../atlas/assets/three.module.js';
-import {GLTFLoader} from './assets/GLTFLoader.js?v=realistic-visitor-r16';
-import {OrbitControls} from './assets/OrbitControls.js?v=realistic-visitor-r16';
+import {GLTFLoader} from './assets/GLTFLoader.js?v=visitor-fit-r17';
+import {OrbitControls} from './assets/OrbitControls.js?v=visitor-fit-r17';
 
-import {cerebralSculpture} from './sculptures.js?v=realistic-visitor-r16';
-import {jasmineShrub} from './jasmine.js?v=realistic-visitor-r16';
-import {humanRig,settleForSniff} from './human.js?v=realistic-visitor-r16';
-import {SVGRenderer} from './assets/SVGRenderer.js?v=realistic-visitor-r16';
-import {hillAtmosphere} from './atmosphere.js?v=realistic-visitor-r16';
-import {styleWorkshopVisitor} from './character.js?v=realistic-visitor-r16';
-import {jasmineScent} from './scent.js?v=realistic-visitor-r16';
-import {olfactoryRelay,neuralCascade,perceptionTiming} from './neural.js?v=realistic-visitor-r16';
-import {jasmineMemory} from './memory.js?v=realistic-visitor-r16';
-import {weatherProfiles,sprayPhase} from './perfume.js?v=realistic-visitor-r16';
-import {magnifiedHand} from './skin.js?v=realistic-visitor-r16';
+import {cerebralSculpture} from './sculptures.js?v=visitor-fit-r17';
+import {jasmineShrub} from './jasmine.js?v=visitor-fit-r17';
+import {humanRig,settleForSniff} from './human.js?v=visitor-fit-r17';
+import {SVGRenderer} from './assets/SVGRenderer.js?v=visitor-fit-r17';
+import {hillAtmosphere} from './atmosphere.js?v=visitor-fit-r17';
+import {styleWorkshopVisitor} from './character.js?v=visitor-fit-r17';
+import {jasmineScent} from './scent.js?v=visitor-fit-r17';
+import {olfactoryRelay,neuralCascade,perceptionTiming} from './neural.js?v=visitor-fit-r17';
+import {jasmineMemory} from './memory.js?v=visitor-fit-r17';
+import {weatherProfiles,sprayPhase} from './perfume.js?v=visitor-fit-r17';
+import {magnifiedHand} from './skin.js?v=visitor-fit-r17';
+import {loadLocomotion} from './locomotion.js?v=visitor-fit-r17';
 const GOLD=0xc9a465,VIOLET=0xb9a1d9;
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z);
 const material=(color,opacity=1)=>new T.MeshStandardMaterial({color,roughness:.48,metalness:.15,transparent:opacity<1,opacity,depthWrite:opacity===1});
@@ -123,7 +124,7 @@ export class ScentScene{
   this.applyDeposits();
  }
  async load(){
-  const loader=new GLTFLoader(),[head,human,memoryHuman]=await Promise.all([loader.loadAsync('./assets/head.glb?v=realistic-visitor-r16'),loader.loadAsync('./assets/visitor-realistic.glb?v=realistic-visitor-r16'),loader.loadAsync('./assets/human.glb?v=realistic-visitor-r16')]);
+  const loader=new GLTFLoader(),[head,human,memoryHuman]=await Promise.all([loader.loadAsync('./assets/head.glb?v=visitor-fit-r17'),loader.loadAsync('./assets/visitor-realistic.glb?v=visitor-fit-r17'),loader.loadAsync('./assets/human.glb?v=visitor-fit-r17'),loadLocomotion().catch(error=>console.warn('Visitor motion unavailable; using the basic pose.',error))]);
   // Opaque purple busts belong to the anatomy and memory diagrams. The street
   // keeps its own full-body visitor and cannot show these enlarged heads.
   head.scene.traverse(o=>{if(o.isMesh){o.material=material(0x9b7cba,1);o.material.roughness=.56;o.material.metalness=.04;}});this.memoryContext.add(head.scene);this.anatomyBust.add(head.scene.clone(true));
@@ -143,7 +144,7 @@ export class ScentScene{
  skinSoftware(proxies=[]){for(const {source,proxy,base} of proxies){source.skeleton.update();const p=proxy.geometry.attributes.position,v=V();for(let i=0;i<p.count;i++){v.fromArray(base,i*3);source.applyBoneTransform(i,v);p.setXYZ(i,v.x,v.y,v.z);}p.needsUpdate=true;proxy.geometry.computeVertexNormals();proxy.geometry.computeBoundingSphere();}}
  prepareStreet(){
   this.streetState=streetMotion(this.time);const motion=this.streetState;this.village.update(this.time);this.atmosphere.update(this.time);this.streetActor.position.copy(motion.position);this.streetActor.rotation.y=motion.yaw;this.streetActor.scale.setScalar(1);
-  if(this.streetRig){const target=this.jasmine.root.localToWorld((this.flowerSource||this.jasmine.sources[0]).clone()),pose={reach:motion.reach,handTarget:target.clone().add(V(-.045,-.07,.015)),breath:motion.breath};this.streetRig.pose(this.time,motion.walk,pose);settleForSniff(this.streetRig,this.streetActor,target,motion.reach);this.streetRig.pose(this.time,motion.walk,pose);const q=this.streetActor.getWorldQuaternion(new T.Quaternion()),head=this.streetRig.bones.Head.bone.getWorldPosition(V());this.headRoot.position.copy(head).add(V(0,-.0594,-.038).applyQuaternion(q));this.headRoot.quaternion.copy(q);this.headRoot.scale.set(.065,.12,.065);if(!this.gpu)this.skinSoftware(this.streetProxies);}
+  if(this.streetRig){const target=this.jasmine.root.localToWorld((this.flowerSource||this.jasmine.sources[0]).clone()),pose={distance:motion.distance,reach:motion.reach,handTarget:target.clone().add(V(-.10,-.15,.06)),breath:motion.breath};this.streetRig.pose(this.time,motion.walk,pose);settleForSniff(this.streetRig,this.streetActor,target,motion.reach);this.streetRig.pose(this.time,motion.walk,pose);const q=this.streetActor.getWorldQuaternion(new T.Quaternion()),head=this.streetRig.bones.Head.bone.getWorldPosition(V());this.headRoot.position.copy(head).add(V(0,-.0594,-.038).applyQuaternion(q));this.headRoot.quaternion.copy(q);this.headRoot.scale.set(.065,.12,.065);if(!this.gpu)this.skinSoftware(this.streetProxies);}
   this.streetShadow.position.set(this.streetActor.position.x,STREET_WALKWAY+.004,this.streetActor.position.z);
   this.scent.update(this.time,{nose:this.streetRig?this.jasmine.root.worldToLocal(this.headRoot.localToWorld(this.nosePoint.clone())):null,capture:this.streetRig?motion.capture:-1,flower:this.flowerSource||this.jasmine.sources[0]});
   if(this.streetCameraFollow){const close=T.MathUtils.smoothstep(motion.reach,0,1),focus=this.streetRig?this.headRoot.localToWorld(V(0,1,1.4)).lerp(this.jasmine.root.localToWorld((this.flowerSource||this.jasmine.sources[0]).clone()),.4):V(-.25,-1.25,1);this.camera.position.lerpVectors(V(-4.8,.15,7.3),focus.clone().add(V(-.9,.32,1.35)),close);this.controls.target.lerpVectors(V(-.8,-1.6,1.5),focus,close);this.controls.update();}
@@ -203,14 +204,14 @@ export class ScentScene{
     if(action){
      action.elapsed+=dt;const phase=sprayPhase(action.elapsed);this.scene.updateMatrixWorld(true);
      const target=action.site==='neck'?this.rig.bones.Neck.bone.getWorldPosition(V()):action.site==='wrists'?this.rig.bones.RightHand.bone.getWorldPosition(V()):this.rig.bones.RightForeArm.bone.getWorldPosition(V()).lerp(this.rig.bones.RightHand.bone.getWorldPosition(V()),.55),q=this.actor.getWorldQuaternion(new T.Quaternion()),handGoal=target.clone().add(V(action.site==='neck'?-.24:-.16,.08,.36).applyQuaternion(q));
-     this.rig.pose(this.time,this.walkBlend,{reach:phase.reach,handTarget:handGoal});this.scene.updateMatrixWorld(true);
+     this.rig.pose(this.time,this.walkBlend,{reach:phase.reach,handTarget:handGoal,distance:this.distance});this.scene.updateMatrixWorld(true);
      const hand=this.rig.bones.LeftHand.bone.getWorldPosition(V()),direction=target.clone().sub(hand).normalize();this.sprayBottle.position.copy(hand);this.sprayBottle.quaternion.setFromUnitVectors(V(0,0,1),direction);this.sprayBottle.visible=phase.reach>.03;this.sprayNozzle.position.y=phase.press?.062:.072;
      if(phase.applied&&!action.emitted){
       action.emitted=true;this.appliedSites.add(action.site);this.zoomProgress=0;this.applyDeposits();this.groups[5].visible=this.mode===5&&s.skinZoom!==false;this.setLabels();
       const nozzle=this.sprayBottle.localToWorld(V(0,.08,.04));for(let i=0;i<14;i++)this.sprayMist.push({from:nozzle.clone(),to:target.clone().add(V((Math.random()-.5)*.12,(Math.random()-.5)*.12,(Math.random()-.5)*.12)),age:-i*.012,life:.32});
      }
      this.breathBadge.textContent=phase.press?'Spraying · '+action.site:phase.reach>.3?'Applying fragrance · '+action.site:'Lowering the bottle';if(phase.done)this.sprayAction=null;
-    }else{this.rig.pose(this.time,this.walkBlend);this.breathBadge.textContent=this.appliedSites.size?({winter:'Winter · slower release, closer cloud',temperate:'Mild · a gentle fragrance cloud',summer:'Summer · faster release, wider early cloud'}[s.weather]):'No fragrance yet · choose an application area';}
+    }else{this.rig.pose(this.time,this.walkBlend,{distance:this.distance});this.breathBadge.textContent=this.appliedSites.size?({winter:'Winter · slower release, closer cloud',temperate:'Mild · a gentle fragrance cloud',summer:'Summer · faster release, wider early cloud'}[s.weather]):'No fragrance yet · choose an application area';}
     this.scene.updateMatrixWorld(true);
     const sites=[...this.appliedSites],areas=sites.length,weather=weatherProfiles[s.weather]||weatherProfiles.temperate;
     if(this.mode===3&&areas){

@@ -4,7 +4,7 @@ const V=()=>new T.Vector3();
 export function magnifiedHand(model){
  let source,best=-1;model.traverse(o=>{if(!o.isSkinnedMesh||o.userData.workshopHair||o.userData.workshopDress)return;const g=o.geometry;let score=0;for(let i=0;i<g.attributes.position.count;i++)for(let k=0;k<4;k++){const id=g.attributes.skinIndex.array[i*4+k],w=g.attributes.skinWeight.array[i*4+k];if(/RightHand/.test(o.skeleton.bones[id]?.name||''))score+=w;}if(score>best){best=score;source=o;}});
  if(!source)throw new Error('Hand source is missing');
- model.updateWorldMatrix(true,true);source.skeleton.update();
+ model.updateWorldMatrix(true,true);source.updateMatrixWorld(true);source.skeleton.update();
  const bones=source.skeleton.bones,point=name=>{const b=bones.find(b=>b.name.replace(/^mixamorig:?/,'')===name);if(!b)throw new Error('Missing hand joint '+name);return b.getWorldPosition(V());};
  const wrist=point('RightHand'),y=point('RightHandMiddle4').sub(wrist).normalize(),across=point('RightHandIndex1').sub(point('RightHandPinky1')).normalize(),z=across.clone().cross(y).normalize(),x=y.clone().cross(z).normalize(),basis=new T.Matrix4().makeBasis(x,y,z).invert(),scale=1.6/point('RightHandMiddle4').distanceTo(wrist);
  const geometry=source.geometry,weights=geometry.attributes.skinWeight,joints=geometry.attributes.skinIndex,positions=[],normals=[],uvs=[],colors=[],index=[],remap=new Map(),eligible=[];

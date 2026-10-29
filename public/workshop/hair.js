@@ -3,7 +3,7 @@ import * as T from '../atlas/assets/three.module.js';
 // Long layered waves, with an exposed forehead and a swept, off-centre part.
 // Cap and fall are closed surfaces in a single skinned mesh, not hair tubes.
 export function addLongHair(model){
- if(model.userData.workshopHairStyle==='realistic-visitor-r16')return;
+ if(model.userData.workshopHairStyle==='visitor-fit-r17')return;
  const previous=[];model.traverse(o=>{if(o.userData.workshopHair)previous.push(o);});previous.forEach(o=>o.removeFromParent());
  let body;model.traverse(o=>{if(o.isSkinnedMesh&&!o.userData.workshopHair&&!o.userData.workshopDress&&!body)body=o;});if(!body)return;
  const find=name=>body.skeleton.bones.findIndex(b=>b.name.replace(/^mixamorig:?/,'')===name),head=find('Head'),neck=find('Neck'),spine=find('Spine2');if(head<0||neck<0||spine<0)return;
@@ -84,5 +84,5 @@ export function addLongHair(model){
  }
  const material=new T.MeshPhysicalMaterial({color:0x2d1d16,roughness:.65,metalness:0,sheen:.6,sheenColor:new T.Color(0x805840),sheenRoughness:.8,vertexColors:true,side:T.DoubleSide});
  const hair=new T.SkinnedMesh(geometry,material);hair.userData.workshopHair=true;hair.name='Layered chestnut waves with a lower hairline and loose face-framing locks';hair.position.copy(body.position);hair.quaternion.copy(body.quaternion);hair.scale.copy(body.scale);body.parent.add(hair);hair.bind(body.skeleton,body.bindMatrix);
- model.userData.workshopSoftHair=true;model.userData.workshopHairStyle='realistic-visitor-r16';
+ model.userData.workshopSoftHair=true;model.userData.workshopHairStyle='visitor-fit-r17';
 }
